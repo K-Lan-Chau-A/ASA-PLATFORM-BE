@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace ASA_PLATFORM_SERVICE.Implenment
 {
-    public class LogActivityService : ILogActivityService
+    public class PromotionProductService : IPromotionProductService
     {
-        private readonly LogActivityRepo _logActivityRepo;
+        private readonly PromotionProductRepo _promotionProductRepo;
         private readonly IMapper _mapper;
-        public LogActivityService(LogActivityRepo logActivityRepo, IMapper mapper)
+        public PromotionProductService(PromotionProductRepo promotionProductRepo, IMapper mapper)
         {
-            _logActivityRepo = logActivityRepo;
+            _promotionProductRepo = promotionProductRepo;
             _mapper = mapper;
         }
     }

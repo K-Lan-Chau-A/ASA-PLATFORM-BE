@@ -17,10 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ASA-PLATFORM-SERVICE\ASA-PLATFORM-SERVICE.csproj" />
   </ItemGroup>
 
