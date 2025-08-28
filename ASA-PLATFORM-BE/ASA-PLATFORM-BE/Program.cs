@@ -64,7 +64,9 @@ builder.Services.AddCors(options =>
                     "http://localhost:5173",
                     "https://asa-web-app-tawny.vercel.app",
                     "https://asa-fe-three.vercel.app",
-                    "https://asa-admin-mu.vercel.app"
+                    "https://asa-admin-mu.vercel.app",
+                    "http://localhost:8081",
+                    "https://localhost:8081"
                  )
                 .AllowAnyHeader()
                 .AllowAnyMethod()
@@ -95,7 +97,7 @@ app.UseSwaggerUI(c =>
 // CORS phải đặt trước Authorization
 app.UseCors("AllowFrontend");
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

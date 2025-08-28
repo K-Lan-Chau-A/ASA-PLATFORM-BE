@@ -28,6 +28,11 @@ namespace ASA_TENANT_SERVICE.Mapping
                         src.PromotionProducts.Select(pp => pp.Promotion.Type).FirstOrDefault()
                     ))
                 .ReverseMap();
+
+            //Mapping Shop
+            CreateMap<Shop, ShopRequest>().ReverseMap();
+            CreateMap<Shop, ShopGetRequest>().ReverseMap();  
+            CreateMap<Shop, ShopResponse>().ReverseMap();
         }
     }
 }

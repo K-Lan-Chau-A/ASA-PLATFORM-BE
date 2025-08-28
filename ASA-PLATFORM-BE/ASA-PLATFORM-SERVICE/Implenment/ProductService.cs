@@ -70,7 +70,7 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                     return new ApiResponse<bool>
                     {
                         Success = false,
-                        Message = "Category not found",
+                        Message = "Product not found",
                         Data = false
                     };
 
@@ -122,7 +122,7 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                     return new ApiResponse<ProductResponse>
                     {
                         Success = false,
-                        Message = "Category not found",
+                        Message = "Product not found",
                         Data = null
                     };
 
