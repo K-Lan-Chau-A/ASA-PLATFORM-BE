@@ -1,55 +1,64 @@
-# Prerequisites
-*.d
+# Visual Studio cache & temp folders
+.vs/
+*.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+# Build results
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
 
-# Linker output
-*.ilk
-*.map
-*.exp
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
 
-# Precompiled Headers
-*.gch
-*.pch
+# NuGet Packages
+*.nupkg
+*.snupkg
+packages/
+*.nuspec
+*.psmdcp
+# NuGet Symbol Packages
+*.symbols.nupkg
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+*.sap
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
+# DotCover
+.idea/
+*.dotCover
 
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
+# JetBrains Rider
+.idea/
+*.sln.iml
 
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
+# Other
+project.lock.json
+project.fragment.lock.json
+artifacts/
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+# IIS Express
+/.vs/config/applicationhost.config
+*.vspscc
+*.vssscc
 
-# debug information files
-*.dwo
+# Mac
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
