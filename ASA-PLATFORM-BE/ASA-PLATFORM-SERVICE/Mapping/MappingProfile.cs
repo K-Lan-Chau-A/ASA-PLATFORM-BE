@@ -33,6 +33,13 @@ namespace ASA_TENANT_SERVICE.Mapping
             CreateMap<Shop, ShopRequest>().ReverseMap();
             CreateMap<Shop, ShopGetRequest>().ReverseMap();  
             CreateMap<Shop, ShopResponse>().ReverseMap();
+
+            //Mapping User
+            CreateMap<User, UserRequest>().ReverseMap();
+            CreateMap<User, UserGetRequest>().ReverseMap();
+            CreateMap<User, UserResponse>().ReverseMap();
+            CreateMap<User, LoginResponse > ().ReverseMap();
+            CreateMap<User, CurrentAccount>().ReverseMap();
         }
     }
 }
