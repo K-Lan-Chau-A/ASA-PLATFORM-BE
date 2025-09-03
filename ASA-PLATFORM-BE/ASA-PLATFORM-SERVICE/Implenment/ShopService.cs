@@ -158,5 +158,9 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 };
             }
         }
+        public async Task<Shop?> GetShopById(long id)
+        {
+            return await _shopRepo.GetByIdAsync(id);
+        }
     }
 }
