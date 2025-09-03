@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Caching.Memory;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json.Linq;
 
 namespace ASA_PLATFORM_BE.Controllers
 {
@@ -94,6 +95,22 @@ namespace ASA_PLATFORM_BE.Controllers
                 }
                 var user = await _authenticationService.GetCurrentAccount(username);
                 return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("validate-tenant-login")]
+        public async Task<IActionResult> ValidateTenantLogin([FromBody] ValidateTenantLoginRequest dto)
+        {
+            try
+            {
+                Console.WriteLine("Received DTO:");
+                Console.WriteLine(dto);
+                var result = await _authenticationService.ValidateShop(dto); 
+                return Ok(result);
             }
             catch (Exception ex)
             {

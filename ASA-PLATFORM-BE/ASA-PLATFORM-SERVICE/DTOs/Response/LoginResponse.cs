@@ -16,4 +16,9 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Response
         public string Avatar { get; set; }
         public string? AccessToken { get; set; }
     }
+
+    public class ValidateShopResponse
+    {
+        public string? AccessToken { get; set; }
+    }
 }
