@@ -19,13 +19,15 @@ namespace ASA_PLATFORM_SERVICE.Implenment
     public class AuthenticationService : IAuthenticationService
     {
         private readonly IUserService _userService;
+        private readonly IShopService _shopService;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
-        public AuthenticationService(IUserService userService, IConfiguration configuration, IMapper mapper)
+        public AuthenticationService(IUserService userService, IConfiguration configuration, IMapper mapper, IShopService shopService)
         {
             _userService = userService;
             _configuration = configuration;
             _mapper = mapper;
+            _shopService = shopService;
         }
         public async Task<ApiResponse<LoginResponse>> Login(LoginRequest loginRequest)
         {
@@ -129,6 +131,48 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 {
                     Success = false,
                     Message = "User not found",
+                    Data = null
+                };
+            }
+        }
+
+        public async Task<ApiResponse<ValidateShopResponse>> ValidateShop(ValidateTenantLoginRequest dto)
+        {
+            try
+            {
+                var shop = await _shopService.GetShopById(dto.ShopId);
+                if (shop != null && shop.Status == 1)
+                {
+                    var userAccount = new User
+                    {
+                        UserId = dto.ShopId,         
+                        Username = dto.Username,     
+                        Role = dto.Role             
+                    };
+                    var accessToken = await GenerateToken(userAccount);
+                    return new ApiResponse<ValidateShopResponse>
+                    {
+                        Success = true,
+                        Message = "Validate shop successfully",
+                        Data = new ValidateShopResponse
+                        {
+                            AccessToken = accessToken
+                        }
+                    };
+                }
+                return new ApiResponse<ValidateShopResponse>
+                {
+                    Success = false,
+                    Message = "Shop not found or inactive",
+                    Data = null
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<ValidateShopResponse>
+                {
+                    Success = false,
+                    Message = $"Error: {ex.Message}",
                     Data = null
                 };
             }

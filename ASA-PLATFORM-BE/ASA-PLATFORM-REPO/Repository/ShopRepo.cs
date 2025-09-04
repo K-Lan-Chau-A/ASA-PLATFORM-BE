@@ -45,5 +45,10 @@ namespace ASA_PLATFORM_REPO.Repository
 
             return query.OrderBy(c => c.ShopId);
         }
+
+        public async Task<Shop?> GetShopById(long id)
+        {
+            return await _context.Shops.FirstOrDefaultAsync(u => u.ShopId == id);
+        }
     }
 }
