@@ -67,6 +67,7 @@ builder.Services.AddCors(options =>
         {
             builder.WithOrigins(
                     "http://localhost:5173",
+                    "http://localhost:3000",
                     "https://asa-web-app-tawny.vercel.app",
                     "https://asa-fe-three.vercel.app",
                     "https://asa-admin-mu.vercel.app",
