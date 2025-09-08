@@ -18,10 +18,12 @@ namespace ASA_PLATFORM_SERVICE.Implenment
     {
         private readonly ShopRepo _shopRepo;
         private readonly IMapper _mapper;
-        public ShopService(ShopRepo shopRepo, IMapper mapper)
+        private readonly OrderRepo _orderRepo;
+        public ShopService(ShopRepo shopRepo, IMapper mapper, OrderRepo orderRepo   )
         {
             _shopRepo = shopRepo;
             _mapper = mapper;
+            _orderRepo = orderRepo;
         }
 
         public async Task<ApiResponse<ShopResponse>> CreateAsync(ShopRequest request)
@@ -104,9 +106,21 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 .Take(pageSize)
                 .ToListAsync();
 
+            var shopResponses = _mapper.Map<List<ShopResponse>>(items);
+
+            foreach (var shopResponse in shopResponses)
+            {
+                var currentOrder = await GetCurrentShopProduct(shopResponse.shopId);
+                if (currentOrder != null)
+                {
+                    shopResponse.productType = currentOrder.Product?.ProductName; 
+                    shopResponse.expiredAt = currentOrder.ExpiredAt;
+                }
+            }
+
             return new PagedResponse<ShopResponse>
             {
-                Items = _mapper.Map<IEnumerable<ShopResponse>>(items),
+                Items = shopResponses,
                 TotalCount = totalCount,
                 Page = page,
                 PageSize = pageSize
@@ -161,6 +175,11 @@ namespace ASA_PLATFORM_SERVICE.Implenment
         public async Task<Shop?> GetShopById(long id)
         {
             return await _shopRepo.GetByIdAsync(id);
+        }
+
+        private async Task<Order?> GetCurrentShopProduct (long shopId)
+        {
+           return await _orderRepo.GetCurrentShopProduct(shopId);
         }
     }
 }

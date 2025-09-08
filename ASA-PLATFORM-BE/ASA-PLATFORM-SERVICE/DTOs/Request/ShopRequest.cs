@@ -33,4 +33,9 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
         public int? currentRequest { get; set; }
         public int? currentAccount { get; set; }
     }
+
+    public class CurrentShopProductRequest
+    {
+        public long shopId { get; set; }
+    }
 }

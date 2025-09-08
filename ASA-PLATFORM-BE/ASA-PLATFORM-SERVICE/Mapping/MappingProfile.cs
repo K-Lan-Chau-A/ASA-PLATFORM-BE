@@ -31,7 +31,7 @@ namespace ASA_TENANT_SERVICE.Mapping
 
             //Mapping Shop
             CreateMap<Shop, ShopRequest>().ReverseMap();
-            CreateMap<Shop, ShopGetRequest>().ReverseMap();  
+            CreateMap<Shop, ShopGetRequest>().ReverseMap();
             CreateMap<Shop, ShopResponse>().ReverseMap();
 
             //Mapping User
@@ -45,10 +45,26 @@ namespace ASA_TENANT_SERVICE.Mapping
             CreateMap<LogActivity, LogActivityRequest>().ReverseMap();
             CreateMap<LogActivity, LogActivityGetRequest>().ReverseMap();
             CreateMap<LogActivity, LogActivityResponse>().ReverseMap();
+
             //Mapping Order
             CreateMap<Order, OrderRequest>().ReverseMap();
             CreateMap<Order, OrderGetRequest>().ReverseMap();
             CreateMap<Order, OrderResponse>().ReverseMap();
+
+            //Mapping Promotion
+            CreateMap<Promotion, PromotionRequest>().ReverseMap();
+            CreateMap<Promotion, PromotionGetRequest>().ReverseMap();
+            CreateMap<Promotion, PromotionResponse>().ReverseMap();
+
+            //Mapping PromotionProduct
+            CreateMap<PromotionProduct, PromotionProductRequest>().ReverseMap();
+            CreateMap<PromotionProduct, PromotionProductGetRequest>().ReverseMap();
+            CreateMap<PromotionProduct, PromotionProductResponse>()
+                .ForMember(dest => dest.ProductName,
+                    opt => opt.MapFrom(src => src.Product.ProductName))
+                .ForMember(dest => dest.PromotionName, otp => otp.MapFrom(src => src.Promotion.PromotionName))
+                .ForMember(dest => dest.Description, otp => otp.MapFrom(src => src.Promotion.Description))
+                .ReverseMap();
         }
     }
 }

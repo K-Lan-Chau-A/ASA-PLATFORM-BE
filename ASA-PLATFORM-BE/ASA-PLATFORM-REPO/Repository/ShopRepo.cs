@@ -17,7 +17,7 @@ namespace ASA_PLATFORM_REPO.Repository
         }
         public IQueryable<Shop> GetFiltered(Shop filter)
         {
-            var query = _context.Shops.AsQueryable();
+            var query = _context.Shops.Include(s => s.Orders).AsQueryable();
 
             if (filter.ShopId > 0)
                 query = query.Where(c => c.ShopId == filter.ShopId);
