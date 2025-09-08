@@ -1,6 +1,7 @@
 ﻿using ASA_PLATFORM_REPO.DBContext;
 using ASA_PLATFORM_REPO.Models;
 using EDUConnect_Repositories.Basic;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,17 @@ namespace ASA_PLATFORM_REPO.Repository
 
 
             return query.OrderBy(c => c.OrderId);
+        }
+
+        public async Task<Order?> GetCurrentShopProduct(long shopId) 
+        {
+            // Assumption: Status 2 = order success and not expired (currently are using)
+            return await _context.Orders
+                .Include(o => o.Product)
+                .Where(o => o.ShopId == shopId
+                        && o.Status == 2)
+                .OrderByDescending(o => o.CreatedAt)
+                .FirstOrDefaultAsync();
         }
     }
 }

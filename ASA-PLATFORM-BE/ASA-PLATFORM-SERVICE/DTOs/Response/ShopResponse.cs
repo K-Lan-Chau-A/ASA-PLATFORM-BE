@@ -16,6 +16,10 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Response
 
         public short? status { get; set; }
 
+        public string? productType { get; set; }
+
+        public DateTime? expiredAt { get; set; }
+
         public DateTime? createdAt { get; set; }
 
         public DateTime? updatedAt { get; set; }
