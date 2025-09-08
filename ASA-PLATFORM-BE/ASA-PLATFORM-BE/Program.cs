@@ -72,7 +72,9 @@ builder.Services.AddCors(options =>
                     "https://asa-fe-three.vercel.app",
                     "https://asa-admin-mu.vercel.app",
                     "http://localhost:8081",
-                    "https://localhost:8081"
+                    "https://localhost:8081",
+                    "https://localhost:8080",
+                    "https://asa-tenant-be.onrender.com"
                  )
                 .AllowAnyHeader()
                 .AllowAnyMethod()
@@ -189,6 +191,8 @@ app.UseSwaggerUI(c =>
 app.UseCors("AllowFrontend");
 
 //app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
