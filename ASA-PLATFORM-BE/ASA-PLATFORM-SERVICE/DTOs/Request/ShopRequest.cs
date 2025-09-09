@@ -17,10 +17,6 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
         public DateTime? createdAt { get; set; }
 
         public DateTime? updatedAt { get; set; }
-
-        public int? currentRequest { get; set; }
-
-        public int? currentAccount { get; set; }
     }
     public class ShopGetRequest
     {
@@ -30,8 +26,6 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
         public short? status { get; set; }
         public DateTime? createdAt { get; set; }
         public DateTime? updatedAt { get; set; }
-        public int? currentRequest { get; set; }
-        public int? currentAccount { get; set; }
     }
 
     public class CurrentShopProductRequest

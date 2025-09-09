@@ -300,12 +300,6 @@ public partial class ASAPLATFORMDBContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("now()")
                 .HasColumnName("created_at");
-            entity.Property(e => e.CurrentAccount)
-                .HasDefaultValue(0)
-                .HasColumnName("current_account");
-            entity.Property(e => e.CurrentRequest)
-                .HasDefaultValue(0)
-                .HasColumnName("current_request");
             entity.Property(e => e.ShopName)
                 .IsRequired()
                 .HasMaxLength(150)

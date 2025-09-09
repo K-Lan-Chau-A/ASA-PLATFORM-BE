@@ -19,9 +19,5 @@ public partial class Shop
 
     public DateTime? UpdatedAt { get; set; }
 
-    public int? CurrentRequest { get; set; }
-
-    public int? CurrentAccount { get; set; }
-
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

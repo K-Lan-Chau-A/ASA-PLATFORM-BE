@@ -23,9 +23,5 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Response
         public DateTime? createdAt { get; set; }
 
         public DateTime? updatedAt { get; set; }
-
-        public int? currentRequest { get; set; }
-
-        public int? currentAccount { get; set; }
     }
 }
