@@ -5,19 +5,19 @@ using System.Collections.Generic;
 
 namespace ASA_PLATFORM_REPO.Models;
 
-public partial class Shop
+public partial class Feature
 {
-    public long ShopId { get; set; }
+    public long FeatureId { get; set; }
 
-    public string ShopName { get; set; }
+    public string FeatureName { get; set; }
 
-    public string Address { get; set; }
+    public string Description { get; set; }
 
-    public short? Status { get; set; }
+    public bool? IsActive { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
 
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
 }

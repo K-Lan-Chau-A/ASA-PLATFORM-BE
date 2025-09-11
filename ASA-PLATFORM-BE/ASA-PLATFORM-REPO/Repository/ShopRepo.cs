@@ -27,13 +27,6 @@ namespace ASA_PLATFORM_REPO.Repository
 
             if (!string.IsNullOrEmpty(filter.Address))
                 query = query.Where(c => c.Address.Contains(filter.Address));
-
-            if (filter.CurrentRequest.HasValue)
-                query = query.Where(p => p.CurrentRequest <= filter.CurrentRequest.Value);
-
-            if (filter.CurrentAccount.HasValue)
-                query = query.Where(p => p.CurrentAccount <= filter.CurrentAccount.Value);
-
             if (filter.CreatedAt.HasValue)
                 query = query.Where(p => p.CreatedAt <= filter.CreatedAt.Value);
 
