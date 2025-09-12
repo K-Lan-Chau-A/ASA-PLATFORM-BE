@@ -16,6 +16,7 @@ namespace ASA_PLATFORM_REPO.Repository
             var query = _context.Products
                                 .Include(p => p.PromotionProducts)
                                     .ThenInclude(pp => pp.Promotion)
+                                    .Include(p => p.Features)
                                 .AsQueryable();
 
             if (filter.ProductId > 0)
