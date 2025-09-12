@@ -27,6 +27,8 @@ namespace ASA_TENANT_SERVICE.Mapping
                     opt => opt.MapFrom(src =>
                         src.PromotionProducts.Select(pp => pp.Promotion.Type).FirstOrDefault()
                     ))
+                .ForMember(dest => dest.Features,
+                    opt => opt.MapFrom(src => src.Features))
                 .ReverseMap();
 
             //Mapping Shop
@@ -65,6 +67,9 @@ namespace ASA_TENANT_SERVICE.Mapping
                 .ForMember(dest => dest.PromotionName, otp => otp.MapFrom(src => src.Promotion.PromotionName))
                 .ForMember(dest => dest.Description, otp => otp.MapFrom(src => src.Promotion.Description))
                 .ReverseMap();
+
+            // Mapping Feature
+            CreateMap<Feature, FeatureResponse>();
         }
     }
 }
