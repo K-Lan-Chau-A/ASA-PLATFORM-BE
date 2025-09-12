@@ -30,6 +30,20 @@ namespace ASA_PLATFORM_SERVICE.Implenment
         {
             try
             {
+                if (request.ProductIds != null && request.ProductIds.Any())
+                {
+                    var invalidIds = await _promotionRepo.GetInvalidProductIdsAsync(request.ProductIds);
+                    if (invalidIds.Any())
+                    {
+                        return new ApiResponse<PromotionResponse>
+                        {
+                            Success = false,
+                            Message = $"Invalid product id(s): {string.Join(", ", invalidIds)}",
+                            Data = null
+                        };
+                    }
+                }
+
                 var entity = _mapper.Map<Promotion>(request);
                 if(!string.IsNullOrEmpty(entity.Type) && entity.Type.ToUpper() == "PERCENTAGE")
                 {
@@ -144,6 +158,20 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                         Message = "Promotion not found",
                         Data = null
                     };
+
+                if (request.ProductIds != null && request.ProductIds.Any())
+                {
+                    var invalidIds = await _promotionRepo.GetInvalidProductIdsAsync(request.ProductIds);
+                    if (invalidIds.Any())
+                    {
+                        return new ApiResponse<PromotionResponse>
+                        {
+                            Success = false,
+                            Message = $"Invalid product id(s): {string.Join(", ", invalidIds)}",
+                            Data = null
+                        };
+                    }
+                }
 
                 // Map dữ liệu cơ bản
                 _mapper.Map(request, existing);
