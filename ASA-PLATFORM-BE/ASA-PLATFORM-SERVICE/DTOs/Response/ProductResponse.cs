@@ -34,5 +34,8 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Response
         public decimal? PromotionValue { get; set; }
         public string? PromotionType { get; set; }
 
+        //Thông tin từ bảng Feature thông qua bảng ProductFeature
+        public List<FeatureResponse> Features { get; set; }
+
     }
 }

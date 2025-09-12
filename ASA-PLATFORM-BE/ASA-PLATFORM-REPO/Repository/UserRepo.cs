@@ -25,6 +25,12 @@ namespace ASA_PLATFORM_REPO.Repository
                 query = query.Where(u => u.Username.Contains(filter.Username));
             if (filter.Status > 0)
                 query = query.Where(u => u.Status == filter.Status);
+            if(!string.IsNullOrEmpty(filter.FullName))
+                query = query.Where(u => u.FullName.Contains(filter.FullName));
+            if (!string.IsNullOrEmpty(filter.Email))
+                query = query.Where(u => u.Email.Contains(filter.Email));
+            if (!string.IsNullOrEmpty(filter.PhoneNumber))
+                query = query.Where(u => u.PhoneNumber.Contains(filter.PhoneNumber));
             if (filter.Role != null)
                 query = query.Where(u => u.Role == filter.Role);
             if (!string.IsNullOrEmpty(filter.Avatar))

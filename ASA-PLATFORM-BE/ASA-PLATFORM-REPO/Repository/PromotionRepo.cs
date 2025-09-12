@@ -38,5 +38,23 @@ namespace ASA_PLATFORM_REPO.Repository
                 query = query.Where(p => p.CreatedAt <= filter.CreatedAt.Value);
             return query.OrderBy(c => c.PromotionId);
         }
+
+        public async Task<List<long>> GetInvalidProductIdsAsync(IEnumerable<long> productIds)
+        {
+            if (productIds == null || !productIds.Any())
+                return new List<long>();
+
+            // Lấy toàn bộ ProductId có trong DB
+            var validIds = _context.Products
+                .Where(p => productIds.Contains(p.ProductId))
+                .Select(p => p.ProductId)
+                .ToList();
+
+            // Những id nào ko nằm trong validIds thì là invalid
+            var invalidIds = productIds.Except(validIds).ToList();
+
+            return invalidIds;
+        }
+
     }
 }
