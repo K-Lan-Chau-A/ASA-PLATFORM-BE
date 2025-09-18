@@ -27,7 +27,49 @@ namespace ASA_TENANT_SERVICE.Mapping
                     opt => opt.MapFrom(src =>
                         src.PromotionProducts.Select(pp => pp.Promotion.Type).FirstOrDefault()
                     ))
+                .ForMember(dest => dest.Features,
+                    opt => opt.MapFrom(src => src.Features))
                 .ReverseMap();
+
+            //Mapping Shop
+            CreateMap<Shop, ShopRequest>().ReverseMap();
+            CreateMap<Shop, ShopGetRequest>().ReverseMap();
+            CreateMap<Shop, ShopResponse>().ReverseMap();
+
+            //Mapping User
+            CreateMap<User, UserRequest>().ReverseMap();
+            CreateMap<User, UserGetRequest>().ReverseMap();
+            CreateMap<User, UserResponse>().ReverseMap();
+            CreateMap<User, LoginResponse > ().ReverseMap();
+            CreateMap<User, CurrentAccount>().ReverseMap();
+
+            //Mapping LogActivity
+            CreateMap<LogActivity, LogActivityRequest>().ReverseMap();
+            CreateMap<LogActivity, LogActivityGetRequest>().ReverseMap();
+            CreateMap<LogActivity, LogActivityResponse>().ReverseMap();
+
+            //Mapping Order
+            CreateMap<Order, OrderRequest>().ReverseMap();
+            CreateMap<Order, OrderGetRequest>().ReverseMap();
+            CreateMap<Order, OrderResponse>().ReverseMap();
+
+            //Mapping Promotion
+            CreateMap<Promotion, PromotionRequest>().ReverseMap();
+            CreateMap<Promotion, PromotionGetRequest>().ReverseMap();
+            CreateMap<Promotion, PromotionResponse>().ReverseMap();
+
+            //Mapping PromotionProduct
+            CreateMap<PromotionProduct, PromotionProductRequest>().ReverseMap();
+            CreateMap<PromotionProduct, PromotionProductGetRequest>().ReverseMap();
+            CreateMap<PromotionProduct, PromotionProductResponse>()
+                .ForMember(dest => dest.ProductName,
+                    opt => opt.MapFrom(src => src.Product.ProductName))
+                .ForMember(dest => dest.PromotionName, otp => otp.MapFrom(src => src.Promotion.PromotionName))
+                .ForMember(dest => dest.Description, otp => otp.MapFrom(src => src.Promotion.Description))
+                .ReverseMap();
+
+            // Mapping Feature
+            CreateMap<Feature, FeatureResponse>();
         }
     }
 }

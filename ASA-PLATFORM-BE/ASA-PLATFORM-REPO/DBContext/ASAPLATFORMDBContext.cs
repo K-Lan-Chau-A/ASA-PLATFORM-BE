@@ -18,6 +18,8 @@ public partial class ASAPLATFORMDBContext : DbContext
     {
     }
 
+    public virtual DbSet<Feature> Features { get; set; }
+
     public virtual DbSet<LogActivity> LogActivities { get; set; }
 
     public virtual DbSet<Notification> Notifications { get; set; }
@@ -44,6 +46,29 @@ public partial class ASAPLATFORMDBContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Feature>(entity =>
+        {
+            entity.HasKey(e => e.FeatureId).HasName("feature_pkey");
+
+            entity.ToTable("feature");
+
+            entity.Property(e => e.FeatureId).HasColumnName("feature_id");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("now()")
+                .HasColumnName("created_at");
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.FeatureName)
+                .IsRequired()
+                .HasMaxLength(150)
+                .HasColumnName("feature_name");
+            entity.Property(e => e.IsActive)
+                .HasDefaultValue(true)
+                .HasColumnName("is_active");
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("now()")
+                .HasColumnName("updated_at");
+        });
+
         modelBuilder.Entity<LogActivity>(entity =>
         {
             entity.HasKey(e => e.LogActivityId).HasName("log_activity_pkey");
@@ -155,6 +180,23 @@ public partial class ASAPLATFORMDBContext : DbContext
             entity.Property(e => e.UpdatedAt)
                 .HasDefaultValueSql("now()")
                 .HasColumnName("updated_at");
+
+            entity.HasMany(d => d.Features).WithMany(p => p.Products)
+                .UsingEntity<Dictionary<string, object>>(
+                    "ProductFeature",
+                    r => r.HasOne<Feature>().WithMany()
+                        .HasForeignKey("FeatureId")
+                        .HasConstraintName("product_feature_feature_id_fkey"),
+                    l => l.HasOne<Product>().WithMany()
+                        .HasForeignKey("ProductId")
+                        .HasConstraintName("product_feature_product_id_fkey"),
+                    j =>
+                    {
+                        j.HasKey("ProductId", "FeatureId").HasName("product_feature_pkey");
+                        j.ToTable("product_feature");
+                        j.IndexerProperty<long>("ProductId").HasColumnName("product_id");
+                        j.IndexerProperty<long>("FeatureId").HasColumnName("feature_id");
+                    });
         });
 
         modelBuilder.Entity<Promotion>(entity =>
@@ -258,12 +300,6 @@ public partial class ASAPLATFORMDBContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("now()")
                 .HasColumnName("created_at");
-            entity.Property(e => e.CurrentAccount)
-                .HasDefaultValue(0)
-                .HasColumnName("current_account");
-            entity.Property(e => e.CurrentRequest)
-                .HasDefaultValue(0)
-                .HasColumnName("current_request");
             entity.Property(e => e.ShopName)
                 .IsRequired()
                 .HasMaxLength(150)
@@ -280,6 +316,10 @@ public partial class ASAPLATFORMDBContext : DbContext
 
             entity.ToTable("user");
 
+            entity.HasIndex(e => e.Email, "user_email_key").IsUnique();
+
+            entity.HasIndex(e => e.PhoneNumber, "user_phone_number_key").IsUnique();
+
             entity.HasIndex(e => e.Username, "user_username_key").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("user_id");
@@ -287,10 +327,19 @@ public partial class ASAPLATFORMDBContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("now()")
                 .HasColumnName("created_at");
+            entity.Property(e => e.Email)
+                .HasMaxLength(100)
+                .HasColumnName("email");
+            entity.Property(e => e.FullName)
+                .HasMaxLength(100)
+                .HasColumnName("full_name");
             entity.Property(e => e.Password)
                 .IsRequired()
                 .HasMaxLength(255)
                 .HasColumnName("password");
+            entity.Property(e => e.PhoneNumber)
+                .HasMaxLength(20)
+                .HasColumnName("phone_number");
             entity.Property(e => e.Role).HasColumnName("role");
             entity.Property(e => e.Status).HasColumnName("status");
             entity.Property(e => e.Username)

@@ -7101,9 +7101,11 @@
     "net8.0": [
       "ASA-PLATFORM-SERVICE >= 1.0.0",
       "AutoMapper >= 15.0.1",
+      "BCrypt.Net-Next >= 4.0.3",
       "ClosedXML >= 0.105.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 8.0.17",
-      "Swashbuckle.AspNetCore >= 6.6.2"
+      "Swashbuckle.AspNetCore >= 6.6.2",
+      "System.IdentityModel.Tokens.Jwt >= 8.12.0"
     ]
   },
   "packageFolders": {
@@ -7165,6 +7167,10 @@
             "target": "Package",
             "version": "[15.0.1, )"
           },
+          "BCrypt.Net-Next": {
+            "target": "Package",
+            "version": "[4.0.3, )"
+          },
           "ClosedXML": {
             "target": "Package",
             "version": "[0.105.0, )"
@@ -7176,6 +7182,10 @@
           "Swashbuckle.AspNetCore": {
             "target": "Package",
             "version": "[6.6.2, )"
+          },
+          "System.IdentityModel.Tokens.Jwt": {
+            "target": "Package",
+            "version": "[8.12.0, )"
           }
         },
         "imports": [

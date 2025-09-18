@@ -34,4 +34,6 @@ public partial class Product
     public virtual ICollection<PromotionProduct> PromotionProducts { get; set; } = new List<PromotionProduct>();
 
     public virtual ICollection<ReportDetail> ReportDetails { get; set; } = new List<ReportDetail>();
+
+    public virtual ICollection<Feature> Features { get; set; } = new List<Feature>();
 }

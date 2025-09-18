@@ -3,6 +3,38 @@
   "WorkspaceRootPath": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|d:\\fpt\\major\\semester_8\\exe201\\project\\hau\\asa-platform-be\\asa-platform-be\\asa-platform-repo\\basic\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|solutionrelative:asa-platform-repo\\basic\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|d:\\fpt\\major\\semester_8\\exe201\\project\\hau\\asa-platform-be\\asa-platform-be\\asa-platform-repo\\repository\\promotionproductrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|solutionrelative:asa-platform-repo\\repository\\promotionproductrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|d:\\fpt\\major\\semester_8\\exe201\\project\\hau\\asa-platform-be\\asa-platform-be\\asa-platform-repo\\repository\\promotionrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|solutionrelative:asa-platform-repo\\repository\\promotionrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|d:\\fpt\\major\\semester_8\\exe201\\project\\hau\\asa-platform-be\\asa-platform-be\\asa-platform-repo\\repository\\reportrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|solutionrelative:asa-platform-repo\\repository\\reportrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|d:\\fpt\\major\\semester_8\\exe201\\project\\hau\\asa-platform-be\\asa-platform-be\\asa-platform-repo\\repository\\userrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|solutionrelative:asa-platform-repo\\repository\\userrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|d:\\fpt\\major\\semester_8\\exe201\\project\\hau\\asa-platform-be\\asa-platform-be\\asa-platform-repo\\repository\\shoprepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|solutionrelative:asa-platform-repo\\repository\\shoprepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|d:\\fpt\\major\\semester_8\\exe201\\project\\hau\\asa-platform-be\\asa-platform-be\\asa-platform-repo\\repository\\productrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|solutionrelative:asa-platform-repo\\repository\\productrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|d:\\fpt\\major\\semester_8\\exe201\\project\\hau\\asa-platform-be\\asa-platform-be\\asa-platform-repo\\repository\\orderrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|solutionrelative:asa-platform-repo\\repository\\orderrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|d:\\fpt\\major\\semester_8\\exe201\\project\\hau\\asa-platform-be\\asa-platform-be\\asa-platform-repo\\repository\\notificationrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|solutionrelative:asa-platform-repo\\repository\\notificationrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -17,14 +49,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|d:\\fpt\\major\\semester_8\\exe201\\project\\hau\\asa-platform-be\\asa-platform-be\\asa-platform-repo\\dbcontext\\asaplatformdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|solutionrelative:asa-platform-repo\\dbcontext\\asaplatformdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|d:\\fpt\\major\\semester_8\\exe201\\project\\hau\\asa-platform-be\\asa-platform-be\\asa-platform-repo\\basic\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|solutionrelative:asa-platform-repo\\basic\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|d:\\fpt\\major\\semester_8\\exe201\\project\\hau\\asa-platform-be\\asa-platform-be\\asa-platform-repo\\repository\\productrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|solutionrelative:asa-platform-repo\\repository\\productrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{EC75E8C5-3794-44EB-BAE2-64C35CA68DDF}|ASA-PLATFORM-BE\\ASA-PLATFORM-BE.csproj|d:\\fpt\\major\\semester_8\\exe201\\project\\hau\\asa-platform-be\\asa-platform-be\\asa-platform-be\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -82,11 +106,102 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PromotionRepo.cs",
+              "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\PromotionRepo.cs",
+              "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\Repository\\PromotionRepo.cs",
+              "ToolTip": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\PromotionRepo.cs",
+              "RelativeToolTip": "ASA-PLATFORM-REPO\\Repository\\PromotionRepo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-10T01:00:17.364Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ReportRepo.cs",
+              "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\ReportRepo.cs",
+              "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\Repository\\ReportRepo.cs",
+              "ToolTip": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\ReportRepo.cs",
+              "RelativeToolTip": "ASA-PLATFORM-REPO\\Repository\\ReportRepo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-10T01:00:16.838Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UserRepo.cs",
+              "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\UserRepo.cs",
+              "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\Repository\\UserRepo.cs",
+              "ToolTip": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\UserRepo.cs",
+              "RelativeToolTip": "ASA-PLATFORM-REPO\\Repository\\UserRepo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-10T01:00:16.185Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ShopRepo.cs",
+              "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\ShopRepo.cs",
+              "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\Repository\\ShopRepo.cs",
+              "ToolTip": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\ShopRepo.cs",
+              "RelativeToolTip": "ASA-PLATFORM-REPO\\Repository\\ShopRepo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-10T01:00:14.994Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PromotionProductRepo.cs",
+              "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\PromotionProductRepo.cs",
+              "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\Repository\\PromotionProductRepo.cs",
+              "ToolTip": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\PromotionProductRepo.cs",
+              "RelativeToolTip": "ASA-PLATFORM-REPO\\Repository\\PromotionProductRepo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-10T01:00:11.317Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "OrderRepo.cs",
+              "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\OrderRepo.cs",
+              "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\Repository\\OrderRepo.cs",
+              "ToolTip": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\OrderRepo.cs",
+              "RelativeToolTip": "ASA-PLATFORM-REPO\\Repository\\OrderRepo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-10T01:00:10.217Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "GenericRepository.cs",
+              "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Basic\\GenericRepository.cs",
+              "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\Basic\\GenericRepository.cs",
+              "ToolTip": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Basic\\GenericRepository.cs",
+              "RelativeToolTip": "ASA-PLATFORM-REPO\\Basic\\GenericRepository.cs",
+              "ViewState": "AgIAAE8AAAAAAAAAAAAcwCEAAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-28T01:25:30.852Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "NotificationRepo.cs",
               "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\NotificationRepo.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\Repository\\NotificationRepo.cs",
@@ -99,59 +214,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ASAPLATFORMDBContext.cs",
-              "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\DBContext\\ASAPLATFORMDBContext.cs",
-              "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\DBContext\\ASAPLATFORMDBContext.cs",
-              "ToolTip": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\DBContext\\ASAPLATFORMDBContext.cs",
-              "RelativeToolTip": "ASA-PLATFORM-REPO\\DBContext\\ASAPLATFORMDBContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-28T01:25:49.12Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "GenericRepository.cs",
-              "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Basic\\GenericRepository.cs",
-              "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\Basic\\GenericRepository.cs",
-              "ToolTip": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Basic\\GenericRepository.cs",
-              "RelativeToolTip": "ASA-PLATFORM-REPO\\Basic\\GenericRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-28T01:25:30.852Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "appsettings.Development.json",
-              "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\appsettings.Development.json",
-              "RelativeDocumentMoniker": "ASA-PLATFORM-BE\\appsettings.Development.json",
-              "ToolTip": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\appsettings.Development.json",
-              "RelativeToolTip": "ASA-PLATFORM-BE\\appsettings.Development.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAyAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-08-28T00:59:17.911Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\appsettings.json",
-              "RelativeDocumentMoniker": "ASA-PLATFORM-BE\\appsettings.json",
-              "ToolTip": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\appsettings.json",
-              "RelativeToolTip": "ASA-PLATFORM-BE\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-08-28T00:27:33.506Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 10,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\Program.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-BE\\Program.cs",
@@ -159,12 +222,11 @@
               "RelativeToolTip": "ASA-PLATFORM-BE\\Program.cs",
               "ViewState": "AgIAABsAAAAAAAAAAAAAACoAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-27T11:15:49.668Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-27T11:15:49.668Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 9,
               "Title": "LogActivityRepo.cs",
               "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\LogActivityRepo.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\Repository\\LogActivityRepo.cs",
@@ -177,20 +239,68 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "ASA-PLATFORM-SERVICE",
+              "DocumentIndex": 6,
+              "Title": "ProductRepo.cs",
+              "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\ProductRepo.cs",
+              "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\Repository\\ProductRepo.cs",
+              "ToolTip": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\ProductRepo.cs",
+              "RelativeToolTip": "ASA-PLATFORM-REPO\\Repository\\ProductRepo.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAYwAwAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-27T11:05:24.185Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\appsettings.json",
+              "RelativeDocumentMoniker": "ASA-PLATFORM-BE\\appsettings.json",
+              "ToolTip": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\appsettings.json",
+              "RelativeToolTip": "ASA-PLATFORM-BE\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-08-28T00:27:33.506Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "ASA-PLATFORM-BE\\appsettings.Development.json",
+              "ToolTip": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\appsettings.Development.json",
+              "RelativeToolTip": "ASA-PLATFORM-BE\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-08-28T00:59:17.911Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ASAPLATFORMDBContext.cs",
+              "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\DBContext\\ASAPLATFORMDBContext.cs",
+              "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\DBContext\\ASAPLATFORMDBContext.cs",
+              "ToolTip": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\DBContext\\ASAPLATFORMDBContext.cs",
+              "RelativeToolTip": "ASA-PLATFORM-REPO\\DBContext\\ASAPLATFORMDBContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-08-28T01:25:49.12Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "ASA-PLATFORM-SERVICE.csproj",
               "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-SERVICE\\ASA-PLATFORM-SERVICE.csproj",
               "RelativeDocumentMoniker": "ASA-PLATFORM-SERVICE\\ASA-PLATFORM-SERVICE.csproj",
               "ToolTip": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-SERVICE\\ASA-PLATFORM-SERVICE.csproj",
               "RelativeToolTip": "ASA-PLATFORM-SERVICE\\ASA-PLATFORM-SERVICE.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-08-28T00:28:43.517Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-28T00:28:43.517Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 22,
               "Title": "IProductService.cs",
               "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-SERVICE\\Interface\\IProductService.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-SERVICE\\Interface\\IProductService.cs",
@@ -202,7 +312,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 19,
               "Title": "ProductService.cs",
               "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-SERVICE\\Implenment\\ProductService.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-SERVICE\\Implenment\\ProductService.cs",
@@ -214,20 +324,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ProductRepo.cs",
-              "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\ProductRepo.cs",
-              "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\Repository\\ProductRepo.cs",
-              "ToolTip": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\ProductRepo.cs",
-              "RelativeToolTip": "ASA-PLATFORM-REPO\\Repository\\ProductRepo.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-27T11:05:24.185Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 23,
               "Title": "IReportService.cs",
               "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-SERVICE\\Interface\\IReportService.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-SERVICE\\Interface\\IReportService.cs",
@@ -239,7 +336,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 20,
               "Title": "PromotionProduct.cs",
               "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Models\\PromotionProduct.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\Models\\PromotionProduct.cs",
@@ -251,7 +348,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 21,
               "Title": "ProductResponse.cs",
               "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-SERVICE\\DTOs\\Response\\ProductResponse.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-SERVICE\\DTOs\\Response\\ProductResponse.cs",
@@ -263,7 +360,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 12,
               "Title": "ProductController.cs",
               "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\Controllers\\ProductController.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-BE\\Controllers\\ProductController.cs",
@@ -271,12 +368,11 @@
               "RelativeToolTip": "ASA-PLATFORM-BE\\Controllers\\ProductController.cs",
               "ViewState": "AgIAAA4AAAAAAAAAAAAAwAgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-27T10:41:26.194Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-27T10:41:26.194Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 17,
               "Title": "Promotion.cs",
               "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Models\\Promotion.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\Models\\Promotion.cs",
@@ -284,12 +380,11 @@
               "RelativeToolTip": "ASA-PLATFORM-REPO\\Models\\Promotion.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-27T10:56:41.744Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-27T10:56:41.744Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 16,
               "Title": "MappingProfile.cs",
               "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-SERVICE\\Mapping\\MappingProfile.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-SERVICE\\Mapping\\MappingProfile.cs",
@@ -297,12 +392,11 @@
               "RelativeToolTip": "ASA-PLATFORM-SERVICE\\Mapping\\MappingProfile.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAAA4AAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-27T10:52:35.337Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-27T10:52:35.337Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 15,
               "Title": "ProductRequest.cs",
               "DocumentMoniker": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-SERVICE\\DTOs\\Request\\ProductRequest.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-SERVICE\\DTOs\\Request\\ProductRequest.cs",
@@ -310,8 +404,7 @@
               "RelativeToolTip": "ASA-PLATFORM-SERVICE\\DTOs\\Request\\ProductRequest.cs",
               "ViewState": "AgIAABIAAAAAAAAAAAA9wDIAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-27T10:42:08.8Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-27T10:42:08.8Z"
             }
           ]
         }

@@ -14,5 +14,47 @@ namespace ASA_PLATFORM_REPO.Repository
         public PromotionRepo(ASAPLATFORMDBContext context) : base(context)
         {
         }
+
+        public IQueryable<Promotion> GetFiltered(Promotion filter)
+        {
+            var query = _context.Promotions.AsQueryable();
+            if (filter.PromotionId > 0)
+                query = query.Where(c => c.PromotionId == filter.PromotionId);
+            if (!string.IsNullOrEmpty(filter.PromotionName))
+                query = query.Where(c => c.PromotionName.Contains(filter.PromotionName));
+            if (!string.IsNullOrEmpty(filter.Description))
+                query = query.Where(c => c.Description.Contains(filter.Description));
+            if (filter.StartDate.HasValue)
+                query = query.Where(p => p.StartDate <= filter.StartDate.Value);
+            if (filter.EndDate.HasValue)
+                query = query.Where(p => p.EndDate <= filter.EndDate.Value);
+            if (filter.Value.HasValue)
+                query = query.Where(p => p.Value <= filter.Value.Value);
+            if (!string.IsNullOrEmpty(filter.Type))
+                query = query.Where(c => c.Type.Contains(filter.Type));
+            if (filter.Status.HasValue)
+                query = query.Where(p => p.Status == filter.Status.Value);
+            if (filter.CreatedAt.HasValue)
+                query = query.Where(p => p.CreatedAt <= filter.CreatedAt.Value);
+            return query.OrderBy(c => c.PromotionId);
+        }
+
+        public async Task<List<long>> GetInvalidProductIdsAsync(IEnumerable<long> productIds)
+        {
+            if (productIds == null || !productIds.Any())
+                return new List<long>();
+
+            // Lấy toàn bộ ProductId có trong DB
+            var validIds = _context.Products
+                .Where(p => productIds.Contains(p.ProductId))
+                .Select(p => p.ProductId)
+                .ToList();
+
+            // Những id nào ko nằm trong validIds thì là invalid
+            var invalidIds = productIds.Except(validIds).ToList();
+
+            return invalidIds;
+        }
+
     }
 }
