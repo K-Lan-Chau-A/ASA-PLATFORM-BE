@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ASA-PLATFORM-SERVICE")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a224b432669bda470eac969ea2857ae1561f9b2a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a1bcd1f27039b5a987507094d97a2f40ab96df97")]
 [assembly: System.Reflection.AssemblyProductAttribute("ASA-PLATFORM-SERVICE")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ASA-PLATFORM-SERVICE")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
