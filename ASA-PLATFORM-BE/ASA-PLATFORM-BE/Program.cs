@@ -56,6 +56,13 @@ builder.Services.AddScoped<ReportRepo>();
 builder.Services.AddScoped<ShopRepo>();
 builder.Services.AddScoped<UserRepo>();
 
+// Add HttpClient for BeTenant
+builder.Services.AddHttpClient("BETenantUrl", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["BETenantUrl:Url"]);
+    client.Timeout = TimeSpan.FromSeconds(60);
+});
+
 // Đăng ký AutoMapper
 builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile).Assembly);
 
