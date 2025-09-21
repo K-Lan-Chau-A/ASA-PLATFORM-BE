@@ -14,9 +14,23 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
 
         public short? status { get; set; }
 
-        public DateTime? createdAt { get; set; }
+        /// <summary>
+        public string ShopToken { get; set; }
 
-        public DateTime? updatedAt { get; set; }
+        public string? QrcodeUrl { get; set; }
+
+        public string? SepayApiKey { get; set; }
+
+        public int? CurrentRequest { get; set; }
+
+        public int? CurrentAccount { get; set; }
+
+        public string? BankName { get; set; }
+
+        public string? BankCode { get; set; }
+
+        public string? BankNum { get; set; }
+
     }
     public class ShopGetRequest
     {

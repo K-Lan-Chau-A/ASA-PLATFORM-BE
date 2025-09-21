@@ -6,9 +6,12 @@ using ASA_PLATFORM_SERVICE.DTOs.Response;
 using ASA_PLATFORM_SERVICE.Interface;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,40 +19,77 @@ namespace ASA_PLATFORM_SERVICE.Implenment
 {
     public class ShopService : IShopService
     {
+        private readonly HttpClient _httpClient;
         private readonly ShopRepo _shopRepo;
         private readonly IMapper _mapper;
         private readonly OrderRepo _orderRepo;
-        public ShopService(ShopRepo shopRepo, IMapper mapper, OrderRepo orderRepo   )
+        private readonly IConfiguration _configuration;
+
+        public ShopService(ShopRepo shopRepo, IMapper mapper, OrderRepo orderRepo, IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _shopRepo = shopRepo;
             _mapper = mapper;
             _orderRepo = orderRepo;
+            _configuration = configuration;
+            _httpClient = httpClientFactory.CreateClient("BETenantUrl");
         }
 
         public async Task<ApiResponse<ShopResponse>> CreateAsync(ShopRequest request)
         {
             try
             {
+                // 1. Map sang entity
                 var entity = _mapper.Map<Shop>(request);
 
+                // 2. Lưu shop vào DB Platform
                 var affected = await _shopRepo.CreateAsync(entity);
 
-                if (affected > 0)
+                if (affected <= 0)
                 {
-                    var response = _mapper.Map<ShopResponse>(entity);
                     return new ApiResponse<ShopResponse>
                     {
-                        Success = true,
-                        Message = "Create successfully",
-                        Data = response
+                        Success = false,
+                        Message = "Create failed in Platform DB",
+                        Data = null
                     };
                 }
 
+                // 3. Gọi API Tenant
+                var tenantApiUrl = _configuration.GetValue<string>("BETenantUrl:Url");
+                var createShopEndpoint = $"{tenantApiUrl}/api/shops";
+
+                var tenantResponse = await _httpClient.PostAsJsonAsync(createShopEndpoint, new
+                {
+                    shopName = request.shopName,
+                    address = request.address,
+                    shopToken = request.ShopToken,
+                    status = 1,
+                    qrcodeUrl = request.QrcodeUrl,
+                    sepayApiKey = request.SepayApiKey,
+                    currentRequest = request.CurrentRequest,
+                    currentAccount = request.CurrentAccount,
+                    bankName = request.BankName,
+                    bankCode = request.BankCode,
+                    bankNum = request.BankNum
+                });
+
+                if (!tenantResponse.IsSuccessStatusCode)
+                {
+                    return new ApiResponse<ShopResponse>
+                    {
+                        Success = false,
+                        Message = $"Tenant API failed: {tenantResponse.StatusCode}",
+                        Data = null
+                    };
+                }
+
+                // 4. Trả về kết quả
+                var shopResponse = _mapper.Map<ShopResponse>(entity);
                 return new ApiResponse<ShopResponse>
                 {
-                    Success = false,
-                    Message = "Create failed",
-                    Data = null
+                    Success = true,
+                    Message = "Create successfully",
+                    Data = shopResponse
                 };
             }
             catch (Exception ex)
