@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ASA_PLATFORM_SERVICE.Enums
+{
+    public enum PromotionType
+    {
+        [Description("%")]
+        Percentage = 0,
+
+        [Description("Tiền")]
+        Money = 1
+    }
+
+    public enum PromotionStatus
+    {
+        [Description("InActive")]
+        Inactive = 0,
+
+        [Description("Active")]
+        Active = 1
+    }
+}

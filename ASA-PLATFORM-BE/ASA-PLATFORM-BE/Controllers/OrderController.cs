@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ASA_PLATFORM_BE.Controllers
 {
-    [Route("api/Orders")]
+    [Route("api/orders")]
     [ApiController]
     public class OrderController : ControllerBase
     {
