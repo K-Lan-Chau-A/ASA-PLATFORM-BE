@@ -1,5 +1,6 @@
 ﻿using ASA_PLATFORM_REPO.DBContext;
 using ASA_PLATFORM_REPO.Repository;
+using ASA_PLATFORM_SERVICE.CronJobs;
 using ASA_PLATFORM_SERVICE.Implenment;
 using ASA_PLATFORM_SERVICE.Interface;
 using ASA_TENANT_SERVICE.Mapping;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Quartz;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -88,6 +90,50 @@ builder.Services.AddCors(options =>
                 .AllowCredentials();
         });
 });
+
+//Đăng ký Quartz
+builder.Services.AddQuartz(q =>
+{
+    // Weekly job: chạy mỗi ngày lúc 00:05 T2
+    var dailyJobKey = new JobKey("WeeklyReportJob");
+    q.AddJob<WeeklyReportJob>(opts => opts.WithIdentity(dailyJobKey));
+    q.AddTrigger(opts => opts
+        .ForJob(dailyJobKey)
+        .WithIdentity("WeeklyReportTrigger")
+        .WithCronSchedule("0 5 0 ? * MON", x => x.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")))); // 00:05 mỗi thứ Hai (UTC)
+
+    // Monthly job: chạy ngày 1 hàng tháng lúc 00:30 
+    var monthlyJobKey = new JobKey("MonthlyReportJob");
+    q.AddJob<MonthlyReportJob>(opts => opts.WithIdentity(monthlyJobKey));
+    q.AddTrigger(opts => opts
+        .ForJob(monthlyJobKey)
+        .WithIdentity("MonthlyReportTrigger")
+        .WithCronSchedule("0 30 0 1 * ?", x => x.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")))); // 00:30 UTC ngày 1 hàng tháng
+});
+
+//// Quartz test 5p và 10p
+//builder.Services.AddQuartz(q =>
+//{
+//    // Daily job: chạy mỗi 5 phút
+//    var dailyJobKey = new JobKey("DailyReportJob");
+//    q.AddJob<WeeklyReportJob>(opts => opts.WithIdentity(dailyJobKey));
+//    q.AddTrigger(opts => opts
+//        .ForJob(dailyJobKey)
+//        .WithIdentity("DailyReportTrigger")
+//        .WithSimpleSchedule(x => x.WithIntervalInMinutes(1).RepeatForever()));
+
+//    //Monthly job: chạy mỗi 10 phút(chỉ để test)
+//    var monthlyJobKey = new JobKey("MonthlyReportJob");
+//    q.AddJob<MonthlyReportJob>(opts => opts.WithIdentity(monthlyJobKey));
+//    q.AddTrigger(opts => opts
+//        .ForJob(monthlyJobKey)
+//        .WithIdentity("MonthlyReportTrigger")
+//        .WithSimpleSchedule(x => x.WithIntervalInMinutes(5).RepeatForever()));
+//});
+
+
+// Dùng Quartz background service
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
 // Add Memory Cache
 builder.Services.AddMemoryCache();
