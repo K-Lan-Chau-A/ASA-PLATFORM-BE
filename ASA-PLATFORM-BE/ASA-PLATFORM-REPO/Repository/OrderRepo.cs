@@ -56,5 +56,12 @@ namespace ASA_PLATFORM_REPO.Repository
                 .OrderByDescending(o => o.CreatedAt)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<Order?> GetByNoteAsync(string note)
+        {
+            return await _context.Orders
+                .Where(o => o.Note == note)
+                .FirstOrDefaultAsync();
+        }
     }
 }

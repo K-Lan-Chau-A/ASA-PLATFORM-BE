@@ -27,6 +27,18 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
         public DateTime? ExpiredAt { get; set; }
 
         public string Note { get; set; }
+
+        // Optional: Shop info to auto-create Shop when ShopId is null
+        public string? shopName { get; set; }
+        public string? address { get; set; }
+        public string? ShopToken { get; set; }
+        public string? QrcodeUrl { get; set; }
+        public string? SepayApiKey { get; set; }
+        public int? CurrentRequest { get; set; }
+        public int? CurrentAccount { get; set; }
+        public string? BankName { get; set; }
+        public string? BankCode { get; set; }
+        public string? BankNum { get; set; }
     }
     public class OrderGetRequest
     {
