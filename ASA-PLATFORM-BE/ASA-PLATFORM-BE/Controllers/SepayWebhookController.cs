@@ -136,19 +136,43 @@ namespace ASA_PLATFORM_BE.Controllers
                 {
                     try
                     {
-                        var trimmedContent = payload.content.Trim();
-                        var sevqrIndex = trimmedContent.IndexOf("SEVQR", StringComparison.OrdinalIgnoreCase);
+                        var content = payload.content.Trim();
+                        var sevqrIndex = content.IndexOf("SEVQR", StringComparison.OrdinalIgnoreCase);
                         if (sevqrIndex > 0)
                         {
-                            var beforeSevqr = trimmedContent.Substring(0, sevqrIndex).TrimEnd('-');
-                            var lastDashIndex = beforeSevqr.LastIndexOf('-');
-                            var orderIdSegment = lastDashIndex >= 0 ? beforeSevqr.Substring(lastDashIndex + 1) : beforeSevqr;
-                            if (long.TryParse(orderIdSegment, out long contentOrderId))
+                            // Ưu tiên lấy chuỗi số LIỀN TRƯỚC từ "SEVQR" (không phụ thuộc dấu '-')
+                            int i = sevqrIndex - 1;
+                            var digits = new System.Text.StringBuilder();
+                            while (i >= 0 && char.IsDigit(content[i]))
                             {
-                                var orderResult = await _orderService.GetByIdAsync(contentOrderId);
+                                digits.Insert(0, content[i]);
+                                i--;
+                            }
+
+                            bool lookedUp = false;
+                            if (digits.Length > 0 && long.TryParse(digits.ToString(), out long tightOrderId))
+                            {
+                                var orderResult = await _orderService.GetByIdAsync(tightOrderId);
                                 if (orderResult.Success)
                                 {
                                     order = orderResult.Data;
+                                    lookedUp = true;
+                                }
+                            }
+
+                            // Nếu không tìm được theo chuỗi số liền trước, fallback lấy token sau dấu '-' cuối trước SEVQR
+                            if (!lookedUp)
+                            {
+                                var beforeSevqr = content.Substring(0, sevqrIndex).TrimEnd('-');
+                                var lastDashIndex = beforeSevqr.LastIndexOf('-');
+                                var orderIdSegment = lastDashIndex >= 0 ? beforeSevqr.Substring(lastDashIndex + 1) : beforeSevqr;
+                                if (long.TryParse(orderIdSegment, out long contentOrderId))
+                                {
+                                    var orderResult = await _orderService.GetByIdAsync(contentOrderId);
+                                    if (orderResult.Success)
+                                    {
+                                        order = orderResult.Data;
+                                    }
                                 }
                             }
                         }
