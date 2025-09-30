@@ -72,14 +72,20 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                     _logger.LogInformation("[OrderService] Assigned request.ShopId={ShopId} after shop creation", request.ShopId);
                 }
 
-                // Derive TotalPrice from ProductId if provided
+                // Derive TotalPrice from ProductId if provided (apply discount 0..1)
                 if (request.ProductId.HasValue)
                 {
                     var product = await _productRepo.GetByIdAsync(request.ProductId.Value);
                     if (product != null && product.Price.HasValue)
                     {
-                        request.TotalPrice = product.Price.Value;
-                        _logger.LogInformation("[OrderService] Derived TotalPrice from ProductId={ProductId}: TotalPrice={TotalPrice}", request.ProductId, request.TotalPrice);
+                        var basePrice = product.Price.Value;
+                        var discountRate = request.Discount ?? 0m;
+                        if (discountRate < 0m) discountRate = 0m;
+                        if (discountRate > 1m) discountRate = 1m;
+                        var finalPrice = basePrice * (1m - discountRate);
+                        request.TotalPrice = finalPrice;
+                        _logger.LogInformation("[OrderService] Derived TotalPrice from ProductId={ProductId}: Base={Base}, Discount={Discount}, Final={Final}",
+                            request.ProductId, basePrice, discountRate, finalPrice);
                     }
                     else
                     {
