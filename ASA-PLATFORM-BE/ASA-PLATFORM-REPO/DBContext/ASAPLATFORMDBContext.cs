@@ -2,9 +2,10 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using ASA_PLATFORM_REPO.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace ASA_PLATFORM_REPO.Models;
+namespace ASA_PLATFORM_REPO.DBContext;
 
 public partial class ASAPLATFORMDBContext : DbContext
 {
