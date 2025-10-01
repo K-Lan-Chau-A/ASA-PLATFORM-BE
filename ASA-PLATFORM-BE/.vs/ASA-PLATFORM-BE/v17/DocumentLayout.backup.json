@@ -7,6 +7,10 @@
       "RelativeMoniker": "D:0:0:{CA5715D6-1531-4E23-8AC1-C36C0937067B}|ASA-PLATFORM-SERVICE\\ASA-PLATFORM-SERVICE.csproj|solutionrelative:asa-platform-service\\implenment\\shopservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{CA5715D6-1531-4E23-8AC1-C36C0937067B}|ASA-PLATFORM-SERVICE\\ASA-PLATFORM-SERVICE.csproj|g:\\fpt\\major\\semester_8\\exe201\\project\\be\\hau\\asa-platform-be\\asa-platform-be\\asa-platform-service\\asa-platform-service.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{CA5715D6-1531-4E23-8AC1-C36C0937067B}|ASA-PLATFORM-SERVICE\\ASA-PLATFORM-SERVICE.csproj|solutionrelative:asa-platform-service\\asa-platform-service.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{CA5715D6-1531-4E23-8AC1-C36C0937067B}|ASA-PLATFORM-SERVICE\\ASA-PLATFORM-SERVICE.csproj|g:\\fpt\\major\\semester_8\\exe201\\project\\be\\hau\\asa-platform-be\\asa-platform-be\\asa-platform-service\\implenment\\authenticationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CA5715D6-1531-4E23-8AC1-C36C0937067B}|ASA-PLATFORM-SERVICE\\ASA-PLATFORM-SERVICE.csproj|solutionrelative:asa-platform-service\\implenment\\authenticationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -39,10 +43,6 @@
       "RelativeMoniker": "D:0:0:{A8FED43B-D95B-47BF-B0DF-0C47FD0E424F}|ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj|solutionrelative:asa-platform-repo\\dbcontext\\asaplatformdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{CA5715D6-1531-4E23-8AC1-C36C0937067B}|ASA-PLATFORM-SERVICE\\ASA-PLATFORM-SERVICE.csproj|g:\\fpt\\major\\semester_8\\exe201\\project\\be\\hau\\asa-platform-be\\asa-platform-be\\asa-platform-service\\asa-platform-service.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{CA5715D6-1531-4E23-8AC1-C36C0937067B}|ASA-PLATFORM-SERVICE\\ASA-PLATFORM-SERVICE.csproj|solutionrelative:asa-platform-service\\asa-platform-service.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{EC75E8C5-3794-44EB-BAE2-64C35CA68DDF}|ASA-PLATFORM-BE\\ASA-PLATFORM-BE.csproj|g:\\fpt\\major\\semester_8\\exe201\\project\\be\\hau\\asa-platform-be\\asa-platform-be\\asa-platform-be\\controllers\\shopcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EC75E8C5-3794-44EB-BAE2-64C35CA68DDF}|ASA-PLATFORM-BE\\ASA-PLATFORM-BE.csproj|solutionrelative:asa-platform-be\\controllers\\shopcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -61,8 +61,12 @@
           "SelectedChildIndex": 9,
           "Children": [
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "AuthenticationController.cs",
               "DocumentMoniker": "G:\\FPT\\Major\\Semester_8\\EXE201\\Project\\BE\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\Controllers\\AuthenticationController.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-BE\\Controllers\\AuthenticationController.cs",
@@ -70,12 +74,11 @@
               "RelativeToolTip": "ASA-PLATFORM-BE\\Controllers\\AuthenticationController.cs",
               "ViewState": "AgIAAFkAAAAAAAAAAAAwwG8AAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-01T11:37:25.616Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-01T11:37:25.616Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "AuthenticationService.cs",
               "DocumentMoniker": "G:\\FPT\\Major\\Semester_8\\EXE201\\Project\\BE\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-SERVICE\\Implenment\\AuthenticationService.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-SERVICE\\Implenment\\AuthenticationService.cs",
@@ -83,12 +86,11 @@
               "RelativeToolTip": "ASA-PLATFORM-SERVICE\\Implenment\\AuthenticationService.cs",
               "ViewState": "AgIAAIsAAAAAAAAAAAAcwJ4AAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-01T11:37:04.315Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-01T11:37:04.315Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "ShopRepo.cs",
               "DocumentMoniker": "G:\\FPT\\Major\\Semester_8\\EXE201\\Project\\BE\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Repository\\ShopRepo.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\Repository\\ShopRepo.cs",
@@ -96,12 +98,11 @@
               "RelativeToolTip": "ASA-PLATFORM-REPO\\Repository\\ShopRepo.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAAgwBsAAABjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-01T10:56:20.709Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-01T10:56:20.709Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 7,
               "Title": "Shop.cs",
               "DocumentMoniker": "G:\\FPT\\Major\\Semester_8\\EXE201\\Project\\BE\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Models\\Shop.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\Models\\Shop.cs",
@@ -109,12 +110,11 @@
               "RelativeToolTip": "ASA-PLATFORM-REPO\\Models\\Shop.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-01T10:55:10.647Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-01T10:55:10.647Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "User.cs",
               "DocumentMoniker": "G:\\FPT\\Major\\Semester_8\\EXE201\\Project\\BE\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\Models\\User.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\Models\\User.cs",
@@ -122,12 +122,11 @@
               "RelativeToolTip": "ASA-PLATFORM-REPO\\Models\\User.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-01T10:55:10.193Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-01T10:55:10.193Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "ASAPLATFORMDBContext.cs",
               "DocumentMoniker": "G:\\FPT\\Major\\Semester_8\\EXE201\\Project\\BE\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\DBContext\\ASAPLATFORMDBContext.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-REPO\\DBContext\\ASAPLATFORMDBContext.cs",
@@ -135,13 +134,12 @@
               "RelativeToolTip": "ASA-PLATFORM-REPO\\DBContext\\ASAPLATFORMDBContext.cs",
               "ViewState": "AgIAABgAAAAAAAAAAAA4wCQAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-01T10:54:50.3Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-01T10:54:50.3Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "ASA-PLATFORM-SERVICE",
+              "DocumentIndex": 1,
+              "Title": "ASA-PLATFORM-SERVICE.csproj",
               "DocumentMoniker": "G:\\FPT\\Major\\Semester_8\\EXE201\\Project\\BE\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-SERVICE\\ASA-PLATFORM-SERVICE.csproj",
               "RelativeDocumentMoniker": "ASA-PLATFORM-SERVICE\\ASA-PLATFORM-SERVICE.csproj",
               "ToolTip": "G:\\FPT\\Major\\Semester_8\\EXE201\\Project\\BE\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-SERVICE\\ASA-PLATFORM-SERVICE.csproj",
@@ -150,10 +148,6 @@
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
               "WhenOpened": "2025-10-01T09:42:49.764Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
             },
             {
               "$type": "Document",
@@ -165,8 +159,7 @@
               "RelativeToolTip": "ASA-PLATFORM-BE\\appsettings.Development.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-10-01T09:36:51.702Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-01T09:36:51.702Z"
             },
             {
               "$type": "Document",
@@ -176,7 +169,7 @@
               "RelativeDocumentMoniker": "ASA-PLATFORM-SERVICE\\Implenment\\ShopService.cs",
               "ToolTip": "G:\\FPT\\Major\\Semester_8\\EXE201\\Project\\BE\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-SERVICE\\Implenment\\ShopService.cs",
               "RelativeToolTip": "ASA-PLATFORM-SERVICE\\Implenment\\ShopService.cs",
-              "ViewState": "AgIAAGEAAAAAAAAAAAAhwHYAAABFAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAASwBIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-10-01T07:11:48.44Z",
               "EditorCaption": ""
@@ -191,12 +184,11 @@
               "RelativeToolTip": "ASA-PLATFORM-BE\\Controllers\\ShopController.cs",
               "ViewState": "AgIAAA4AAAAAAAAAAAAQwCQAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-01T07:02:45.519Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-01T07:02:45.519Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "ShopRequest.cs",
               "DocumentMoniker": "G:\\FPT\\Major\\Semester_8\\EXE201\\Project\\BE\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-SERVICE\\DTOs\\Request\\ShopRequest.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-SERVICE\\DTOs\\Request\\ShopRequest.cs",
@@ -204,12 +196,11 @@
               "RelativeToolTip": "ASA-PLATFORM-SERVICE\\DTOs\\Request\\ShopRequest.cs",
               "ViewState": "AgIAABQAAAAAAAAAAAAIwCsAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-01T07:02:41.733Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-01T07:02:41.733Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "ShopResponse.cs",
               "DocumentMoniker": "G:\\FPT\\Major\\Semester_8\\EXE201\\Project\\BE\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-SERVICE\\DTOs\\Response\\ShopResponse.cs",
               "RelativeDocumentMoniker": "ASA-PLATFORM-SERVICE\\DTOs\\Response\\ShopResponse.cs",
@@ -217,8 +208,7 @@
               "RelativeToolTip": "ASA-PLATFORM-SERVICE\\DTOs\\Response\\ShopResponse.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwA8AAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-01T07:02:39.098Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-01T07:02:39.098Z"
             }
           ]
         }
