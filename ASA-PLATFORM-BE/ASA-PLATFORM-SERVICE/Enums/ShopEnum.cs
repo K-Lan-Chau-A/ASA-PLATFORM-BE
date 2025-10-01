@@ -13,6 +13,9 @@ namespace ASA_PLATFORM_SERVICE.Enums
         Inactive = 0,
 
         [Description("Active")]
-        Active = 1
+        Active = 1,
+
+        [Description("Trial")]
+        Trial = 2
     }
 }

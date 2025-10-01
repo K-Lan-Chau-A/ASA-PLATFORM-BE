@@ -141,7 +141,7 @@ namespace ASA_PLATFORM_SERVICE.Implenment
             try
             {
                 var shop = await _shopService.GetShopById(dto.ShopId);
-                if (shop != null && shop.Status == 1)
+                if (shop != null && (shop.Status == 1 || shop.Status ==2) )
                 {
                     var userAccount = new User
                     {

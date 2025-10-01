@@ -19,5 +19,9 @@ public partial class Shop
 
     public DateTime? UpdatedAt { get; set; }
 
+    public string Fullname { get; set; }
+
+    public string Phonenumber { get; set; }
+
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }
