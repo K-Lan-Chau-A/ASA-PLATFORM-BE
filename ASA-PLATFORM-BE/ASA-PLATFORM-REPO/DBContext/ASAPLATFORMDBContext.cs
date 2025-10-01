@@ -167,6 +167,7 @@ public partial class ASAPLATFORMDBContext : DbContext
             entity.Property(e => e.Discount)
                 .HasPrecision(5, 2)
                 .HasColumnName("discount");
+            entity.Property(e => e.Duration).HasColumnName("duration");
             entity.Property(e => e.Price)
                 .HasPrecision(18, 2)
                 .HasColumnName("price");
