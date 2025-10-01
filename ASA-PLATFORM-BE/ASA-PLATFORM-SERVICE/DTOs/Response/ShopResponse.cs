@@ -11,6 +11,9 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Response
         public long shopId { get; set; }
 
         public string shopName { get; set; }
+        public string Fullname { get; set; }
+
+        public string Phonenumber { get; set; }
 
         public string address { get; set; }
 
@@ -23,5 +26,8 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Response
         public DateTime? createdAt { get; set; }
 
         public DateTime? updatedAt { get; set; }
+
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 }
