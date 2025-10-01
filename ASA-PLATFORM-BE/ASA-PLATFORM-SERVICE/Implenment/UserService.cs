@@ -28,6 +28,46 @@ namespace ASA_PLATFORM_SERVICE.Implenment
         {
             try
             {
+                // Uniqueness checks: Username, Email, PhoneNumber
+                var usernameExists = await _userRepo
+                    .GetFiltered(new User { Username = request.Username })
+                    .AnyAsync(u => u.Username == request.Username);
+                if (usernameExists)
+                {
+                    return new ApiResponse<UserResponse>
+                    {
+                        Success = false,
+                        Message = "Username already exists",
+                        Data = null
+                    };
+                }
+
+                var emailExists = await _userRepo
+                    .GetFiltered(new User { Email = request.Email })
+                    .AnyAsync(u => u.Email == request.Email);
+                if (emailExists)
+                {
+                    return new ApiResponse<UserResponse>
+                    {
+                        Success = false,
+                        Message = "Email already exists",
+                        Data = null
+                    };
+                }
+
+                var phoneExists = await _userRepo
+                    .GetFiltered(new User { PhoneNumber = request.PhoneNumber })
+                    .AnyAsync(u => u.PhoneNumber == request.PhoneNumber);
+                if (phoneExists)
+                {
+                    return new ApiResponse<UserResponse>
+                    {
+                        Success = false,
+                        Message = "Phone number already exists",
+                        Data = null
+                    };
+                }
+
                 var entity = _mapper.Map<User>(request);
                 entity.Password = HashPassword(request.Password);
 
