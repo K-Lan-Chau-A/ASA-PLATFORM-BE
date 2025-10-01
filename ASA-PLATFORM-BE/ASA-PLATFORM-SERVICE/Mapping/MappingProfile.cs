@@ -70,6 +70,11 @@ namespace ASA_TENANT_SERVICE.Mapping
 
             // Mapping Feature
             CreateMap<Feature, FeatureResponse>();
+
+            // Mapping Report
+            CreateMap<Report, ReportRequest>().ReverseMap();
+            CreateMap<Report, ReportGetRequest>().ReverseMap();
+            CreateMap<Report, ReportResponse>().ReverseMap();
         }
     }
 }

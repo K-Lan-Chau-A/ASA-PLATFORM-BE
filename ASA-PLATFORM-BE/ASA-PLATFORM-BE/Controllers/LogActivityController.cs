@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ASA_PLATFORM_BE.Controllers
 {
-    [Route("api/LogActivities")]
+    [Route("api/log-activities")]
     [ApiController]
     public class LogActivityController : ControllerBase
     {

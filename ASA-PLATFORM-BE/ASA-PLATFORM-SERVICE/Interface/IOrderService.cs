@@ -15,5 +15,8 @@ namespace ASA_PLATFORM_SERVICE.Interface
         Task<ApiResponse<OrderResponse>> CreateAsync(OrderRequest request);
         Task<ApiResponse<OrderResponse>> UpdateAsync(long id, OrderRequest request);
         Task<ApiResponse<bool>> DeleteAsync(long id);
+        Task<ApiResponse<OrderResponse>> GetByIdAsync(long id);
+        Task<ApiResponse<OrderResponse>> GetByNoteAsync(string note);
+        Task<ApiResponse<bool>> UpdateStatusAsync(long id, short status);
     }
 }
