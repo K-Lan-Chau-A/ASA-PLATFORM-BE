@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ASA-PLATFORM-REPO")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+529d0e17fcc64258634466d729d3ea580d3d88bb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+93d263710db501d7db13d76eeec89b77daf759c2")]
 [assembly: System.Reflection.AssemblyProductAttribute("ASA-PLATFORM-REPO")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ASA-PLATFORM-REPO")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
