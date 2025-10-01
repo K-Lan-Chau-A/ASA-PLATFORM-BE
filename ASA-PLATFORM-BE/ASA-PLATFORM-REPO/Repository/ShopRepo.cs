@@ -23,8 +23,11 @@ namespace ASA_PLATFORM_REPO.Repository
                 query = query.Where(c => c.ShopId == filter.ShopId);
 
             if (!string.IsNullOrEmpty(filter.ShopName))
-                query = query.Where(c => c.ShopName.Contains(filter.ShopName));
-
+                query = query.Where(c => c.ShopName.ToLower().Contains(filter.ShopName.ToLower()));
+            if (!string.IsNullOrEmpty(filter.Fullname))
+                query = query.Where(c => c.Fullname.ToLower().Contains(filter.Fullname.ToLower()));
+            if (!string.IsNullOrEmpty(filter.Phonenumber))
+                query = query.Where(c => c.Phonenumber.Contains(filter.Phonenumber));
             if (!string.IsNullOrEmpty(filter.Address))
                 query = query.Where(c => c.Address.Contains(filter.Address));
             if (filter.CreatedAt.HasValue)
