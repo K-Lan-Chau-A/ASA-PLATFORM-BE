@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ASA-PLATFORM-SERVICE")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+47cdbcd597f9737e4ba2ec8bf5a15fbb464467f4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f35e214d02b628a6082b2c0a795c229f00b6238f")]
 [assembly: System.Reflection.AssemblyProductAttribute("ASA-PLATFORM-SERVICE")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ASA-PLATFORM-SERVICE")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

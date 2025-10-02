@@ -26,7 +26,7 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
 
         public DateTime? ExpiredAt { get; set; }
 
-        public string Note { get; set; }
+        public string? Note { get; set; }
 
         // Optional: Shop info to auto-create Shop when ShopId is null
         public string? shopName { get; set; }
