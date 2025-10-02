@@ -293,6 +293,9 @@ public partial class ASAPLATFORMDBContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("now()")
                 .HasColumnName("created_at");
+            entity.Property(e => e.Email)
+                .HasMaxLength(150)
+                .HasColumnName("email");
             entity.Property(e => e.Fullname)
                 .HasMaxLength(150)
                 .HasColumnName("fullname");
