@@ -10,7 +10,7 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
     {
         public long? ShopId { get; set; }
 
-        public long? ProductId { get; set; }
+        public long ProductId { get; set; }
 
         public long? UserId { get; set; }
 
@@ -24,11 +24,10 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
 
         public DateTime? CreatedAt { get; set; }
 
-        public DateTime? ExpiredAt { get; set; }
-
-        public string Note { get; set; }
+        public string? Note { get; set; }
 
         // Optional: Shop info to auto-create Shop when ShopId is null
+        public string? Phonenumber { get; set; }
         public string? shopName { get; set; }
         public string? address { get; set; }
         public string? ShopToken { get; set; }
@@ -46,7 +45,7 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
 
         public long? ShopId { get; set; }
 
-        public long? ProductId { get; set; }
+        public long ProductId { get; set; }
 
         public long? UserId { get; set; }
 
