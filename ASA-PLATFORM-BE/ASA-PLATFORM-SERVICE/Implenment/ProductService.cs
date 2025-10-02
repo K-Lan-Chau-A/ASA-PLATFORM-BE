@@ -28,7 +28,27 @@ namespace ASA_PLATFORM_SERVICE.Implenment
         {
             try
             {
+                if (request.featureIds != null && request.featureIds.Any())
+                {
+                    var invalidIds = await _productRepo.GetInvalidFeatureIdsAsync(request.featureIds);
+                    if (invalidIds.Any())
+                    {
+                        return new ApiResponse<ProductResponse>
+                        {
+                            Success = false,
+                            Message = $"Invalid feature id(s): {string.Join(", ", invalidIds)}",
+                            Data = null
+                        };
+                    }
+                }
+
                 var entity = _mapper.Map<Product>(request);
+
+                // Thêm quan hệ ProductFeature nếu có featureIds
+                if (request.featureIds != null && request.featureIds.Any())
+                {
+                    await _productRepo.AttachFeaturesAsync(entity, request.featureIds);
+                }
 
                 var affected = await _productRepo.CreateAsync(entity);
 
@@ -126,10 +146,26 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                         Data = null
                     };
 
+                if (request.featureIds != null && request.featureIds.Any())
+                {
+                    var invalidIds = await _productRepo.GetInvalidFeatureIdsAsync(request.featureIds);
+                    if (invalidIds.Any())
+                    {
+                        return new ApiResponse<ProductResponse>
+                        {
+                            Success = false,
+                            Message = $"Invalid feature id(s): {string.Join(", ", invalidIds)}",
+                            Data = null
+                        };
+                    }
+                }
+
                 // Map dữ liệu từ DTO sang entity, bỏ Id
                 _mapper.Map(request, existing);
 
-                var affected = await _productRepo.UpdateAsync(existing);
+                // Gọi repo update, truyền kèm featureIds
+                var affected = await _productRepo.UpdateAsync(existing, request.featureIds);
+
                 if (affected > 0)
                 {
                     var response = _mapper.Map<ProductResponse>(existing);
@@ -158,5 +194,6 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 };
             }
         }
+
     }
 }
