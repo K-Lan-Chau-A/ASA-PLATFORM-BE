@@ -29,7 +29,8 @@ namespace ASA_TENANT_SERVICE.Mapping
                     ))
                 .ForMember(dest => dest.Features,
                     opt => opt.MapFrom(src => src.Features))
-                .ReverseMap();
+                .ReverseMap()
+                .ForMember(dest => dest.Features, opt => opt.Ignore());
 
             //Mapping Shop
             CreateMap<Shop, ShopRequest>().ReverseMap();

@@ -27,6 +27,8 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
         public short? status { get; set; }
 
         public string qrcodeUrl { get; set; }
+        public TimeSpan? Duration { get; set; }
+        public HashSet<long> featureIds { get; set; }
     }
     public class ProductGetRequest
     {
