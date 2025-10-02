@@ -18,5 +18,6 @@ namespace ASA_PLATFORM_SERVICE.Interface
         Task<ApiResponse<OrderResponse>> GetByIdAsync(long id);
         Task<ApiResponse<OrderResponse>> GetByNoteAsync(string note);
         Task<ApiResponse<bool>> UpdateStatusAsync(long id, short status);
+        Task<ApiResponse<bool>> UpdateExpiryFromProductAsync(long id);
     }
 }
