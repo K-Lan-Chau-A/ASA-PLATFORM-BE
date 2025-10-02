@@ -237,6 +237,20 @@ namespace ASA_PLATFORM_BE.Controllers
                     _logger.LogWarning(sx, "Không thể cập nhật status Shop {ShopId} thành 1", existingShop.ShopId);
                 }
 
+                // Tính và cập nhật ExpiredAt từ Product.Duration sau khi thanh toán thành công
+                try
+                {
+                    var updateExpiry = await _orderService.UpdateExpiryFromProductAsync(order.OrderId);
+                    if (!updateExpiry.Success)
+                    {
+                        _logger.LogWarning("Không thể cập nhật ExpiredAt cho Order {OrderId}: {Message}", order.OrderId, updateExpiry.Message);
+                    }
+                }
+                catch (Exception exUpd)
+                {
+                    _logger.LogWarning(exUpd, "Lỗi khi cập nhật ExpiredAt cho Order {OrderId}", order.OrderId);
+                }
+
                 _logger.LogInformation("Xử lý webhook SePay thành công cho Order {OrderId}. Amount: {Amount}", order.OrderId, payload.transferAmount);
 
                 return Ok(new { success = true });

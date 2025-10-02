@@ -38,8 +38,18 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 // Auto-create Shop if missing
                 if (!request.ShopId.HasValue)
                 {
-                    _logger.LogInformation("[OrderService] ShopId is null. Auto-creating shop with body fields: shopName={ShopName}, address={Address}, bankCode={BankCode}, bankNum={BankNum}",
-                        request.shopName, request.address, request.BankCode, request.BankNum);
+                    _logger.LogInformation("[OrderService] ShopId is null. Auto-creating shop with body fields: phone={Phone}, shopName={ShopName}, address={Address}, bankCode={BankCode}, bankNum={BankNum}",
+                        request.Phonenumber, request.shopName, request.address, request.BankCode, request.BankNum);
+
+                    if (string.IsNullOrWhiteSpace(request.Phonenumber))
+                    {
+                        return new ApiResponse<OrderResponse>
+                        {
+                            Success = false,
+                            Message = "Phonenumber is required when creating a new shop",
+                            Data = null
+                        };
+                    }
                     var createShopReq = new ShopRequest
                     {
                         shopName = string.IsNullOrWhiteSpace(request.shopName) ? $"Shop-Auto-{DateTime.UtcNow:yyyyMMddHHmmss}" : request.shopName,
@@ -52,7 +62,9 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                         CurrentAccount = request.CurrentAccount,
                         BankName = request.BankName,
                         BankCode = request.BankCode,
-                        BankNum = request.BankNum
+                        BankNum = request.BankNum,
+                        Phonenumber = request.Phonenumber,
+                        ProductId = request.ProductId
                     };
                     var createdShop = await _shopService.CreateAsync(createShopReq);
                     _logger.LogInformation("[OrderService] Create shop result: Success={Success}, Message={Message}, ReturnedShopId={ReturnedShopId}",
@@ -72,20 +84,25 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                     _logger.LogInformation("[OrderService] Assigned request.ShopId={ShopId} after shop creation", request.ShopId);
                 }
 
-                // Derive TotalPrice from ProductId if provided (apply discount 0..100%)
-                if (request.ProductId.HasValue)
+                // Derive TotalPrice and ExpiredAt from Product (apply discount 0..100%)
+                if (request.ProductId > 0)
                 {
-                    var product = await _productRepo.GetByIdAsync(request.ProductId.Value);
-                    if (product != null && product.Price.HasValue)
+                    var product = await _productRepo.GetByIdAsync(request.ProductId);
+                    if (product != null)
                     {
-                        var basePrice = product.Price.Value;
-                        var discountRate = request.Discount ?? 0m;
-                        if (discountRate < 0m) discountRate = 0m;
-                        if (discountRate > 100m) discountRate = 100m;
-                        var finalPrice = basePrice * (1m - discountRate / 100m);
-                        request.TotalPrice = finalPrice;
-                        _logger.LogInformation("[OrderService] Derived TotalPrice from ProductId={ProductId}: Base={Base}, Discount={Discount}%, Final={Final}",
-                            request.ProductId, basePrice, discountRate, finalPrice);
+                        if (product.Price.HasValue)
+                        {
+                            var basePrice = product.Price.Value;
+                            var discountRate = request.Discount ?? 0m;
+                            if (discountRate < 0m) discountRate = 0m;
+                            if (discountRate > 100m) discountRate = 100m;
+                            var finalPrice = basePrice * (1m - discountRate / 100m);
+                            request.TotalPrice = finalPrice;
+                            _logger.LogInformation("[OrderService] Derived TotalPrice from ProductId={ProductId}: Base={Base}, Discount={Discount}%, Final={Final}",
+                                request.ProductId, basePrice, discountRate, finalPrice);
+                        }
+
+                        // Do NOT compute ExpiredAt here; it will be set on webhook success
                     }
                     else
                     {
@@ -94,6 +111,7 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 }
 
                 var entity = _mapper.Map<Order>(request);
+                // Do NOT set ExpiredAt at creation time; it will be set on webhook success
                 _logger.LogInformation("[OrderService] Mapping to entity: ShopId={ShopId}, ProductId={ProductId}, TotalPrice={TotalPrice}",
                     entity.ShopId, entity.ProductId, entity.TotalPrice);
 
@@ -314,6 +332,65 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 {
                     Success = affected > 0,
                     Message = affected > 0 ? "Status updated successfully" : "Update failed",
+                    Data = affected > 0
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<bool>
+                {
+                    Success = false,
+                    Message = $"Error: {ex.Message}",
+                    Data = false
+                };
+            }
+        }
+
+        public async Task<ApiResponse<bool>> UpdateExpiryFromProductAsync(long id)
+        {
+            try
+            {
+                var existing = await _orderRepo.GetByIdAsync(id);
+                if (existing == null)
+                {
+                    return new ApiResponse<bool>
+                    {
+                        Success = false,
+                        Message = "Order not found",
+                        Data = false
+                    };
+                }
+
+                if (!existing.ProductId.HasValue)
+                {
+                    return new ApiResponse<bool>
+                    {
+                        Success = false,
+                        Message = "Order missing ProductId",
+                        Data = false
+                    };
+                }
+
+                var product = await _productRepo.GetByIdAsync(existing.ProductId.Value);
+                if (product == null || !product.Duration.HasValue)
+                {
+                    return new ApiResponse<bool>
+                    {
+                        Success = false,
+                        Message = "Product not found or missing Duration",
+                        Data = false
+                    };
+                }
+
+                var createdAt = existing.CreatedAt ?? DateTime.UtcNow;
+                existing.CreatedAt = createdAt;
+                existing.ExpiredAt = createdAt + product.Duration.Value;
+
+                var affected = await _orderRepo.UpdateAsync(existing);
+                return new ApiResponse<bool>
+                {
+                    Success = affected > 0,
+                    Message = affected > 0 ? "Expiry updated successfully" : "Update failed",
                     Data = affected > 0
                 };
             }
