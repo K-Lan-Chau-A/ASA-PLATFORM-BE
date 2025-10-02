@@ -13,6 +13,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ASA_PLATFORM_SERVICE.Implenment
@@ -40,6 +42,34 @@ namespace ASA_PLATFORM_SERVICE.Implenment
             {
                 // 1. Map sang entity
                 var entity = _mapper.Map<Shop>(request);
+                entity.Status = 2;
+
+                // Validate and normalize Vietnamese phone number
+                string normalizedPhone;
+                if (!TryNormalizeVietnamPhoneNumber(request.Phonenumber, out normalizedPhone))
+                {
+                    return new ApiResponse<ShopResponse>
+                    {
+                        Success = false,
+                        Message = "Invalid Vietnamese phone number format",
+                        Data = null
+                    };
+                }
+
+                // Check duplicate phone in Shop table and set normalized phone on entity
+                var shopPhoneExists = await _shopRepo
+                    .GetFiltered(new Shop { Phonenumber = normalizedPhone })
+                    .AnyAsync(s => s.Phonenumber == normalizedPhone);
+                if (shopPhoneExists)
+                {
+                    return new ApiResponse<ShopResponse>
+                    {
+                        Success = false,
+                        Message = "Phone number already exists in shop",
+                        Data = null
+                    };
+                }
+                entity.Phonenumber = normalizedPhone;
 
                 // 2. Lưu shop vào DB Platform
                 var affected = await _shopRepo.CreateAsync(entity);
@@ -63,14 +93,16 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                     shopName = request.shopName,
                     address = request.address,
                     shopToken = request.ShopToken,
-                    status = 1,
+                    status = 2,
                     qrcodeUrl = request.QrcodeUrl,
                     sepayApiKey = request.SepayApiKey,
                     currentRequest = request.CurrentRequest,
                     currentAccount = request.CurrentAccount,
                     bankName = request.BankName,
                     bankCode = request.BankCode,
-                    bankNum = request.BankNum
+                    bankNum = request.BankNum,
+                    productId = request.ProductId,
+                    username = normalizedPhone
                 });
 
                 if (!tenantResponse.IsSuccessStatusCode)
@@ -85,6 +117,13 @@ namespace ASA_PLATFORM_SERVICE.Implenment
 
                 // 4. Trả về kết quả
                 var shopResponse = _mapper.Map<ShopResponse>(entity);
+                // Đọc thông tin đăng nhập từ Tenant API response (nếu có)
+                var tenantRaw = await tenantResponse.Content.ReadAsStringAsync();
+                if (TryParseTenantCredentials(tenantRaw, out var adminUsername, out var adminPassword))
+                {
+                    shopResponse.Username = adminUsername;
+                    shopResponse.Password = adminPassword;
+                }
                 return new ApiResponse<ShopResponse>
                 {
                     Success = true,
@@ -220,6 +259,88 @@ namespace ASA_PLATFORM_SERVICE.Implenment
         private async Task<Order?> GetCurrentShopProduct (long shopId)
         {
            return await _orderRepo.GetCurrentShopProduct(shopId);
+        }
+
+        private class TenantCreateShopResponse
+        {
+            public string CreatedAdminUsername { get; set; }
+            public string CreatedAdminPassword { get; set; }
+        }
+
+        private class TenantCreateShopEnvelope
+        {
+            public bool Success { get; set; }
+            public string Message { get; set; }
+            public TenantCreateShopResponse Data { get; set; }
+        }
+
+        private static bool TryParseTenantCredentials(string json, out string username, out string password)
+        {
+            username = null;
+            password = null;
+            if (string.IsNullOrWhiteSpace(json)) return false;
+
+            try
+            {
+                var envelope = JsonSerializer.Deserialize<TenantCreateShopEnvelope>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+                if (envelope?.Data != null &&
+                    !string.IsNullOrEmpty(envelope.Data.CreatedAdminUsername) &&
+                    !string.IsNullOrEmpty(envelope.Data.CreatedAdminPassword))
+                {
+                    username = envelope.Data.CreatedAdminUsername;
+                    password = envelope.Data.CreatedAdminPassword;
+                    return true;
+                }
+            }
+            catch { /* ignore and try flat */ }
+
+            try
+            {
+                var flat = JsonSerializer.Deserialize<TenantCreateShopResponse>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+                if (flat != null && !string.IsNullOrEmpty(flat.CreatedAdminUsername) && !string.IsNullOrEmpty(flat.CreatedAdminPassword))
+                {
+                    username = flat.CreatedAdminUsername;
+                    password = flat.CreatedAdminPassword;
+                    return true;
+                }
+            }
+            catch { /* ignore */ }
+
+            return false;
+        }
+
+        private static bool TryNormalizeVietnamPhoneNumber(string input, out string normalized)
+        {
+            normalized = null;
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return false;
+            }
+
+            var phone = input.Trim().Replace(" ", string.Empty).Replace("-", string.Empty);
+
+            if (phone.StartsWith("+84"))
+            {
+                phone = "0" + phone.Substring(3);
+            }
+            else if (phone.StartsWith("84"))
+            {
+                phone = "0" + phone.Substring(2);
+            }
+
+            if (Regex.IsMatch(phone, @"^0(3|5|7|8|9)\d{8}$"))
+            {
+                normalized = phone;
+                return true;
+            }
+
+            return false;
         }
     }
 }
