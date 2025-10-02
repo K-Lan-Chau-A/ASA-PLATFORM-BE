@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "G:\\FPT\\Major\\Semester_8\\EXE201\\Project\\BE\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj": {}
+    "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj": {}
   },
   "projects": {
-    "G:\\FPT\\Major\\Semester_8\\EXE201\\Project\\BE\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj": {
+    "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\FPT\\Major\\Semester_8\\EXE201\\Project\\BE\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj",
+        "projectUniqueName": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj",
         "projectName": "ASA-PLATFORM-REPO",
-        "projectPath": "G:\\FPT\\Major\\Semester_8\\EXE201\\Project\\BE\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "G:\\FPT\\Major\\Semester_8\\EXE201\\Project\\BE\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\obj\\",
+        "projectPath": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\ASA-PLATFORM-REPO.csproj",
+        "packagesPath": "C:\\Users\\Hau Huynh\\.nuget\\packages\\",
+        "outputPath": "D:\\FPT\\Major\\Semester_8\\EXE201\\Project\\Hau\\ASA-PLATFORM-BE\\ASA-PLATFORM-BE\\ASA-PLATFORM-REPO\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Hau Huynh\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -92,7 +92,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
