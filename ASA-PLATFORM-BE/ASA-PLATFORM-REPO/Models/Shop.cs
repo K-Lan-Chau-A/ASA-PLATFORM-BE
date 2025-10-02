@@ -15,6 +15,12 @@ public partial class Shop
 
     public short? Status { get; set; }
 
+    public string Email { get; set; }
+
+    public string Fullname { get; set; }
+
+    public string Phonenumber { get; set; }
+
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }

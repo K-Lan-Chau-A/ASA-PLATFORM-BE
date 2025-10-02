@@ -9,12 +9,16 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
     public class ShopRequest
     {
         public string shopName { get; set; }
+        public string Fullname { get; set; }
+
+        public string Phonenumber { get; set; }
 
         public string address { get; set; }
 
         public short? status { get; set; }
 
         /// <summary>
+
         public string ShopToken { get; set; }
 
         public string? QrcodeUrl { get; set; }
@@ -31,11 +35,16 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
 
         public string? BankNum { get; set; }
 
+        public long? ProductId { get; set; }
+
     }
     public class ShopGetRequest
     {
         public long? shopId { get; set; }
         public string? shopName { get; set; }
+        public string? fullName { get; set; }
+
+        public string? phoneNumber { get; set; }
         public string? address { get; set; }
         public short? status { get; set; }
         public DateTime? createdAt { get; set; }

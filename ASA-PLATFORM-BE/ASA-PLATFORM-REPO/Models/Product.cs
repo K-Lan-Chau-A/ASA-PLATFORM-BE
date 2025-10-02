@@ -19,6 +19,8 @@ public partial class Product
 
     public int? AccountLimit { get; set; }
 
+    public TimeSpan? Duration { get; set; }
+
     public DateTime? CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
@@ -28,8 +30,6 @@ public partial class Product
     public short? Status { get; set; }
 
     public string QrcodeUrl { get; set; }
-
-    public TimeSpan? Duration { get; set; }
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
