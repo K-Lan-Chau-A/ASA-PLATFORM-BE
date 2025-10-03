@@ -16,6 +16,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static ASA_PLATFORM_REPO.Repository.ShopRepo;
 
 namespace ASA_PLATFORM_SERVICE.Implenment
 {
@@ -341,6 +342,11 @@ namespace ASA_PLATFORM_SERVICE.Implenment
             }
 
             return false;
+        }
+
+        public Task<List<ShopTrialDto>> CheckTrialShops()
+        {
+            return _shopRepo.CheckTrialShops();
         }
     }
 }

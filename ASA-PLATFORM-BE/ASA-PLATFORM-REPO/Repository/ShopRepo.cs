@@ -46,5 +46,57 @@ namespace ASA_PLATFORM_REPO.Repository
         {
             return await _context.Shops.FirstOrDefaultAsync(u => u.ShopId == id);
         }
+
+        public async Task<List<ShopTrialDto>> CheckTrialShops()
+        {
+            var today = DateTime.UtcNow.Date;
+
+            var shops = await _context.Shops
+                .Where(s => s.Status == 2) // trial
+                .ToListAsync();
+
+            var needNotify = new List<ShopTrialDto>();
+
+            foreach (var shop in shops)
+            {
+                if (!shop.CreatedAt.HasValue) continue;
+
+                var daysUsed = (int)(today - shop.CreatedAt.Value.Date).TotalDays;
+                var trialDays = 15; // ví dụ mặc định 15 ngày trial
+                var daysLeft = trialDays - daysUsed;
+
+                if (daysUsed >= trialDays)
+                {
+                    shop.Status = 0; // hết hạn -> Inactive
+                    shop.UpdatedAt = DateTime.UtcNow;
+                }
+                else if (daysUsed == 12 || daysUsed == 13 || daysUsed == 14)
+                {
+                    needNotify.Add(new ShopTrialDto
+                    {
+                        ShopId = shop.ShopId,
+                        ShopName = shop.ShopName,
+                        Fullname = shop.Fullname,
+                        Email = shop.Email,
+                        DaysLeft = daysLeft
+                    });
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            return needNotify;
+        }
+
+
+        public class ShopTrialDto
+        {
+            public long ShopId { get; set; }
+            public string ShopName { get; set; }
+            public string Fullname { get; set; }
+            public string Email { get; set; }
+            public int DaysLeft { get; set; }
+        }
+
     }
 }
