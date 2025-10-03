@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static ASA_PLATFORM_REPO.Repository.ShopRepo;
 
 namespace ASA_PLATFORM_SERVICE.Interface
 {
@@ -17,5 +18,6 @@ namespace ASA_PLATFORM_SERVICE.Interface
         Task<ApiResponse<ShopResponse>> UpdateAsync(long id, ShopRequest request);
         Task<ApiResponse<bool>> DeleteAsync(long id);
         Task<Shop?> GetShopById(long id);
+        Task<List<ShopTrialDto>> CheckTrialShops();
     }
 }
