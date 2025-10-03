@@ -44,6 +44,7 @@ builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IShopService, ShopService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 // Register repositories
@@ -109,26 +110,42 @@ builder.Services.AddQuartz(q =>
         .ForJob(monthlyJobKey)
         .WithIdentity("MonthlyReportTrigger")
         .WithCronSchedule("0 30 0 1 * ?", x => x.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")))); // 00:30 UTC ngày 1 hàng tháng
+
+    // Check Trial job: chạy mỗi ngày lúc 01:00
+    var checkTrialJobKey = new JobKey("CheckTrialJob");
+    q.AddJob<CheckTrialJob>(opts => opts.WithIdentity(checkTrialJobKey));
+    q.AddTrigger(opts => opts
+        .ForJob(checkTrialJobKey)
+        .WithIdentity("CheckTrialTrigger")
+        .WithCronSchedule("0 0 1 * * ?", x => x.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")))); // 01:00 UTC mỗi ngày
 });
 
 //// Quartz test 5p và 10p
 //builder.Services.AddQuartz(q =>
 //{
-//    // Daily job: chạy mỗi 5 phút
-//    var dailyJobKey = new JobKey("DailyReportJob");
-//    q.AddJob<WeeklyReportJob>(opts => opts.WithIdentity(dailyJobKey));
-//    q.AddTrigger(opts => opts
-//        .ForJob(dailyJobKey)
-//        .WithIdentity("DailyReportTrigger")
-//        .WithSimpleSchedule(x => x.WithIntervalInMinutes(1).RepeatForever()));
+    //// Daily job: chạy mỗi 5 phút
+    //var dailyJobKey = new JobKey("DailyReportJob");
+    //q.AddJob<WeeklyReportJob>(opts => opts.WithIdentity(dailyJobKey));
+    //q.AddTrigger(opts => opts
+    //    .ForJob(dailyJobKey)
+    //    .WithIdentity("DailyReportTrigger")
+    //    .WithSimpleSchedule(x => x.WithIntervalInMinutes(1).RepeatForever()));
 
-//    //Monthly job: chạy mỗi 10 phút(chỉ để test)
-//    var monthlyJobKey = new JobKey("MonthlyReportJob");
-//    q.AddJob<MonthlyReportJob>(opts => opts.WithIdentity(monthlyJobKey));
-//    q.AddTrigger(opts => opts
-//        .ForJob(monthlyJobKey)
-//        .WithIdentity("MonthlyReportTrigger")
-//        .WithSimpleSchedule(x => x.WithIntervalInMinutes(5).RepeatForever()));
+    ////Monthly job: chạy mỗi 10 phút(chỉ để test)
+    //var monthlyJobKey = new JobKey("MonthlyReportJob");
+    //q.AddJob<MonthlyReportJob>(opts => opts.WithIdentity(monthlyJobKey));
+    //q.AddTrigger(opts => opts
+    //    .ForJob(monthlyJobKey)
+    //    .WithIdentity("MonthlyReportTrigger")
+    //    .WithSimpleSchedule(x => x.WithIntervalInMinutes(5).RepeatForever()));
+
+    //Check Trial job: chạy mỗi 5 phút
+//   var checkTrialJobKey = new JobKey("CheckTrialJob");
+//q.AddJob<CheckTrialJob>(opts => opts.WithIdentity(checkTrialJobKey));
+//q.AddTrigger(opts => opts
+//    .ForJob(checkTrialJobKey)
+//    .WithIdentity("CheckTrialTrigger")
+//    .WithSimpleSchedule(x => x.WithIntervalInMinutes(1).RepeatForever()));
 //});
 
 

@@ -12,6 +12,7 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
         public string Fullname { get; set; }
 
         public string Phonenumber { get; set; }
+        public string Email { get; set; }
 
         public string address { get; set; }
 
