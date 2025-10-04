@@ -91,7 +91,7 @@ namespace ASA_PLATFORM_SERVICE.Implenment
             var issuer = jwtConfig["Issuer"];
             var audience = jwtConfig["Audience"];
             var key = jwtConfig["Key"];
-            var expiryIn = DateTime.Now.AddMinutes(Double.Parse(jwtConfig["ExpireMinutes"]));
+            var expiryIn = DateTime.Now.AddYears(int.Parse(jwtConfig["ExpireYears"]));
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
