@@ -6,8 +6,6 @@ using MailKit.Security;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 using System.Threading.Tasks;
 
 namespace ASA_PLATFORM_SERVICE.Implenment
@@ -30,65 +28,33 @@ namespace ASA_PLATFORM_SERVICE.Implenment
             _logger = logger;
         }
 
-        //public async Task<bool> SendEmailAsync(string to, string subject, string body)
-        //{
-        //    try
-        //    {
-        //        var message = new MimeMessage();
-        //        message.From.Add(new MailboxAddress("ASA Platform", _config["SmtpSettings:Username"]));
-        //        message.To.Add(MailboxAddress.Parse(to));
-        //        message.Subject = subject;
-        //        message.Body = new TextPart("html")
-        //        {
-        //            Text = body
-        //        };
-
-        //        using var client = new SmtpClient();
-        //        await client.ConnectAsync(
-        //            _config["SmtpSettings:Host"],
-        //            int.Parse(_config["SmtpSettings:Port"]),
-        //            SecureSocketOptions.StartTls
-        //        );
-
-        //        await client.AuthenticateAsync(
-        //            _config["SmtpSettings:Username"],
-        //            _config["SmtpSettings:Password"]
-        //        );
-
-        //        await client.SendAsync(message);
-        //        await client.DisconnectAsync(true);
-
-        //        _logger.LogInformation($"Email sent successfully to {to}");
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, $"Failed to send email to {to}");
-        //        return false;
-        //    }
-        //}
         public async Task<bool> SendEmailAsync(string to, string subject, string body)
         {
             try
             {
-                var apiKey = _config["SendGrid:ApiKey"];
-                var client = new SendGridClient(apiKey);
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress("ASA Platform", _config["SmtpSettings:Username"]));
+                message.To.Add(MailboxAddress.Parse(to));
+                message.Subject = subject;
+                message.Body = new TextPart("html")
+                {
+                    Text = body
+                };
 
-                var from = new EmailAddress(
-                    _config["SendGrid:FromEmail"],
-                    _config["SendGrid:FromName"] ?? "ASA Platform"
+                using var client = new SmtpClient();
+                await client.ConnectAsync(
+                    _config["SmtpSettings:Host"],
+                    int.Parse(_config["SmtpSettings:Port"]),
+                    SecureSocketOptions.StartTls
                 );
 
-                var toEmail = new EmailAddress(to);
-                var msg = MailHelper.CreateSingleEmail(from, toEmail, subject, body, body);
+                await client.AuthenticateAsync(
+                    _config["SmtpSettings:Username"],
+                    _config["SmtpSettings:Password"]
+                );
 
-                var response = await client.SendEmailAsync(msg);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    _logger.LogError($"SendGrid failed with status: {response.StatusCode}");
-                    return false;
-                }
+                await client.SendAsync(message);
+                await client.DisconnectAsync(true);
 
                 _logger.LogInformation($"Email sent successfully to {to}");
                 return true;
@@ -99,6 +65,7 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 return false;
             }
         }
+
         public async Task<bool> SendWelcomeEmailAsync(string toEmail, string userName, string username, string password)
         {
             var subject = "Chào mừng đến với AI Store Assistant";
