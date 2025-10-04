@@ -45,5 +45,74 @@ namespace ASA_PLATFORM_REPO.Repository
 
             return query.OrderBy(c => c.ProductId);
         }
+
+        public async Task<List<long>> GetInvalidFeatureIdsAsync(IEnumerable<long> featureIds)
+        {
+            if (featureIds == null || !featureIds.Any())
+                return new List<long>();
+
+            // Lấy toàn bộ Features có trong DB
+            var validIds = _context.Features
+                .Where(p => featureIds.Contains(p.FeatureId))
+                .Select(p => p.FeatureId)
+                .ToList();
+
+            // Những id nào ko nằm trong validIds thì là invalid
+            var invalidIds = featureIds.Except(validIds).ToList();
+
+            return invalidIds;
+        }
+
+        public async Task AttachFeaturesAsync(Product product, IEnumerable<long> featureIds)
+        {
+            var features = await _context.Features
+                .Where(f => featureIds.Contains(f.FeatureId))
+                .ToListAsync();
+
+            foreach (var feature in features)
+            {
+                product.Features.Add(feature);
+            }
+        }
+
+        public async Task<Product> GetByIdAsync(long id)
+        {
+            return await _context.Products
+                                 .Include(p => p.PromotionProducts)
+                                    .ThenInclude(pp => pp.Promotion)
+                                 .Include(p => p.Features)
+                                 .FirstOrDefaultAsync(p => p.ProductId == id);
+        }
+
+
+        public async Task<int> UpdateAsync(Product product, IEnumerable<long> featureIds = null)
+        {
+            var existing = await _context.Products
+                .Include(p => p.Features)
+                .FirstOrDefaultAsync(p => p.ProductId == product.ProductId);
+
+            if (existing == null) return 0;
+
+            // Update scalar fields
+            _context.Entry(existing).CurrentValues.SetValues(product);
+
+            // Update quan hệ Features
+            existing.Features.Clear();
+            if (featureIds != null && featureIds.Any())
+            {
+                var features = await _context.Features
+                    .Where(f => featureIds.Contains(f.FeatureId))
+                    .ToListAsync();
+
+                foreach (var feature in features)
+                {
+                    existing.Features.Add(feature);
+                }
+            }
+
+            return await _context.SaveChangesAsync();
+        }
+
+
     }
 }
