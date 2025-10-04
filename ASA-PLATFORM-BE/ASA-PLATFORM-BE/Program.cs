@@ -58,6 +58,7 @@ builder.Services.AddScoped<ReportDetailRepo>();
 builder.Services.AddScoped<ReportRepo>();
 builder.Services.AddScoped<ShopRepo>();
 builder.Services.AddScoped<UserRepo>();
+builder.Services.AddScoped<PasswordResetRepo>();
 
 // Add HttpClient for BeTenant
 builder.Services.AddHttpClient("BETenantUrl", client =>

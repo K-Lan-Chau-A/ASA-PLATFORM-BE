@@ -42,5 +42,9 @@ namespace ASA_PLATFORM_REPO.Repository
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
         }
+        public async Task<bool> IsEmailExistsAsync(string email)
+        {
+            return await _context.Users.AnyAsync(u => u.Email == email);
+        }
     }
 }

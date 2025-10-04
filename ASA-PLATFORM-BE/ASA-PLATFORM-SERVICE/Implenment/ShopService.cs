@@ -27,14 +27,16 @@ namespace ASA_PLATFORM_SERVICE.Implenment
         private readonly IMapper _mapper;
         private readonly OrderRepo _orderRepo;
         private readonly IConfiguration _configuration;
+		private readonly IEmailService _emailService;
 
-        public ShopService(ShopRepo shopRepo, IMapper mapper, OrderRepo orderRepo, IConfiguration configuration, IHttpClientFactory httpClientFactory)
+		public ShopService(ShopRepo shopRepo, IMapper mapper, OrderRepo orderRepo, IConfiguration configuration, IHttpClientFactory httpClientFactory, IEmailService emailService)
         {
             _shopRepo = shopRepo;
             _mapper = mapper;
             _orderRepo = orderRepo;
             _configuration = configuration;
             _httpClient = httpClientFactory.CreateClient("BETenantUrl");
+			_emailService = emailService;
         }
 
         public async Task<ApiResponse<ShopResponse>> CreateAsync(ShopRequest request)
@@ -120,10 +122,21 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 var shopResponse = _mapper.Map<ShopResponse>(entity);
                 // Đọc thông tin đăng nhập từ Tenant API response (nếu có)
                 var tenantRaw = await tenantResponse.Content.ReadAsStringAsync();
-                if (TryParseTenantCredentials(tenantRaw, out var adminUsername, out var adminPassword))
+				if (TryParseTenantCredentials(tenantRaw, out var adminUsername, out var adminPassword))
                 {
                     shopResponse.Username = adminUsername;
                     shopResponse.Password = adminPassword;
+
+					// Gửi email chào mừng với thông tin đăng nhập
+					var displayName = !string.IsNullOrWhiteSpace(request.Fullname) ? request.Fullname : (!string.IsNullOrWhiteSpace(request.shopName) ? request.shopName : normalizedPhone);
+					if (!string.IsNullOrWhiteSpace(request.Email))
+					{
+						try
+						{
+							await _emailService.SendWelcomeEmailAsync(request.Email, displayName, adminUsername, adminPassword);
+						}
+						catch { /* ignore email errors to not block creation flow */ }
+					}
                 }
                 return new ApiResponse<ShopResponse>
                 {
