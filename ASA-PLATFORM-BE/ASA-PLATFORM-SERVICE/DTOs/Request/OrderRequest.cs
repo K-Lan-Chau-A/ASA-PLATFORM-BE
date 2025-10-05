@@ -39,7 +39,9 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
         public string? BankCode { get; set; }
         public string? BankNum { get; set; }
 
-        
+        // Contact info for auto-created shop user
+        public string? Fullname { get; set; }
+        public string? Email { get; set; }
     }
     public class OrderGetRequest
     {
