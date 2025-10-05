@@ -257,31 +257,44 @@ namespace ASA_PLATFORM_BE.Controllers
                     _logger.LogWarning(exUpd, "Lỗi khi cập nhật ExpiredAt cho Order {OrderId}", order.OrderId);
                 }
 
-                // Sau khi thanh toán thành công: gửi email thông tin đăng nhập cho user của order (nếu có)
+                // Sau khi thanh toán thành công: gửi email thông tin đăng nhập cho email trong shop
                 try
                 {
-                    if (order.UserId.HasValue)
+                    if (order.ShopId.HasValue)
                     {
-                        var user = await _userRepo.GetByIdAsync(order.UserId.Value);
-                        if (user != null && !string.IsNullOrWhiteSpace(user.Email) && !string.IsNullOrWhiteSpace(user.Username) && !string.IsNullOrWhiteSpace(user.Password))
+                        var shop = await _shopRepo.GetByIdAsync(order.ShopId.Value);
+                        if (shop != null && !string.IsNullOrWhiteSpace(shop.Email))
                         {
+                            // Tạo thông tin đăng nhập từ shop phone (thường dùng làm username)
+                            var username = shop.Phonenumber;
+                            var password = $"Shop{shop.ShopId}@{DateTime.UtcNow:yyyyMM}"; // Tạo password mặc định
+                            
+                            var displayName = shop.Fullname ?? shop.ShopName ?? username;
                             var subject = "Thanh toán thành công - Thông tin tài khoản ASA Platform";
-                            var body = $"<p>Xin chào {user.FullName ?? user.Username},</p>" +
+                            var body = $"<p>Xin chào {displayName},</p>" +
                                        $"<p>Đơn hàng #{order.OrderId} đã được thanh toán thành công.</p>" +
                                        $"<p>Thông tin đăng nhập:</p>" +
-                                       $"<ul><li>Username: <b>{user.Username}</b></li><li>Password: <b>{user.Password}</b></li></ul>" +
+                                       $"<ul><li>Username: <b>{username}</b></li><li>Password: <b>{password}</b></li></ul>" +
                                        "<p>Vui lòng đổi mật khẩu sau khi đăng nhập lần đầu để đảm bảo an toàn.</p>";
-                            await _emailService.SendEmailAsync(user.Email, subject, body);
-                            _logger.LogInformation("Đã gửi email thông tin tài khoản tới {Email} cho Order {OrderId}", user.Email, order.OrderId);
+                            
+                            var emailSent = await _emailService.SendEmailAsync(shop.Email, subject, body);
+                            if (emailSent)
+                            {
+                                _logger.LogInformation("Đã gửi email thông tin tài khoản tới {Email} cho Order {OrderId}", shop.Email, order.OrderId);
+                            }
+                            else
+                            {
+                                _logger.LogError("Không thể gửi email thông tin tài khoản tới {Email} cho Order {OrderId}", shop.Email, order.OrderId);
+                            }
                         }
                         else
                         {
-                            _logger.LogWarning("Thiếu email/username/password của userId {UserId}; bỏ qua gửi email.", order.UserId);
+                            _logger.LogWarning("Shop {ShopId} không có email hoặc không tồn tại; bỏ qua gửi email.", order.ShopId);
                         }
                     }
                     else
                     {
-                        _logger.LogWarning("Order {OrderId} không có UserId; bỏ qua gửi email.", order.OrderId);
+                        _logger.LogWarning("Order {OrderId} không có ShopId; bỏ qua gửi email.", order.OrderId);
                     }
                 }
                 catch (Exception mailEx)
