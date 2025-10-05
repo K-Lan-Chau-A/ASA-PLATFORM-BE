@@ -15,18 +15,24 @@ namespace ASA_PLATFORM_BE.Controllers
         private readonly ILogger<SepayWebhookController> _logger;
         private readonly IOrderService _orderService;
         private readonly ShopRepo _shopRepo;
+        private readonly UserRepo _userRepo;
+        private readonly IEmailService _emailService;
         private readonly IConfiguration _config;
 
         public SepayWebhookController(
             ILogger<SepayWebhookController> logger,
             IOrderService orderService,
             ShopRepo shopRepo,
-            IConfiguration config)
+            IConfiguration config,
+            UserRepo userRepo,
+            IEmailService emailService)
         {
             _logger = logger;
             _orderService = orderService;
             _shopRepo = shopRepo;
             _config = config;
+            _userRepo = userRepo;
+            _emailService = emailService;
         }
 
         [HttpGet("vietqr")]
@@ -249,6 +255,38 @@ namespace ASA_PLATFORM_BE.Controllers
                 catch (Exception exUpd)
                 {
                     _logger.LogWarning(exUpd, "Lỗi khi cập nhật ExpiredAt cho Order {OrderId}", order.OrderId);
+                }
+
+                // Sau khi thanh toán thành công: gửi email thông tin đăng nhập cho user của order (nếu có)
+                try
+                {
+                    if (order.UserId.HasValue)
+                    {
+                        var user = await _userRepo.GetByIdAsync(order.UserId.Value);
+                        if (user != null && !string.IsNullOrWhiteSpace(user.Email) && !string.IsNullOrWhiteSpace(user.Username) && !string.IsNullOrWhiteSpace(user.Password))
+                        {
+                            var subject = "Thanh toán thành công - Thông tin tài khoản ASA Platform";
+                            var body = $"<p>Xin chào {user.FullName ?? user.Username},</p>" +
+                                       $"<p>Đơn hàng #{order.OrderId} đã được thanh toán thành công.</p>" +
+                                       $"<p>Thông tin đăng nhập:</p>" +
+                                       $"<ul><li>Username: <b>{user.Username}</b></li><li>Password: <b>{user.Password}</b></li></ul>" +
+                                       "<p>Vui lòng đổi mật khẩu sau khi đăng nhập lần đầu để đảm bảo an toàn.</p>";
+                            await _emailService.SendEmailAsync(user.Email, subject, body);
+                            _logger.LogInformation("Đã gửi email thông tin tài khoản tới {Email} cho Order {OrderId}", user.Email, order.OrderId);
+                        }
+                        else
+                        {
+                            _logger.LogWarning("Thiếu email/username/password của userId {UserId}; bỏ qua gửi email.", order.UserId);
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Order {OrderId} không có UserId; bỏ qua gửi email.", order.OrderId);
+                    }
+                }
+                catch (Exception mailEx)
+                {
+                    _logger.LogError(mailEx, "Lỗi khi gửi email thông tin tài khoản cho Order {OrderId}", order.OrderId);
                 }
 
                 _logger.LogInformation("Xử lý webhook SePay thành công cho Order {OrderId}. Amount: {Amount}", order.OrderId, payload.transferAmount);
