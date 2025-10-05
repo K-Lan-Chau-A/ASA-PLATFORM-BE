@@ -6,6 +6,7 @@ using MailKit.Security;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
+using System;
 using System.Threading.Tasks;
 
 namespace ASA_PLATFORM_SERVICE.Implenment
@@ -32,8 +33,32 @@ namespace ASA_PLATFORM_SERVICE.Implenment
         {
             try
             {
+                // Validate SMTP settings - try environment variables first, then config
+                var host = Environment.GetEnvironmentVariable("SMTP_SETTINGS__HOST") ?? _config["SmtpSettings:Host"];
+                var portStr = Environment.GetEnvironmentVariable("SMTP_SETTINGS__PORT") ?? _config["SmtpSettings:Port"];
+                var username = Environment.GetEnvironmentVariable("SMTP_SETTINGS__USERNAME") ?? _config["SmtpSettings:Username"];
+                var password = Environment.GetEnvironmentVariable("SMTP_SETTINGS__PASSWORD") ?? _config["SmtpSettings:Password"];
+
+                if (string.IsNullOrWhiteSpace(host) || string.IsNullOrWhiteSpace(portStr) || 
+                    string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+                {
+                    _logger.LogError("SMTP settings are missing or invalid");
+                    return false;
+                }
+
+                if (!int.TryParse(portStr, out int port))
+                {
+                    _logger.LogError($"Invalid SMTP port: {portStr}");
+                    return false;
+                }
+
+                _logger.LogInformation($"Attempting to send email to {to} via {host}:{port}");
+                
+                // Log configuration source for debugging
+                _logger.LogInformation($"SMTP Config - Host: {host}, Port: {port}, Username: {username}");
+
                 var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("ASA Platform", _config["SmtpSettings:Username"]));
+                message.From.Add(new MailboxAddress("ASA Platform", username));
                 message.To.Add(MailboxAddress.Parse(to));
                 message.Subject = subject;
                 message.Body = new TextPart("html")
@@ -42,16 +67,19 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 };
 
                 using var client = new SmtpClient();
-                await client.ConnectAsync(
-                    _config["SmtpSettings:Host"],
-                    int.Parse(_config["SmtpSettings:Port"]),
-                    SecureSocketOptions.StartTls
-                );
+                
+                // Try different SSL options
+                try
+                {
+                    await client.ConnectAsync(host, port, SecureSocketOptions.StartTls);
+                }
+                catch
+                {
+                    _logger.LogWarning("StartTls failed, trying Auto");
+                    await client.ConnectAsync(host, port, SecureSocketOptions.Auto);
+                }
 
-                await client.AuthenticateAsync(
-                    _config["SmtpSettings:Username"],
-                    _config["SmtpSettings:Password"]
-                );
+                await client.AuthenticateAsync(username, password);
 
                 await client.SendAsync(message);
                 await client.DisconnectAsync(true);
@@ -61,7 +89,7 @@ namespace ASA_PLATFORM_SERVICE.Implenment
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Failed to send email to {to}");
+                _logger.LogError(ex, $"Failed to send email to {to}. Error: {ex.Message}. StackTrace: {ex.StackTrace}");
                 return false;
             }
         }

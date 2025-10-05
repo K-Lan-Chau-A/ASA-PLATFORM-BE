@@ -127,15 +127,18 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                     shopResponse.Username = adminUsername;
                     shopResponse.Password = adminPassword;
 
-					// Gửi email chào mừng với thông tin đăng nhập
-					var displayName = !string.IsNullOrWhiteSpace(request.Fullname) ? request.Fullname : (!string.IsNullOrWhiteSpace(request.shopName) ? request.shopName : normalizedPhone);
-					if (!string.IsNullOrWhiteSpace(request.Email))
+					// Gửi email chào mừng với thông tin đăng nhập (chỉ cho shop dùng thử)
+					if (entity.Status == 2) // Status = 2 là trial/dùng thử
 					{
-						try
+						var displayName = !string.IsNullOrWhiteSpace(request.Fullname) ? request.Fullname : (!string.IsNullOrWhiteSpace(request.shopName) ? request.shopName : normalizedPhone);
+						if (!string.IsNullOrWhiteSpace(request.Email))
 						{
-							await _emailService.SendWelcomeEmailAsync(request.Email, displayName, adminUsername, adminPassword);
+							try
+							{
+								await _emailService.SendWelcomeEmailAsync(request.Email, displayName, adminUsername, adminPassword);
+							}
+							catch { /* ignore email errors to not block creation flow */ }
 						}
-						catch { /* ignore email errors to not block creation flow */ }
 					}
                 }
                 return new ApiResponse<ShopResponse>
