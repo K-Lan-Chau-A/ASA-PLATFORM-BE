@@ -22,6 +22,8 @@ public partial class ASAPLATFORMDBContext : DbContext
 
     public virtual DbSet<Order> Orders { get; set; }
 
+    public virtual DbSet<PasswordResetOtp> PasswordResetOtps { get; set; }
+
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<Promotion> Promotions { get; set; }
@@ -142,6 +144,35 @@ public partial class ASAPLATFORMDBContext : DbContext
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("order_user_id_fkey");
+        });
+
+        modelBuilder.Entity<PasswordResetOtp>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("password_reset_otps_pkey");
+
+            entity.ToTable("password_reset_otps");
+
+            entity.HasIndex(e => new { e.Email, e.Otp }, "idx_password_reset_otps_email_otp");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("created_at");
+            entity.Property(e => e.Email)
+                .IsRequired()
+                .HasMaxLength(255)
+                .HasColumnName("email");
+            entity.Property(e => e.ExpiredAt)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("expired_at");
+            entity.Property(e => e.IsUsed)
+                .HasDefaultValue(false)
+                .HasColumnName("is_used");
+            entity.Property(e => e.Otp)
+                .IsRequired()
+                .HasMaxLength(20)
+                .HasColumnName("otp");
         });
 
         modelBuilder.Entity<Product>(entity =>
