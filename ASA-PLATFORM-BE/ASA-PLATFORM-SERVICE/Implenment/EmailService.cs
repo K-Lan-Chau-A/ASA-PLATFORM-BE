@@ -6,6 +6,9 @@ using MailKit.Security;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
+using SendGrid;
+using SendGrid.Helpers.Mail;
+using System;
 using System.Threading.Tasks;
 
 namespace ASA_PLATFORM_SERVICE.Implenment
@@ -32,36 +35,42 @@ namespace ASA_PLATFORM_SERVICE.Implenment
         {
             try
             {
-                var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("ASA Platform", _config["SmtpSettings:Username"]));
-                message.To.Add(MailboxAddress.Parse(to));
-                message.Subject = subject;
-                message.Body = new TextPart("html")
+                // Lấy cấu hình từ env hoặc appsettings
+                var apiKey = Environment.GetEnvironmentVariable("SENDGRID_SETTINGS__APIKEY")
+                             ?? _config["SendGridSettings:ApiKey"];
+                var fromEmail = Environment.GetEnvironmentVariable("SENDGRID_SETTINGS__FROMEMAIL")
+                                ?? _config["SendGridSettings:FromEmail"];
+                var fromName = Environment.GetEnvironmentVariable("SENDGRID_SETTINGS__FROMNAME")
+                               ?? _config["SendGridSettings:FromName"];
+
+                if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(fromEmail))
                 {
-                    Text = body
-                };
+                    _logger.LogError("SendGrid configuration missing or invalid.");
+                    return false;
+                }
 
-                using var client = new SmtpClient();
-                await client.ConnectAsync(
-                    _config["SmtpSettings:Host"],
-                    int.Parse(_config["SmtpSettings:Port"]),
-                    SecureSocketOptions.StartTls
-                );
+                var client = new SendGridClient(apiKey);
+                var from = new EmailAddress(fromEmail, fromName);
+                var toAddress = new EmailAddress(to);
+                var msg = MailHelper.CreateSingleEmail(from, toAddress, subject, plainTextContent: null, htmlContent: body);
 
-                await client.AuthenticateAsync(
-                    _config["SmtpSettings:Username"],
-                    _config["SmtpSettings:Password"]
-                );
+                var response = await client.SendEmailAsync(msg);
 
-                await client.SendAsync(message);
-                await client.DisconnectAsync(true);
-
-                _logger.LogInformation($"Email sent successfully to {to}");
-                return true;
+                if (response.IsSuccessStatusCode)
+                {
+                    _logger.LogInformation($"✅ Email sent successfully to {to}");
+                    return true;
+                }
+                else
+                {
+                    var responseBody = await response.Body.ReadAsStringAsync();
+                    _logger.LogError($"❌ Failed to send email to {to}. Status: {response.StatusCode}, Body: {responseBody}");
+                    return false;
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Failed to send email to {to}");
+                _logger.LogError(ex, $"Exception while sending email to {to}");
                 return false;
             }
         }
