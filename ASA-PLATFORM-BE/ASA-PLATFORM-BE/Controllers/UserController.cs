@@ -33,13 +33,13 @@ namespace ASA_PLATFORM_BE.Controllers
             }
         }
         [HttpPost]
-        public async Task<ActionResult<UserResponse>> Create([FromBody] UserRequest request)
+        public async Task<ActionResult<UserResponse>> Create([FromForm] UserCreateRequest request)
         {
             var result = await _userService.CreateAsync(request);
             return Ok(result);
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult<UserResponse>> Update(long id, [FromBody] UserRequest request)
+        public async Task<ActionResult<UserResponse>> Update(long id, [FromForm] UserUpdateRequest request)
         {
             var result = await _userService.UpdateAsync(id, request);
             return Ok(result);

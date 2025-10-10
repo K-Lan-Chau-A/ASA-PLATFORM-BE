@@ -23,8 +23,5 @@
   <ItemGroup>
     <ProjectReference Include="..\ASA-PLATFORM-REPO\ASA-PLATFORM-REPO.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Configurations\" />
-  </ItemGroup>
 
 </Project>
