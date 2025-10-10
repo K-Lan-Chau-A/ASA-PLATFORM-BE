@@ -1,9 +1,12 @@
 ﻿using ASA_PLATFORM_REPO.DBContext;
 using ASA_PLATFORM_REPO.Repository;
+using ASA_PLATFORM_SERVICE.Configurations;
 using ASA_PLATFORM_SERVICE.CronJobs;
 using ASA_PLATFORM_SERVICE.Implenment;
 using ASA_PLATFORM_SERVICE.Interface;
 using ASA_TENANT_SERVICE.Mapping;
+using CloudinaryDotNet;
+using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -45,7 +48,7 @@ builder.Services.AddScoped<IShopService, ShopService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
-
+builder.Services.AddScoped<IPhotoService, PhotoService>();
 
 // Register repositories
 builder.Services.AddScoped<LogActivityRepo>();
@@ -66,7 +69,15 @@ builder.Services.AddHttpClient("BETenantUrl", client =>
     client.BaseAddress = new Uri(builder.Configuration["BETenantUrl:Url"]);
     client.Timeout = TimeSpan.FromSeconds(60);
 });
-
+// Cấu hình Cloudinary
+builder.Services.Configure<CloudinarySettings>(
+    builder.Configuration.GetSection("CloudinarySettings"));
+builder.Services.AddSingleton(sp =>
+{
+    var config = sp.GetRequiredService<IOptions<CloudinarySettings>>().Value;
+    var account = new Account(config.CloudName, config.ApiKey, config.ApiSecret);
+    return new Cloudinary(account);
+});
 // Đăng ký AutoMapper
 builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile).Assembly);
 
