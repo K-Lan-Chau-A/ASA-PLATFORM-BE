@@ -270,12 +270,40 @@ namespace ASA_PLATFORM_BE.Controllers
                             var password = $"Shop{shop.ShopId}@{DateTime.UtcNow:yyyyMM}"; // Tạo password mặc định
                             
                             var displayName = shop.Fullname ?? shop.ShopName ?? username;
-                            var subject = "Thanh toán thành công - Thông tin tài khoản ASA Platform";
-                            var body = $"<p>Xin chào {displayName},</p>" +
-                                       $"<p>Đơn hàng #{order.OrderId} đã được thanh toán thành công.</p>" +
-                                       $"<p>Thông tin đăng nhập:</p>" +
-                                       $"<ul><li>Username: <b>{username}</b></li><li>Password: <b>{password}</b></li></ul>" +
-                                       "<p>Vui lòng đổi mật khẩu sau khi đăng nhập lần đầu để đảm bảo an toàn.</p>";
+                            var subject = "Xác nhận thanh toán - ASA Platform";
+                            var body = $@"
+                            <html>
+                            <body style='font-family:Arial,Helvetica,sans-serif;background:#f6f9fc;padding:24px;'>
+                                <div style='max-width:640px;margin:0 auto;background:#ffffff;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.08);overflow:hidden;'>
+                                    <div style='background:linear-gradient(135deg,#4f46e5,#06b6d4);padding:24px 28px;color:#ffffff;'>
+                                        <h2 style='margin:0;font-size:22px;'>Thanh toán thành công</h2>
+                                        <p style='margin:6px 0 0;opacity:0.95;'>Xin chào {displayName}</p>
+                                    </div>
+                                    <div style='padding:24px 28px;color:#0f172a;'>
+                                        <p style='margin:0 0 12px;'>Đơn hàng #{order.OrderId} đã được thanh toán thành công.</p>
+                                        <p style='margin:0 0 16px;'>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
+                                        <div style='background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px 18px;margin:18px 0;'>
+                                            <h3 style='margin:0 0 10px;font-size:16px;color:#334155;'>Thông tin truy cập hệ thống</h3>
+                                            <div style='display:flex;gap:12px;flex-wrap:wrap;'>
+                                                <div style='flex:1 1 240px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;'>
+                                                    <div style='font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.4px;'>Tên đăng nhập</div>
+                                                    <div style='font-weight:600;color:#0f172a;margin-top:4px;'>{username}</div>
+                                                </div>
+                                                <div style='flex:1 1 240px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;'>
+                                                    <div style='font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.4px;'>Mật khẩu</div>
+                                                    <div style='font-weight:600;color:#0f172a;margin-top:4px;'>{password}</div>
+                                                </div>
+                                            </div>
+                                            <p style='margin:10px 0 0;color:#64748b;font-size:12px;'>Vui lòng bảo mật thông tin truy cập này. Bạn có thể đổi mật khẩu sau khi đăng nhập.</p>
+                                        </div>
+                                        <a href='https://asa-web-app-tawny.vercel.app/login' style='display:inline-block;background:#4f46e5;color:#ffffff;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:600;'>Truy cập hệ thống</a>
+                                    </div>
+                                    <div style='background:#0f172a;color:#94a3b8;padding:16px 28px;font-size:12px;'>
+                                        © {DateTime.Now.Year} ASA Platform. Tất cả các quyền được bảo lưu.
+                                    </div>
+                                </div>
+                            </body>
+                            </html>";
                             
                             var emailSent = await _emailService.SendEmailAsync(shop.Email, subject, body);
                             if (emailSent)
