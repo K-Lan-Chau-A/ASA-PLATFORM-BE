@@ -64,6 +64,7 @@ namespace ASA_TENANT_SERVICE.Mapping
 
             //Mapping Promotion
             CreateMap<Promotion, PromotionRequest>().ReverseMap();
+            CreateMap<Promotion, PromotionCreateRequest>().ReverseMap();
             CreateMap<Promotion, PromotionGetRequest>().ReverseMap();
             CreateMap<Promotion, PromotionResponse>().ReverseMap();
 

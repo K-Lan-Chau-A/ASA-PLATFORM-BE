@@ -6,10 +6,13 @@ using ASA_PLATFORM_SERVICE.DTOs.Response;
 using ASA_PLATFORM_SERVICE.Interface;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ASA_PLATFORM_SERVICE.Implenment
@@ -19,14 +22,20 @@ namespace ASA_PLATFORM_SERVICE.Implenment
         private readonly PromotionRepo _promotionRepo;
         private readonly PromotionProductRepo _promotionProductRepo;
         private readonly IMapper _mapper;
-        public PromotionService(PromotionRepo promotionRepo, IMapper mapper, PromotionProductRepo promotionProductRepo)
+        private readonly IConfiguration _configuration;
+        private readonly IHttpClientFactory _httpClientFactory;
+        
+        public PromotionService(PromotionRepo promotionRepo, IMapper mapper, PromotionProductRepo promotionProductRepo, 
+            IConfiguration configuration, IHttpClientFactory httpClientFactory)
         {
             _promotionRepo = promotionRepo;
             _mapper = mapper;
             _promotionProductRepo = promotionProductRepo;
+            _configuration = configuration;
+            _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<ApiResponse<PromotionResponse>> CreateAsync(PromotionRequest request)
+        public async Task<ApiResponse<PromotionResponse>> CreateAsync(PromotionCreateRequest request)
         {
             try
             {
@@ -45,6 +54,10 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 }
 
                 var entity = _mapper.Map<Promotion>(request);
+                
+                // Tự động set status = 1 (active) khi tạo promotion
+                entity.Status = 1;
+                
                 if(!string.IsNullOrEmpty(entity.Type) && entity.Type.ToUpper() == "PERCENTAGE")
                 {
                     entity.Type = "%";
@@ -67,6 +80,9 @@ namespace ASA_PLATFORM_SERVICE.Implenment
 
                 if (affected > 0)
                 {
+                    // Gửi broadcast notification đến tất cả shop
+                    await SendBroadcastNotificationAsync(request.promotionName, request.description);
+                    
                     var response = _mapper.Map<PromotionResponse>(entity);
                     return new ApiResponse<PromotionResponse>
                     {
@@ -242,5 +258,70 @@ namespace ASA_PLATFORM_SERVICE.Implenment
             }
         }
 
+        private async Task SendBroadcastNotificationAsync(string promotionName, string description)
+        {
+            try
+            {
+                Console.WriteLine($"SendBroadcastNotificationAsync: Starting broadcast for promotion '{promotionName}'");
+                
+                // Lấy tenant API URL từ configuration
+                var tenantApiUrl = _configuration.GetValue<string>("BETenantUrl:Url");
+                if (string.IsNullOrEmpty(tenantApiUrl))
+                {
+                    Console.WriteLine("BETenantUrl:Url not configured in appsettings");
+                    return;
+                }
+
+                Console.WriteLine($"Tenant API URL: {tenantApiUrl}");
+
+                // Tạo request payload
+                var broadcastRequest = new BroadcastNotificationRequest
+                {
+                    Title = promotionName ?? "Khuyến mãi mới",
+                    Content = description ?? "Có khuyến mãi mới từ hệ thống",
+                    Type = 2 // Type 2 cho thông báo hệ thống
+                };
+
+                // Serialize request
+                var jsonContent = JsonSerializer.Serialize(broadcastRequest, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                });
+
+                Console.WriteLine($"Broadcast payload: {jsonContent}");
+
+                // Tạo HTTP request
+                using var httpClient = _httpClientFactory.CreateClient("BETenantUrl");
+                using var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                using var response = await httpClient.PostAsync("/api/notifications/broadcast", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Broadcast notification sent successfully. Response: {responseContent}");
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Failed to send broadcast notification. Status: {response.StatusCode}, Error: {errorContent}");
+                }
+            }
+            catch (HttpRequestException httpEx)
+            {
+                Console.WriteLine($"HTTP error when sending broadcast notification: {httpEx.Message}");
+            }
+            catch (TaskCanceledException timeoutEx)
+            {
+                Console.WriteLine($"Timeout when sending broadcast notification: {timeoutEx.Message}");
+            }
+            catch (JsonException jsonEx)
+            {
+                Console.WriteLine($"JSON serialization error: {jsonEx.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error when sending broadcast notification: {ex.Message}");
+            }
+        }
     }
 }

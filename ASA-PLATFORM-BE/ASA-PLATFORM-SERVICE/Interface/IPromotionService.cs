@@ -12,7 +12,7 @@ namespace ASA_PLATFORM_SERVICE.Interface
     public interface IPromotionService
     {
         Task<PagedResponse<PromotionResponse>> GetFilteredPromotionsAsync(PromotionGetRequest filterDto, int page, int pageSize);
-        Task<ApiResponse<PromotionResponse>> CreateAsync(PromotionRequest request);
+        Task<ApiResponse<PromotionResponse>> CreateAsync(PromotionCreateRequest request);
         Task<ApiResponse<PromotionResponse>> UpdateAsync(long id, PromotionRequest request);
         Task<ApiResponse<bool>> DeleteAsync(long id);
     }
