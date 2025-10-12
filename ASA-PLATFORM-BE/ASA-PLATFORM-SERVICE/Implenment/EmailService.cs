@@ -67,58 +67,6 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                     _logger.LogError($"❌ Failed to send email to {to}. Status: {response.StatusCode}, Body: {responseBody}");
                     return false;
                 }
-<<<<<<< HEAD
-
-                _logger.LogInformation($"Attempting to send email to {to} via {host}:{port}");
-                
-                // Log configuration source for debugging
-                _logger.LogInformation($"SMTP Config - Host: {host}, Port: {port}, Username: {username}");
-
-                var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("ASA Platform", username));
-                message.To.Add(MailboxAddress.Parse(to));
-                message.Subject = subject;
-                
-                // Add proper headers to avoid spam
-                message.Headers.Add("X-Mailer", "ASA Platform");
-                message.Headers.Add("X-Priority", "3");
-                message.Headers.Add("X-MSMail-Priority", "Normal");
-                message.Headers.Add("Importance", "Normal");
-                
-                // Create multipart message with both HTML and text
-                var multipart = new Multipart("alternative");
-                
-                // Text version (required for spam filters)
-                var textBody = System.Text.RegularExpressions.Regex.Replace(body, "<[^>]*>", "");
-                multipart.Add(new TextPart("plain") { Text = textBody });
-                
-                // HTML version
-                multipart.Add(new TextPart("html") { Text = body });
-                
-                message.Body = multipart;
-
-                using var client = new SmtpClient();
-                
-                // Try different SSL options
-                try
-                {
-                    await client.ConnectAsync(host, port, SecureSocketOptions.StartTls);
-                }
-                catch
-                {
-                    _logger.LogWarning("StartTls failed, trying Auto");
-                    await client.ConnectAsync(host, port, SecureSocketOptions.Auto);
-                }
-
-                await client.AuthenticateAsync(username, password);
-
-                await client.SendAsync(message);
-                await client.DisconnectAsync(true);
-
-                _logger.LogInformation($"Email sent successfully to {to}");
-                return true;
-=======
->>>>>>> 4a3a453da7a5f5a26cfad93e20de19b736961eda
             }
             catch (Exception ex)
             {
@@ -224,5 +172,7 @@ namespace ASA_PLATFORM_SERVICE.Implenment
 
             return await SendEmailAsync(toEmail, subject, body);
         }
+
+        
     }
 }
