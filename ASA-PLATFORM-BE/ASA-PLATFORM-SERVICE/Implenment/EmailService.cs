@@ -6,6 +6,8 @@ using MailKit.Security;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 using System;
 using System.Threading.Tasks;
 
@@ -33,24 +35,39 @@ namespace ASA_PLATFORM_SERVICE.Implenment
         {
             try
             {
-                // Validate SMTP settings - try environment variables first, then config
-                var host = Environment.GetEnvironmentVariable("SMTP_SETTINGS__HOST") ?? _config["SmtpSettings:Host"];
-                var portStr = Environment.GetEnvironmentVariable("SMTP_SETTINGS__PORT") ?? _config["SmtpSettings:Port"];
-                var username = Environment.GetEnvironmentVariable("SMTP_SETTINGS__USERNAME") ?? _config["SmtpSettings:Username"];
-                var password = Environment.GetEnvironmentVariable("SMTP_SETTINGS__PASSWORD") ?? _config["SmtpSettings:Password"];
+                // Lấy cấu hình từ env hoặc appsettings
+                var apiKey = Environment.GetEnvironmentVariable("SENDGRID_SETTINGS__APIKEY")
+                             ?? _config["SendGridSettings:ApiKey"];
+                var fromEmail = Environment.GetEnvironmentVariable("SENDGRID_SETTINGS__FROMEMAIL")
+                                ?? _config["SendGridSettings:FromEmail"];
+                var fromName = Environment.GetEnvironmentVariable("SENDGRID_SETTINGS__FROMNAME")
+                               ?? _config["SendGridSettings:FromName"];
 
-                if (string.IsNullOrWhiteSpace(host) || string.IsNullOrWhiteSpace(portStr) || 
-                    string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+                if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(fromEmail))
                 {
-                    _logger.LogError("SMTP settings are missing or invalid");
+                    _logger.LogError("SendGrid configuration missing or invalid.");
                     return false;
                 }
 
-                if (!int.TryParse(portStr, out int port))
+                var client = new SendGridClient(apiKey);
+                var from = new EmailAddress(fromEmail, fromName);
+                var toAddress = new EmailAddress(to);
+                var msg = MailHelper.CreateSingleEmail(from, toAddress, subject, plainTextContent: null, htmlContent: body);
+
+                var response = await client.SendEmailAsync(msg);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    _logger.LogError($"Invalid SMTP port: {portStr}");
+                    _logger.LogInformation($"✅ Email sent successfully to {to}");
+                    return true;
+                }
+                else
+                {
+                    var responseBody = await response.Body.ReadAsStringAsync();
+                    _logger.LogError($"❌ Failed to send email to {to}. Status: {response.StatusCode}, Body: {responseBody}");
                     return false;
                 }
+<<<<<<< HEAD
 
                 _logger.LogInformation($"Attempting to send email to {to} via {host}:{port}");
                 
@@ -100,10 +117,12 @@ namespace ASA_PLATFORM_SERVICE.Implenment
 
                 _logger.LogInformation($"Email sent successfully to {to}");
                 return true;
+=======
+>>>>>>> 4a3a453da7a5f5a26cfad93e20de19b736961eda
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Failed to send email to {to}. Error: {ex.Message}. StackTrace: {ex.StackTrace}");
+                _logger.LogError(ex, $"Exception while sending email to {to}");
                 return false;
             }
         }

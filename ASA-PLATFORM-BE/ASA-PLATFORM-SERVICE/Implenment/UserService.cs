@@ -18,13 +18,15 @@ namespace ASA_PLATFORM_SERVICE.Implenment
     {
         private readonly UserRepo _userRepo;
         private readonly IMapper _mapper;
-        public UserService(UserRepo userRepo, IMapper mapper)
+        private readonly IPhotoService _photoService;
+        public UserService(UserRepo userRepo, IMapper mapper, IPhotoService photoService)
         {
             _userRepo = userRepo;
             _mapper = mapper;
+            _photoService = photoService;
         }
 
-        public async Task<ApiResponse<UserResponse>> CreateAsync(UserRequest request)
+        public async Task<ApiResponse<UserResponse>> CreateAsync(UserCreateRequest request)
         {
             try
             {
@@ -70,6 +72,12 @@ namespace ASA_PLATFORM_SERVICE.Implenment
 
                 var entity = _mapper.Map<User>(request);
                 entity.Password = HashPassword(request.Password);
+                entity.Status = 1; // default active
+                if (request.AvatarFile != null)
+                {
+                    var imageUrl = await _photoService.UploadImageAsync(request.AvatarFile);
+                    entity.Avatar = imageUrl;
+                }
 
                 var affected = await _userRepo.CreateAsync(entity);
 
@@ -164,7 +172,7 @@ namespace ASA_PLATFORM_SERVICE.Implenment
             return BCrypt.Net.BCrypt.HashPassword(password);
         }
 
-        public async Task<ApiResponse<UserResponse>> UpdateAsync(long id, UserRequest request)
+        public async Task<ApiResponse<UserResponse>> UpdateAsync(long id, UserUpdateRequest request)
         {
             try
             {
@@ -177,7 +185,21 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                         Data = null
                     };
 
+                // Preserve Username (not updatable)
+                var currentUsername = existing.Username;
                 _mapper.Map(request, existing);
+                existing.Username = currentUsername;
+
+                if (!string.IsNullOrWhiteSpace(request.Password))
+                {
+                    existing.Password = HashPassword(request.Password);
+                }
+
+                if (request.AvatarFile != null)
+                {
+                    var imageUrl = await _photoService.UploadImageAsync(request.AvatarFile);
+                    existing.Avatar = imageUrl;
+                }
 
                 var affected = await _userRepo.UpdateAsync(existing);
                 if (affected > 0)
