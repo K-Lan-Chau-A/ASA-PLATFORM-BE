@@ -267,7 +267,7 @@ namespace ASA_PLATFORM_BE.Controllers
                         {
                             // Tạo thông tin đăng nhập từ shop phone (thường dùng làm username)
                             var username = shop.Phonenumber;
-                            var password = $"Shop{shop.ShopId}@{DateTime.UtcNow:yyyyMM}"; // Tạo password mặc định
+                            var password = "asa123456"; // Tạo password mặc định
                             
                             var displayName = shop.Fullname ?? shop.ShopName ?? username;
                             var subject = "Xác nhận thanh toán - ASA Platform";
