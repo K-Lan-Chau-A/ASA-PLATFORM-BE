@@ -31,7 +31,7 @@ namespace ASA_PLATFORM_BE.Controllers
             }
         }
         [HttpPost]
-        public async Task<ActionResult<PromotionResponse>> Create([FromBody] PromotionRequest request)
+        public async Task<ActionResult<PromotionResponse>> Create([FromBody] PromotionCreateRequest request)
         {
             var result = await _promotionService.CreateAsync(request);
             return Ok(result);

@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ASA_PLATFORM_SERVICE.DTOs.Request
 {
-    public class UserRequest
+    public class UserCreateRequest
     {
         [Required(ErrorMessage = "Username is required.")]
         public string Username { get; set; }
@@ -31,10 +32,23 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
         [Required(ErrorMessage = "Role is required.")]
         public short Role { get; set; }
 
-        [Required(ErrorMessage = "Status is required.")]
+        public IFormFile? AvatarFile { get; set; }
+    }
+
+    public class UserUpdateRequest
+    {
+        // Username is not updatable via API
+        public string? Password { get; set; }
+        public string? Email { get; set; }
+        public string? FullName { get; set; }
+
+        [RegularExpression(@"^0\d{9}$", ErrorMessage = "Invaid Phone number format, 10 numbers is required and start with '0'")]
+        public string? PhoneNumber { get; set; }
+
+        public short? Role { get; set; }
         public short? Status { get; set; }
 
-        public string Avatar { get; set; }
+        public IFormFile? AvatarFile { get; set; }
     }
 
     public class UserGetRequest

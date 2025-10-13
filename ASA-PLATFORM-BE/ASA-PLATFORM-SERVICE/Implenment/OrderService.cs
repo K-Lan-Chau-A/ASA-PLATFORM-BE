@@ -64,7 +64,9 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                         BankCode = request.BankCode,
                         BankNum = request.BankNum,
                         Phonenumber = request.Phonenumber,
-                        ProductId = request.ProductId
+                        ProductId = request.ProductId,
+                        Fullname = request.Fullname,
+                        Email = request.Email
                     };
                     var createdShop = await _shopService.CreateAsync(createShopReq);
                     _logger.LogInformation("[OrderService] Create shop result: Success={Success}, Message={Message}, ReturnedShopId={ReturnedShopId}",

@@ -6,6 +6,9 @@ using MailKit.Security;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
+using SendGrid;
+using SendGrid.Helpers.Mail;
+using System;
 using System.Threading.Tasks;
 
 namespace ASA_PLATFORM_SERVICE.Implenment
@@ -32,36 +35,42 @@ namespace ASA_PLATFORM_SERVICE.Implenment
         {
             try
             {
-                var message = new MimeMessage();
-                message.From.Add(new MailboxAddress("ASA Platform", _config["SmtpSettings:Username"]));
-                message.To.Add(MailboxAddress.Parse(to));
-                message.Subject = subject;
-                message.Body = new TextPart("html")
+                // Lấy cấu hình từ env hoặc appsettings
+                var apiKey = Environment.GetEnvironmentVariable("SENDGRID_SETTINGS__APIKEY")
+                             ?? _config["SendGridSettings:ApiKey"];
+                var fromEmail = Environment.GetEnvironmentVariable("SENDGRID_SETTINGS__FROMEMAIL")
+                                ?? _config["SendGridSettings:FromEmail"];
+                var fromName = Environment.GetEnvironmentVariable("SENDGRID_SETTINGS__FROMNAME")
+                               ?? _config["SendGridSettings:FromName"];
+
+                if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(fromEmail))
                 {
-                    Text = body
-                };
+                    _logger.LogError("SendGrid configuration missing or invalid.");
+                    return false;
+                }
 
-                using var client = new SmtpClient();
-                await client.ConnectAsync(
-                    _config["SmtpSettings:Host"],
-                    int.Parse(_config["SmtpSettings:Port"]),
-                    SecureSocketOptions.StartTls
-                );
+                var client = new SendGridClient(apiKey);
+                var from = new EmailAddress(fromEmail, fromName);
+                var toAddress = new EmailAddress(to);
+                var msg = MailHelper.CreateSingleEmail(from, toAddress, subject, plainTextContent: null, htmlContent: body);
 
-                await client.AuthenticateAsync(
-                    _config["SmtpSettings:Username"],
-                    _config["SmtpSettings:Password"]
-                );
+                var response = await client.SendEmailAsync(msg);
 
-                await client.SendAsync(message);
-                await client.DisconnectAsync(true);
-
-                _logger.LogInformation($"Email sent successfully to {to}");
-                return true;
+                if (response.IsSuccessStatusCode)
+                {
+                    _logger.LogInformation($"✅ Email sent successfully to {to}");
+                    return true;
+                }
+                else
+                {
+                    var responseBody = await response.Body.ReadAsStringAsync();
+                    _logger.LogError($"❌ Failed to send email to {to}. Status: {response.StatusCode}, Body: {responseBody}");
+                    return false;
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Failed to send email to {to}");
+                _logger.LogError(ex, $"Exception while sending email to {to}");
                 return false;
             }
         }
@@ -74,37 +83,39 @@ namespace ASA_PLATFORM_SERVICE.Implenment
         <body style='font-family:Arial,Helvetica,sans-serif;background:#f6f9fc;padding:24px;'>
             <div style='max-width:640px;margin:0 auto;background:#ffffff;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.08);overflow:hidden;'>
                 <div style='background:linear-gradient(135deg,#4f46e5,#06b6d4);padding:24px 28px;color:#ffffff;'>
-                    <h2 style='margin:0;font-size:22px;'>Chào mừng đến với AI Store Assistant 🎉</h2>
-                    <p style='margin:6px 0 0;opacity:0.95;'>Xin chào {userName}, cảm ơn bạn đã đăng ký dùng thử!</p>
+                    <h2 style='margin:0;font-size:22px;'>Chào mừng đến với ASA Platform</h2>
+                    <p style='margin:6px 0 0;opacity:0.95;'>Xin chào {userName}, cảm ơn bạn đã đăng ký!</p>
                 </div>
 
                 <div style='padding:24px 28px;color:#0f172a;'>
-                    <p style='margin:0 0 12px;'>Cảm ơn bạn đã đăng ký dùng thử sản phẩm của chúng tôi. Thời gian dùng thử của bạn là <strong>7 ngày</strong>.</p>
-                    <p style='margin:0 0 16px;'>Chúc bạn sẽ có những trải nghiệm thật tốt với sản phẩm của chúng tôi!</p>
+                    <p style='margin:0 0 12px;'>Cảm ơn bạn đã đăng ký sử dụng dịch vụ của chúng tôi. Thời gian sử dụng của bạn là <strong>7 ngày</strong>.</p>
+                    <p style='margin:0 0 16px;'>Chúc bạn sẽ có những trải nghiệm thật tốt với dịch vụ của chúng tôi!</p>
 
                     <div style='background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px 18px;margin:18px 0;'>
-                        <h3 style='margin:0 0 10px;font-size:16px;color:#334155;'>Thông tin đăng nhập</h3>
+                        <h3 style='margin:0 0 10px;font-size:16px;color:#334155;'>Thông tin truy cập hệ thống</h3>
                         <div style='display:flex;gap:12px;flex-wrap:wrap;'>
                             <div style='flex:1 1 240px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;'>
-                                <div style='font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.4px;'>Username</div>
+                                <div style='font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.4px;'>Tên đăng nhập</div>
                                 <div style='font-weight:600;color:#0f172a;margin-top:4px;'>{username}</div>
                             </div>
                             <div style='flex:1 1 240px;background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;'>
-                                <div style='font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.4px;'>Password</div>
+                                <div style='font-size:12px;color:#64748b;text-transform:uppercase;letter-spacing:0.4px;'>Mật khẩu</div>
                                 <div style='font-weight:600;color:#0f172a;margin-top:4px;'>{password}</div>
                             </div>
                         </div>
-                        <p style='margin:10px 0 0;color:#64748b;font-size:12px;'>Vui lòng bảo mật thông tin đăng nhập này. Bạn có thể đổi mật khẩu sau khi đăng nhập.</p>
+                        <p style='margin:10px 0 0;color:#64748b;font-size:12px;'>Vui lòng bảo mật thông tin truy cập này. Bạn có thể đổi mật khẩu sau khi đăng nhập.</p>
                     </div>
 
                     <a href='https://asa-web-app-tawny.vercel.app/login'
-                       style='display:inline-block;background:#4f46e5;color:#ffffff;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:600;'>Đăng nhập ngay</a>
+                       style='display:inline-block;background:#4f46e5;color:#ffffff;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:600;'>Truy cập hệ thống</a>
 
-                    <p style='margin:18px 0 0;color:#475569;font-size:14px;'>Nếu bạn cần hỗ trợ, hãy phản hồi lại email này hoặc liên hệ đội ngũ hỗ trợ của chúng tôi.</p>
+                    <p style='margin:18px 0 0;color:#475569;font-size:14px;'>Nếu bạn cần hỗ trợ, hãy liên hệ đội ngũ hỗ trợ của chúng tôi.</p>
                 </div>
 
                 <div style='background:#0f172a;color:#94a3b8;padding:16px 28px;font-size:12px;'>
-                    © {DateTime.Now.Year} AI Store Assistant. Tất cả các quyền được bảo lưu.
+                    © {DateTime.Now.Year} ASA Platform. Tất cả các quyền được bảo lưu.<br/>
+                    <a href='#' style='color:#94a3b8;text-decoration:none;'>Hủy đăng ký</a> | 
+                    <a href='#' style='color:#94a3b8;text-decoration:none;'>Chính sách bảo mật</a>
                 </div>
             </div>
         </body>
@@ -161,5 +172,7 @@ namespace ASA_PLATFORM_SERVICE.Implenment
 
             return await SendEmailAsync(toEmail, subject, body);
         }
+
+        
     }
 }
