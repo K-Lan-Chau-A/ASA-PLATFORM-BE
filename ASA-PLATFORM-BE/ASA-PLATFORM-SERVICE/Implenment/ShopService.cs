@@ -45,7 +45,7 @@ namespace ASA_PLATFORM_SERVICE.Implenment
             {
                 // 1. Map sang entity
                 var entity = _mapper.Map<Shop>(request);
-                entity.Status = 2;
+                
 
                 // Validate and normalize Vietnamese phone number
                 string normalizedPhone;
