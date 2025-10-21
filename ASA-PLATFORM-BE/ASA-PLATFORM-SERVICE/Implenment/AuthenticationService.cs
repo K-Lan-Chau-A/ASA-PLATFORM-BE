@@ -55,7 +55,7 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                             Data = null
                         };
                     }
-                    var accessToken = await GenerateToken(user);
+                    var accessToken = await GenerateToken(user, null);
                     var response = _mapper.Map<LoginResponse>(user);
                     response.AccessToken = accessToken;
                     return new ApiResponse<LoginResponse>
@@ -84,7 +84,7 @@ namespace ASA_PLATFORM_SERVICE.Implenment
             }
         }
 
-        public Task<string> GenerateToken(User account)
+        public Task<string> GenerateToken(User account, List<long>? featureIds = null)
         {
             var jwtConfig = _configuration.GetSection("JwtConfig");
 
@@ -93,14 +93,23 @@ namespace ASA_PLATFORM_SERVICE.Implenment
             var key = jwtConfig["Key"];
             var expiryIn = DateTime.Now.AddYears(int.Parse(jwtConfig["ExpireYears"]));
 
+            var claims = new List<Claim>
+            {
+                new Claim("Id", account.UserId.ToString()),
+                new Claim(ClaimTypes.Name, account.Username),
+                new Claim(ClaimTypes.Role, account.Role.ToString())
+            };
+
+            // Thêm FeatureIds vào claims nếu có
+            if (featureIds != null && featureIds.Any())
+            {
+                var featureIdsJson = System.Text.Json.JsonSerializer.Serialize(featureIds);
+                claims.Add(new Claim("FeatureIds", featureIdsJson));
+            }
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim("Id", account.UserId.ToString()),
-                    new Claim(ClaimTypes.Name, account.Username),
-                    new Claim(ClaimTypes.Role, account.Role.ToString())
-                }),
+                Subject = new ClaimsIdentity(claims),
                 Expires = expiryIn,
                 Issuer = issuer,
                 Audience = audience,
@@ -149,7 +158,8 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                         Username = dto.Username,     
                         Role = dto.Role             
                     };
-                    var accessToken = await GenerateToken(userAccount);
+                    // Truyền FeatureIds vào GenerateToken để thêm vào JWT claims
+                    var accessToken = await GenerateToken(userAccount, dto.FeatureIds);
                     return new ApiResponse<ValidateShopResponse>
                     {
                         Success = true,

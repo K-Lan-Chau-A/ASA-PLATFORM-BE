@@ -18,5 +18,6 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
         public string Username { get; set; }
         public short? Role { get; set; }
         public long ShopId { get; set; }
+        public List<long> FeatureIds { get; set; }
     }
 }
