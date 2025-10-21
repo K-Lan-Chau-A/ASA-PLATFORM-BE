@@ -15,4 +15,12 @@ namespace ASA_PLATFORM_SERVICE.Enums
         [Description("Thất bại")]
         Failed = 2
     }
+    public enum PaymentMethodEnum
+    {
+        [Description("Tiền mặt")]
+        Cash = 1,
+
+        [Description("Chuyển khoản")]
+        BankTransfer = 2,
+    }
 }
