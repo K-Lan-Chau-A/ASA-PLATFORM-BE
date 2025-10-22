@@ -20,15 +20,11 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
 
         /// <summary>
 
-        public string ShopToken { get; set; }
+        public string? ShopToken { get; set; }
 
         public string? QrcodeUrl { get; set; }
 
         public string? SepayApiKey { get; set; }
-
-        public int? CurrentRequest { get; set; }
-
-        public int? CurrentAccount { get; set; }
 
         public string? BankName { get; set; }
 

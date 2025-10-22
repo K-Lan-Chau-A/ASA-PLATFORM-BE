@@ -48,11 +48,11 @@ namespace ASA_PLATFORM_REPO.Repository
 
         public async Task<Order?> GetCurrentShopProduct(long shopId) 
         {
-            // Assumption: Status 2 = order success and not expired (currently are using)
+            // Assumption: Status 1 = order success and not expired (currently are using)
             return await _context.Orders
                 .Include(o => o.Product)
                 .Where(o => o.ShopId == shopId
-                        && o.Status == 2)
+                        && o.Status == 1)
                 .OrderByDescending(o => o.CreatedAt)
                 .FirstOrDefaultAsync();
         }
