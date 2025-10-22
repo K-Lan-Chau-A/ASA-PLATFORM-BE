@@ -95,12 +95,12 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 {
                     shopName = request.shopName,
                     address = request.address,
-                    shopToken = request.ShopToken,
-                    status = 2,
+                    shopToken = request.ShopToken ?? "",
+                    status = request.status ?? 2, // Sử dụng status từ request, mặc định là 2 (trial)
                     qrcodeUrl = request.QrcodeUrl,
-                    sepayApiKey = request.SepayApiKey,
-                    currentRequest = request.CurrentRequest,
-                    currentAccount = request.CurrentAccount,
+                    sepayApiKey = request.SepayApiKey ?? "", 
+                    currentRequest = 0, // Luôn default là 0
+                    currentAccount = 0, // Luôn default là 0
                     bankName = request.BankName,
                     bankCode = request.BankCode,
                     bankNum = request.BankNum,
@@ -120,6 +120,14 @@ namespace ASA_PLATFORM_SERVICE.Implenment
 
                 // 4. Trả về kết quả
                 var shopResponse = _mapper.Map<ShopResponse>(entity);
+                
+                // Áp dụng logic cho trial shops
+                if (entity.Status == 2) // Trial shop
+                {
+                    shopResponse.productType = "Gói Basic";
+                    shopResponse.expiredAt = entity.CreatedAt?.AddDays(7);
+                }
+                
                 // Đọc thông tin đăng nhập từ Tenant API response (nếu có)
                 var tenantRaw = await tenantResponse.Content.ReadAsStringAsync();
 				if (TryParseTenantCredentials(tenantRaw, out var adminUsername, out var adminPassword))
@@ -212,6 +220,11 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                     shopResponse.productType = currentOrder.Product?.ProductName; 
                     shopResponse.expiredAt = currentOrder.ExpiredAt;
                 }
+                else if (shopResponse.status == 2) // Trial shop
+                {
+                    shopResponse.productType = "Gói Basic";
+                    shopResponse.expiredAt = shopResponse.createdAt?.AddDays(7);
+                }
             }
 
             return new PagedResponse<ShopResponse>
@@ -243,6 +256,14 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 if (affected > 0)
                 {
                     var response = _mapper.Map<ShopResponse>(existing);
+                    
+                    // Áp dụng logic cho trial shops
+                    if (existing.Status == 2) // Trial shop
+                    {
+                        response.productType = "Gói Basic";
+                        response.expiredAt = existing.CreatedAt?.AddDays(7);
+                    }
+                    
                     return new ApiResponse<ShopResponse>
                     {
                         Success = true,
