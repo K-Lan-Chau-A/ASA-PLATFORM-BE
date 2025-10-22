@@ -113,9 +113,11 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 }
 
                 var entity = _mapper.Map<Order>(request);
+                // Auto-set status = 0 for new orders
+                entity.Status = 0;
                 // Do NOT set ExpiredAt at creation time; it will be set on webhook success
-                _logger.LogInformation("[OrderService] Mapping to entity: ShopId={ShopId}, ProductId={ProductId}, TotalPrice={TotalPrice}",
-                    entity.ShopId, entity.ProductId, entity.TotalPrice);
+                _logger.LogInformation("[OrderService] Mapping to entity: ShopId={ShopId}, ProductId={ProductId}, TotalPrice={TotalPrice}, Status={Status}",
+                    entity.ShopId, entity.ProductId, entity.TotalPrice, entity.Status);
 
                 var affected = await _orderRepo.CreateAsync(entity);
 
