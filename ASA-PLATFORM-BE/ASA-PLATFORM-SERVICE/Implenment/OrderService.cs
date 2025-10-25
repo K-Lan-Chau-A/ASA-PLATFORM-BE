@@ -4,6 +4,7 @@ using ASA_PLATFORM_SERVICE.DTOs.Common;
 using ASA_PLATFORM_SERVICE.DTOs.Request;
 using ASA_PLATFORM_SERVICE.DTOs.Response;
 using ASA_PLATFORM_SERVICE.Interface;
+using ASA_PLATFORM_SERVICE.Enums;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -111,16 +112,70 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 }
 
                 var entity = _mapper.Map<Order>(request);
-                // Auto-set status = 0 for new orders
-                entity.Status = 0;
-                // Do NOT set ExpiredAt at creation time; it will be set on webhook success
-                _logger.LogInformation("[OrderService] Mapping to entity: ShopId={ShopId}, ProductId={ProductId}, TotalPrice={TotalPrice}, Status={Status}",
-                    entity.ShopId, entity.ProductId, entity.TotalPrice, entity.Status);
+                
+                // Check if payment method is cash (1) - auto-set status to success
+                bool isCashPayment = request.PaymentMethod == "1" || request.PaymentMethod == PaymentMethodEnum.Cash.ToString();
+                
+                if (isCashPayment)
+                {
+                    // Auto-set status = 1 (success) for cash payments
+                    entity.Status = 1;
+                    _logger.LogInformation("[OrderService] Cash payment detected. Setting order status to success (1)");
+                    
+                    // Set ExpiredAt for successful cash payments
+                    if (request.ProductId > 0)
+                    {
+                        var product = await _productRepo.GetByIdAsync(request.ProductId);
+                        if (product != null && product.Duration.HasValue)
+                        {
+                            var createdAt = DateTime.UtcNow;
+                            entity.CreatedAt = createdAt;
+                            entity.ExpiredAt = createdAt + product.Duration.Value;
+                            _logger.LogInformation("[OrderService] Set ExpiredAt for cash payment: {ExpiredAt}", entity.ExpiredAt);
+                        }
+                    }
+                }
+                else
+                {
+                    // Auto-set status = 0 for non-cash payments
+                    entity.Status = 0;
+                    _logger.LogInformation("[OrderService] Non-cash payment. Setting order status to pending (0)");
+                }
+                
+                _logger.LogInformation("[OrderService] Mapping to entity: ShopId={ShopId}, ProductId={ProductId}, TotalPrice={TotalPrice}, Status={Status}, PaymentMethod={PaymentMethod}",
+                    entity.ShopId, entity.ProductId, entity.TotalPrice, entity.Status, entity.PaymentMethod);
 
                 var affected = await _orderRepo.CreateAsync(entity);
 
                 if (affected > 0)
                 {
+                    // If cash payment was successful, update shop status to active
+                    if (isCashPayment && entity.ShopId.HasValue)
+                    {
+                        try
+                        {
+                            var shop = await _shopService.GetShopById(entity.ShopId.Value);
+                            if (shop != null && shop.Status != 1) // Only update if not already active
+                            {
+                                shop.Status = 1; // Set to active
+                                var updateResult = await _shopService.UpdateAsync(entity.ShopId.Value, _mapper.Map<ShopRequest>(shop));
+                                if (updateResult.Success)
+                                {
+                                    _logger.LogInformation("[OrderService] Updated shop {ShopId} status to active (1) for successful cash payment", entity.ShopId.Value);
+                                }
+                                else
+                                {
+                                    _logger.LogWarning("[OrderService] Failed to update shop {ShopId} status: {Message}", entity.ShopId.Value, updateResult.Message);
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogWarning("[OrderService] Failed to update shop status for cash payment: {Error}", ex.Message);
+                            // Don't fail the order creation if shop update fails
+                        }
+                    }
+                    
                     var response = _mapper.Map<OrderResponse>(entity);
                     return new ApiResponse<OrderResponse>
                     {
