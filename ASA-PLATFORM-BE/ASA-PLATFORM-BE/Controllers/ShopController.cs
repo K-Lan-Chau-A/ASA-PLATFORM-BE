@@ -34,20 +34,32 @@ namespace ASA_PLATFORM_BE.Controllers
         public async Task<ActionResult<ShopResponse>> Create([FromBody] ShopRequest request)
         {
             var result = await _shopService.CreateAsync(request);
-            return Ok(result);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
         [HttpPut("{id}")]
         public async Task<ActionResult<ShopResponse>> Update(long id, [FromBody] ShopRequest request)
         {
             var result = await _shopService.UpdateAsync(id, request);
-            return Ok(result);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<bool>> Delete(long id)
         {
             var result = await _shopService.DeleteAsync(id);
-            return Ok(result);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }

@@ -210,9 +210,9 @@ INSERT INTO product_feature (product_id, feature_id) VALUES
 
 -- 6. Tạo khuyến mãi
 INSERT INTO promotion (promotion_name, description, start_date, end_date, value, type, status) VALUES
-('Khuyến mãi khai trương', 'Giảm giá 20% cho khách hàng đăng ký lần đầu trong tháng 10', '2025-10-15', '2025-10-21', 20.00, '%', 1),
-('Ưu đãi tuần lễ', 'Giảm 50,000 VNĐ cho gói Premium', '2025-10-18', '2025-10-25', 50000.00, 'VNĐ', 1),
-('Khuyến mãi học sinh', 'Giảm 10% cho gói Basic dành cho các cửa hàng học đường', '2025-10-16', '2025-10-22', 10.00, '%', 1);
+('Khuyến mãi khai trương', 'Giảm giá 20% cho khách hàng đăng ký lần đầu trong tháng 10', '2025-10-15', '2025-11-21', 20.00, '%', 1),
+('Ưu đãi tuần lễ', 'Giảm 50,000 VNĐ cho gói Premium', '2025-10-18', '2025-11-25', 50000.00, 'VNĐ', 1),
+('Khuyến mãi học sinh', 'Giảm 10% cho gói Basic dành cho các cửa hàng học đường', '2025-10-16', '2025-11-22', 10.00, '%', 1);
 
 -- 7. Liên kết khuyến mãi với sản phẩm
 INSERT INTO promotion_product (promotion_id, product_id) VALUES

@@ -130,6 +130,14 @@ builder.Services.AddQuartz(q =>
         .ForJob(checkTrialJobKey)
         .WithIdentity("CheckTrialTrigger")
         .WithCronSchedule("0 0 1 * * ?", x => x.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")))); // 01:00 UTC mỗi ngày
+
+    // Promotion Expiry job: chạy mỗi ngày lúc 00:00 (12h đêm VN time)
+    var promotionExpiryJobKey = new JobKey("PromotionExpiryJob");
+    q.AddJob<PromotionExpiryJob>(opts => opts.WithIdentity(promotionExpiryJobKey));
+    q.AddTrigger(opts => opts
+        .ForJob(promotionExpiryJobKey)
+        .WithIdentity("PromotionExpiryTrigger")
+        .WithCronSchedule("0 0 0 * * ?", x => x.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")))); // 00:00 VN time mỗi ngày
 });
 
 //// Quartz test 5p và 10p
