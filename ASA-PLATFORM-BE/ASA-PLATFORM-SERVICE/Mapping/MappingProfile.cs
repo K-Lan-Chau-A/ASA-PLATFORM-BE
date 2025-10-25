@@ -19,14 +19,8 @@ namespace ASA_TENANT_SERVICE.Mapping
             CreateMap<Product, ProductGetRequest>().ReverseMap();
             // Mapping Product -> ProductResponse
             CreateMap<Product, ProductResponse>()
-                .ForMember(dest => dest.PromotionValue,
-                    opt => opt.MapFrom(src =>
-                        src.PromotionProducts.Select(pp => pp.Promotion.Value).FirstOrDefault()
-                    ))
-                .ForMember(dest => dest.PromotionType,
-                    opt => opt.MapFrom(src =>
-                        src.PromotionProducts.Select(pp => pp.Promotion.Type).FirstOrDefault()
-                    ))
+                .ForMember(dest => dest.PromotionValue, opt => opt.Ignore()) // Để logic xử lý
+                .ForMember(dest => dest.PromotionType, opt => opt.Ignore()) // Để logic xử lý
                 .ForMember(dest => dest.Features,
                     opt => opt.MapFrom(src => src.Features))
                 .ReverseMap()
