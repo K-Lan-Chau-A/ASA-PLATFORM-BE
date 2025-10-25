@@ -33,20 +33,32 @@ namespace ASA_PLATFORM_BE.Controllers
         public async Task<ActionResult<ProductResponse>> Create([FromBody] ProductRequest request)
         {
             var result = await _productService.CreateAsync(request);
-            return Ok(result);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
         [HttpPut("{id}")]
         public async Task<ActionResult<ProductResponse>> Update(long id, [FromBody] ProductRequest request)
         {
             var result = await _productService.UpdateAsync(id, request);
-            return Ok(result);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<bool>> Delete(long id)
         {
             var result = await _productService.DeleteAsync(id);
-            return Ok(result);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }
