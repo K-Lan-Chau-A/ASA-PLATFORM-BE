@@ -21,6 +21,8 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Response
 
         public int? AccountLimit { get; set; }
 
+        public TimeSpan? Duration { get; set; }
+
         public DateTime? CreatedAt { get; set; }
 
         public DateTime? UpdatedAt { get; set; }
