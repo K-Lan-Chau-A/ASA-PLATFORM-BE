@@ -73,7 +73,16 @@ namespace ASA_TENANT_SERVICE.Mapping
                 .ReverseMap();
 
             // Mapping Feature
-            CreateMap<Feature, FeatureResponse>();
+            CreateMap<FeatureRequest, Feature>()
+                .ForMember(dest => dest.FeatureName, opt => opt.MapFrom(src => src.FeatureName ?? ""))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description ?? ""))
+                .ForMember(dest => dest.IsActive, opt => opt.Ignore()) // BE sẽ set
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore()) // BE sẽ set
+                .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore()) // BE sẽ set
+                .ForMember(dest => dest.FeatureId, opt => opt.Ignore()) // Auto increment
+                .ForMember(dest => dest.Products, opt => opt.Ignore()); // Ignore navigation
+            CreateMap<Feature, FeatureGetRequest>().ReverseMap();
+            CreateMap<Feature, FeatureResponse>().ReverseMap();
 
             // Mapping Report
             CreateMap<Report, ReportRequest>().ReverseMap();

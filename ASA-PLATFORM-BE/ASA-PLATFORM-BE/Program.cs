@@ -49,6 +49,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPhotoService, PhotoService>();
+builder.Services.AddScoped<IFeatureService, FeatureService>();
 
 // Register repositories
 builder.Services.AddScoped<LogActivityRepo>();
@@ -62,6 +63,7 @@ builder.Services.AddScoped<ReportRepo>();
 builder.Services.AddScoped<ShopRepo>();
 builder.Services.AddScoped<UserRepo>();
 builder.Services.AddScoped<PasswordResetRepo>();
+builder.Services.AddScoped<FeatureRepo>();
 
 // Add HttpClient for BeTenant
 builder.Services.AddHttpClient("BETenantUrl", client =>
