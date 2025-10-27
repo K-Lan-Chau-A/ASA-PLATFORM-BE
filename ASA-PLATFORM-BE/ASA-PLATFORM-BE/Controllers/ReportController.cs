@@ -118,5 +118,57 @@ namespace ASA_PLATFORM_BE.Controllers
                 });
             }
         }
+
+        /// <summary>
+        /// API 4: Lấy doanh thu theo tháng từ đầu năm đến hiện tại
+        /// </summary>
+        [HttpGet("monthly-revenue")]
+        public async Task<ActionResult<object>> GetMonthlyRevenue()
+        {
+            try
+            {
+                var result = await _reportService.GetMonthlyRevenueLast12MonthsAsync();
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Lấy doanh thu theo tháng thành công",
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    Success = false,
+                    Message = $"Lỗi server: {ex.Message}"
+                });
+            }
+        }
+
+        /// <summary>
+        /// API 5: Lấy thống kê theo khoảng thời gian (tự động tính từ ngày hiện tại)
+        /// </summary>
+        [HttpGet("get-report-data")]
+        public async Task<ActionResult<object>> GetStatsByPeriod()
+        {
+            try
+            {
+                var result = await _reportService.GetStatsByPeriodAsync();
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Lấy thống kê theo khoảng thời gian thành công",
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    Success = false,
+                    Message = $"Lỗi server: {ex.Message}"
+                });
+            }
+        }
     }
 }

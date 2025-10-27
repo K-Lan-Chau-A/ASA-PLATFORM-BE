@@ -154,5 +154,76 @@ namespace ASA_PLATFORM_REPO.Repository
             await _context.ReportDetails.AddRangeAsync(productStats);
             await _context.SaveChangesAsync();
         }
+
+        /// <summary>
+        /// Lấy doanh thu theo tháng trong 12 tháng gần nhất (từ đầu năm đến cuối năm)
+        /// </summary>
+        public async Task<List<(int Year, int Month, decimal Revenue)>> GetMonthlyRevenueLast12MonthsAsync()
+        {
+            var vnTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+            var localNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, vnTimeZone);
+            
+            // Bắt đầu từ tháng 1 và kết thúc ở tháng 12 của năm hiện tại
+            var startOfYear = new DateTime(localNow.Year, 1, 1);
+            var endOfYear = new DateTime(localNow.Year, 12, 31);
+            
+            var startDateTime = DateTime.SpecifyKind(startOfYear.ToUniversalTime(), DateTimeKind.Utc);
+            var endDateTime = DateTime.SpecifyKind(endOfYear.ToUniversalTime(), DateTimeKind.Utc);
+
+            // Query Orders từ đầu năm đến cuối năm, chỉ tính đơn đã hoàn thành
+            var orders = await _context.Orders
+                .Where(o => o.CreatedAt >= startDateTime && o.CreatedAt <= endDateTime)
+                .Where(o => o.Status == 1)
+                .ToListAsync();
+
+            // Gom nhóm theo năm và tháng
+            var monthlyRevenue = orders
+                .GroupBy(o => new 
+                { 
+                    Year = TimeZoneInfo.ConvertTimeFromUtc(o.CreatedAt.Value, vnTimeZone).Year, 
+                    Month = TimeZoneInfo.ConvertTimeFromUtc(o.CreatedAt.Value, vnTimeZone).Month 
+                })
+                .Select(g => new 
+                { 
+                    g.Key.Year, 
+                    g.Key.Month, 
+                    Revenue = g.Sum(o => o.TotalPrice ?? 0) 
+                })
+                .ToList();
+
+            return monthlyRevenue.Select(x => (x.Year, x.Month, x.Revenue)).ToList();
+        }
+
+        /// <summary>
+        /// Lấy thống kê theo khoảng thời gian
+        /// </summary>
+        public async Task<(int NewShops, int ActiveShops, decimal Revenue, int PremiumSold)> GetStatsByPeriodAsync(
+            DateTime startDate, DateTime endDate)
+        {
+            // Tổng số shop mới trong khoảng thời gian
+            var newShops = await _context.Shops
+                .Where(s => s.CreatedAt >= startDate && s.CreatedAt <= endDate)
+                .CountAsync();
+
+            // Tổng số shop đang hoạt động (Active)
+            var activeShops = await _context.Shops
+                .Where(s => s.Status == 1)
+                .CountAsync();
+
+            // Doanh thu từ orders đã hoàn thành trong khoảng thời gian
+            var revenue = await _context.Orders
+                .Where(o => o.CreatedAt >= startDate && o.CreatedAt <= endDate)
+                .Where(o => o.Status == 1)
+                .SumAsync(o => o.TotalPrice ?? 0);
+
+            // Số gói premium đã bán trong khoảng thời gian (ProductId = 2)
+            var premiumSold = await _context.Orders
+                .Where(o => o.CreatedAt >= startDate && o.CreatedAt <= endDate)
+                .Where(o => o.Status == 1)
+                .Where(o => o.ProductId == 2)
+                .CountAsync();
+
+            return (newShops, activeShops, revenue, premiumSold);
+        }
     }
 }

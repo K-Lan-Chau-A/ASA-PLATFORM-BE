@@ -19,4 +19,10 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
         public int? OrderCounter { get; set; }
         public decimal? Revenue { get; set; }
     }
+
+    public class PeriodStatsRequest
+    {
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+    }
 }
