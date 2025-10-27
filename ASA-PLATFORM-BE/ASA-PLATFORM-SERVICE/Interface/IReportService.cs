@@ -14,5 +14,8 @@ namespace ASA_PLATFORM_SERVICE.Interface
         Task GenerateWeeklyReportAsync();
         Task GenerateMonthlyReportAsync();
         Task<PagedResponse<ReportResponse>> GetFilteredReportAsync(ReportGetRequest Filter, int page, int pageSize);
+        Task<List<MonthlyRevenueResponse>> GetMonthlyRevenueLast12MonthsAsync();
+        Task<DashboardStatsResponse> GetDashboardStatsAsync();
+        Task<DashboardStatsResponse> GetStatsByPeriodAsync();
     }
 }
