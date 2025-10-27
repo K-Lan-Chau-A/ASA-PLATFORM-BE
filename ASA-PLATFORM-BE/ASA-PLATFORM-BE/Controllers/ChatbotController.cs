@@ -102,56 +102,6 @@ namespace ASA_PLATFORM_BE.Controllers
                 Timestamp = DateTime.UtcNow
             });
         }
-
-        [HttpPost("register-trial")]
-        public async Task<ActionResult> RegisterTrial([FromBody] TrialRegistrationDto request)
-        {
-            try
-            {
-                var shopRequest = new ShopRequest
-                {
-                    shopName = request.ShopName,
-                    Fullname = request.Fullname,
-                    Phonenumber = request.Phonenumber,
-                    Email = request.Email,
-                    address = request.Address,
-                    status = 2, // Trial status
-                    ProductId = 1, // Default product for trial
-                    ShopToken = "",
-                    QrcodeUrl = "",
-                    SepayApiKey = "",
-                    BankName = "",
-                    BankCode = "",
-                    BankNum = ""
-                };
-
-                var result = await _shopService.CreateAsync(shopRequest);
-
-                if (result.Success)
-                {
-                    return Ok(new
-                    {
-                        Success = true,
-                        Message = "Đăng ký dùng thử thành công!",
-                        Data = result.Data
-                    });
-                }
-
-                return BadRequest(new
-                {
-                    Success = false,
-                    Message = result.Message
-                });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new
-                {
-                    Success = false,
-                    Message = $"Lỗi khi đăng ký: {ex.Message}"
-                });
-            }
-        }
     }
 }
 
