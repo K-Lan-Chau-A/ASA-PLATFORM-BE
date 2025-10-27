@@ -28,8 +28,9 @@ namespace ASA_PLATFORM_SERVICE.Implenment
         private readonly OrderRepo _orderRepo;
         private readonly IConfiguration _configuration;
 		private readonly IEmailService _emailService;
+        private readonly ProductRepo _productRepo;
 
-		public ShopService(ShopRepo shopRepo, IMapper mapper, OrderRepo orderRepo, IConfiguration configuration, IHttpClientFactory httpClientFactory, IEmailService emailService)
+		public ShopService(ShopRepo shopRepo, IMapper mapper, OrderRepo orderRepo, IConfiguration configuration, IHttpClientFactory httpClientFactory, IEmailService emailService, ProductRepo productRepo)
         {
             _shopRepo = shopRepo;
             _mapper = mapper;
@@ -37,6 +38,7 @@ namespace ASA_PLATFORM_SERVICE.Implenment
             _configuration = configuration;
             _httpClient = httpClientFactory.CreateClient("BETenantUrl");
 			_emailService = emailService;
+            _productRepo = productRepo;
         }
 
         public async Task<ApiResponse<ShopResponse>> CreateAsync(ShopRequest request)
@@ -77,9 +79,12 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 // Check duplicate email in Shop table (if email is provided)
                 if (!string.IsNullOrWhiteSpace(request.Email))
                 {
-                    var shopEmailExists = await _shopRepo
+                    var shopsWithEmail = await _shopRepo
                         .GetFiltered(new Shop { Email = request.Email })
-                        .AnyAsync(s => !string.IsNullOrEmpty(s.Email) && s.Email.Equals(request.Email, StringComparison.OrdinalIgnoreCase));
+                        .Where(s => !string.IsNullOrEmpty(s.Email))
+                        .ToListAsync();
+                    
+                    var shopEmailExists = shopsWithEmail.Any(s => s.Email.Equals(request.Email, StringComparison.OrdinalIgnoreCase));
                     if (shopEmailExists)
                     {
                         return new ApiResponse<ShopResponse>
@@ -516,40 +521,75 @@ namespace ASA_PLATFORM_SERVICE.Implenment
         {
             try
             {
-                // Lấy tất cả shop với order của họ
-                var shopsWithOrders = await _shopRepo.GetAllAsync();
-                var result = new List<object>();
-
-                foreach (var shop in shopsWithOrders)
+                // Lấy tất cả products từ database
+                var allProducts = await _productRepo.GetAllAsync();
+                
+                // Lấy tất cả shop ĐANG HOẠT ĐỘNG (status = 1 hoặc 2)
+                var allShops = await _shopRepo.GetAllAsync();
+                var activeShops = allShops.Where(s => s.Status == 1 || s.Status == 2).ToList();
+                
+                // Tạo dictionary để lưu count cho mỗi package
+                var packageCounts = new Dictionary<string, int>();
+                
+                // Initialize tất cả products với count = 0
+                foreach (var product in allProducts)
+                {
+                    if (!string.IsNullOrEmpty(product.ProductName))
+                    {
+                        packageCounts[product.ProductName] = 0;
+                    }
+                }
+                
+                // Đếm số shop cho mỗi product (chỉ tính shop đang hoạt động)
+                foreach (var shop in activeShops)
                 {
                     var currentOrder = await _orderRepo.GetCurrentShopProduct(shop.ShopId);
-                    var packageName = "Chưa có gói";
+                    var now = DateTime.UtcNow;
                     
                     if (currentOrder != null && currentOrder.Product != null)
                     {
-                        packageName = currentOrder.Product.ProductName;
+                        // Kiểm tra order chưa hết hạn (nếu có ExpiredAt)
+                        bool isOrderValid = true;
+                        if (currentOrder.ExpiredAt.HasValue && currentOrder.ExpiredAt.Value < now)
+                        {
+                            isOrderValid = false;
+                        }
+                        
+                        if (isOrderValid)
+                        {
+                            var packageName = currentOrder.Product.ProductName;
+                            if (!string.IsNullOrEmpty(packageName) && packageCounts.ContainsKey(packageName))
+                            {
+                                packageCounts[packageName]++;
+                            }
+                            else if (!string.IsNullOrEmpty(packageName))
+                            {
+                                packageCounts[packageName] = 1;
+                            }
+                        }
                     }
                     else if (shop.Status == 2) // Trial shop
                     {
-                        packageName = "Gói Basic (Trial)";
-                    }
-
-                    var existingPackage = result.FirstOrDefault(x => ((dynamic)x).PackageName == packageName);
-                    if (existingPackage != null)
-                    {
-                        ((dynamic)existingPackage).Count++;
-                    }
-                    else
-                    {
-                        result.Add(new
+                        var trialPackageName = "Gói Basic (Trial)";
+                        if (packageCounts.ContainsKey(trialPackageName))
                         {
-                            PackageName = packageName,
-                            Count = 1
-                        });
+                            packageCounts[trialPackageName]++;
+                        }
+                        else
+                        {
+                            packageCounts[trialPackageName] = 1;
+                        }
                     }
                 }
+                
+                // Convert sang list of objects
+                var result = packageCounts.Select(kvp => new
+                {
+                    PackageName = kvp.Key,
+                    Count = kvp.Value
+                }).OrderByDescending(x => x.Count).ToList();
 
-                return result.OrderByDescending(x => ((dynamic)x).Count).ToList();
+                return result;
             }
             catch (Exception ex)
             {
