@@ -41,9 +41,6 @@ namespace ASA_PLATFORM_BE.Controllers
             }
         }
 
-        /// <summary>
-        /// API 1: Đếm số shop dùng của từng gói
-        /// </summary>
         [HttpGet("shop-by-package")]
         public async Task<ActionResult<object>> GetShopCountByPackage()
         {
@@ -67,9 +64,7 @@ namespace ASA_PLATFORM_BE.Controllers
             }
         }
 
-        /// <summary>
-        /// API 2: Đếm số shop mới và shop gia hạn trong 12 tháng trước
-        /// </summary>
+
         [HttpGet("shop-new-vs-renewal")]
         public async Task<ActionResult<object>> GetShopNewVsRenewalStats()
         {
@@ -93,9 +88,6 @@ namespace ASA_PLATFORM_BE.Controllers
             }
         }
 
-        /// <summary>
-        /// API 3: Đếm số shop theo tỉnh
-        /// </summary>
         [HttpGet("shop-by-province")]
         public async Task<ActionResult<object>> GetShopCountByProvince()
         {
