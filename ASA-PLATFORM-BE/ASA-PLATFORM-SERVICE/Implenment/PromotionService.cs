@@ -323,5 +323,39 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 Console.WriteLine($"Unexpected error when sending broadcast notification: {ex.Message}");
             }
         }
+
+        public async Task<int> UpdateExpiredPromotionsAsync()
+        {
+            try
+            {
+                var today = DateOnly.FromDateTime(DateTime.Now);
+                
+                // Lấy tất cả promotion đã hết hạn và đang active
+                var expiredPromotions = await _promotionRepo.GetFiltered(new Promotion { Status = 1 })
+                    .Where(p => p.EndDate < today)
+                    .ToListAsync();
+
+                if (!expiredPromotions.Any())
+                {
+                    return 0;
+                }
+
+                // Cập nhật status = 0 cho tất cả promotion đã hết hạn
+                var affected = 0;
+                foreach (var promotion in expiredPromotions)
+                {
+                    promotion.Status = 0;
+                    affected += await _promotionRepo.UpdateAsync(promotion);
+                }
+                
+                Console.WriteLine($"[PromotionExpiryJob] Updated {affected} expired promotions to status 0");
+                return affected;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[PromotionExpiryJob] Error updating expired promotions: {ex.Message}");
+                return 0;
+            }
+        }
     }
 }

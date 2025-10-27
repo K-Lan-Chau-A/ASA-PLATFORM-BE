@@ -14,11 +14,14 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Response
 
         public string Description { get; set; }
 
+        public decimal? OriginalPrice { get; set; }
         public decimal? Price { get; set; }
 
         public int? RequestLimit { get; set; }
 
         public int? AccountLimit { get; set; }
+
+        public TimeSpan? Duration { get; set; }
 
         public DateTime? CreatedAt { get; set; }
 

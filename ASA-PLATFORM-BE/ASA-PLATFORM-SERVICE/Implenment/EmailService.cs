@@ -1,14 +1,12 @@
 ﻿using ASA_PLATFORM_REPO.Models;
 using ASA_PLATFORM_REPO.Repository;
 using ASA_PLATFORM_SERVICE.Interface;
-using MailKit.Net.Smtp;
-using MailKit.Security;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using MimeKit;
-using SendGrid;
-using SendGrid.Helpers.Mail;
 using System;
+using System.Net.Http;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ASA_PLATFORM_SERVICE.Implenment
@@ -19,58 +17,95 @@ namespace ASA_PLATFORM_SERVICE.Implenment
         private readonly PasswordResetRepo _passwordResetRepo;
         private readonly UserRepo _userRepo;
         private readonly ILogger<EmailService> _logger;
+        private readonly HttpClient _httpClient;
+        private readonly string _apiKey;
+        private readonly string _fromEmail;
+        private readonly string _fromName;
 
-
-
-
-        public EmailService(IConfiguration config,PasswordResetRepo passwordResetRepo, UserRepo userRepo, ILogger<EmailService> logger)
+        public EmailService(IConfiguration config, PasswordResetRepo passwordResetRepo, UserRepo userRepo, ILogger<EmailService> logger, HttpClient httpClient)
         {
             _config = config;
             _passwordResetRepo = passwordResetRepo;
             _userRepo = userRepo;
             _logger = logger;
+            _httpClient = httpClient;
+
+            // Lấy API key & thông tin sender từ ENV trước, sau đó mới tới appsettings
+            _apiKey = Environment.GetEnvironmentVariable("BREVO_SETTINGS__APIKEY")
+                            ?? _config["BrevoSettings:ApiKey"];
+
+            _fromEmail = Environment.GetEnvironmentVariable("BREVO_SETTINGS__FROMEMAIL")
+                            ?? _config["BrevoSettings:FromEmail"];
+
+            _fromName = Environment.GetEnvironmentVariable("BREVO_SETTINGS__FROMNAME")
+                            ?? _config["BrevoSettings:FromName"];
+
+            if (string.IsNullOrWhiteSpace(_apiKey))
+            {
+                _logger.LogError("Brevo API key chưa được cấu hình (BREVO_SETTINGS__APIKEY hoặc BrevoSettings:ApiKey).");
+            }
         }
 
         public async Task<bool> SendEmailAsync(string to, string subject, string body)
         {
+            if (string.IsNullOrWhiteSpace(_apiKey))
+            {
+                _logger.LogError("Brevo API key chưa được cấu hình.");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(_fromEmail))
+            {
+                _logger.LogError("Brevo FromEmail chưa cấu hình (BREVO_SETTINGS__FROMEMAIL hoặc BrevoSettings:FromEmail).");
+                return false;
+            }
+
             try
             {
-                // Lấy cấu hình từ env hoặc appsettings
-                var apiKey = Environment.GetEnvironmentVariable("SENDGRID_SETTINGS__APIKEY")
-                             ?? _config["SendGridSettings:ApiKey"];
-                var fromEmail = Environment.GetEnvironmentVariable("SENDGRID_SETTINGS__FROMEMAIL")
-                                ?? _config["SendGridSettings:FromEmail"];
-                var fromName = Environment.GetEnvironmentVariable("SENDGRID_SETTINGS__FROMNAME")
-                               ?? _config["SendGridSettings:FromName"];
+                // Debug logging
+                _logger.LogInformation("🔑 Using API Key: {ApiKey}", _apiKey?.Substring(0, Math.Min(20, _apiKey?.Length ?? 0)) + "...");
+                _logger.LogInformation("📧 From Email: {FromEmail}", _fromEmail);
+                _logger.LogInformation("📧 From Name: {FromName}", _fromName);
 
-                if (string.IsNullOrWhiteSpace(apiKey) || string.IsNullOrWhiteSpace(fromEmail))
+                // Tạo request payload cho Brevo API
+                var requestPayload = new
                 {
-                    _logger.LogError("SendGrid configuration missing or invalid.");
-                    return false;
-                }
+                    sender = new { name = _fromName, email = _fromEmail },
+                    to = new[] { new { email = to } },
+                    subject = subject,
+                    htmlContent = body
+                };
 
-                var client = new SendGridClient(apiKey);
-                var from = new EmailAddress(fromEmail, fromName);
-                var toAddress = new EmailAddress(to);
-                var msg = MailHelper.CreateSingleEmail(from, toAddress, subject, plainTextContent: null, htmlContent: body);
+                var json = JsonSerializer.Serialize(requestPayload);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var response = await client.SendEmailAsync(msg);
+                // Cấu hình headers
+                _httpClient.DefaultRequestHeaders.Clear();
+                _httpClient.DefaultRequestHeaders.Add("api-key", _apiKey);
+
+                // Gửi request đến Brevo API
+                var response = await _httpClient.PostAsync("https://api.brevo.com/v3/smtp/email", content);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    _logger.LogInformation($"✅ Email sent successfully to {to}");
-                    return true;
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var result = JsonSerializer.Deserialize<JsonElement>(responseContent);
+                    
+                    if (result.TryGetProperty("messageId", out var messageId))
+                    {
+                        _logger.LogInformation("✅ Email sent to {To}. MessageId: {Mid}", to, messageId.GetString());
+                        return true;
+                    }
                 }
-                else
-                {
-                    var responseBody = await response.Body.ReadAsStringAsync();
-                    _logger.LogError($"❌ Failed to send email to {to}. Status: {response.StatusCode}, Body: {responseBody}");
-                    return false;
-                }
+
+                var errorContent = await response.Content.ReadAsStringAsync();
+                _logger.LogError("❌ Gửi email tới {To} thất bại. Status: {Status}, Response: {Response}", 
+                    to, response.StatusCode, errorContent);
+                return false;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Exception while sending email to {to}");
+                _logger.LogError(ex, "Exception khi gửi email tới {To}", to);
                 return false;
             }
         }

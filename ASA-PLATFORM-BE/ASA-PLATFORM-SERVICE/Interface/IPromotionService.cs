@@ -15,5 +15,6 @@ namespace ASA_PLATFORM_SERVICE.Interface
         Task<ApiResponse<PromotionResponse>> CreateAsync(PromotionCreateRequest request);
         Task<ApiResponse<PromotionResponse>> UpdateAsync(long id, PromotionRequest request);
         Task<ApiResponse<bool>> DeleteAsync(long id);
+        Task<int> UpdateExpiredPromotionsAsync();
     }
 }
