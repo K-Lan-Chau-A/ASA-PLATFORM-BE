@@ -5,6 +5,7 @@ using ASA_PLATFORM_SERVICE.Implenment;
 using ASA_PLATFORM_SERVICE.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace ASA_PLATFORM_BE.Controllers
 {
@@ -24,6 +25,20 @@ namespace ASA_PLATFORM_BE.Controllers
             {
                 var result = await _shopService.GetFilteredShopsAsync(requestDto, page, pageSize);
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("expiring")]
+        public async Task<ActionResult> GetTopExpiring([FromQuery] int top = 5)
+        {
+            try
+            {
+                var data = await _shopService.GetTopExpiringShopsAsync(top);
+                return Ok(data);
             }
             catch (Exception ex)
             {
