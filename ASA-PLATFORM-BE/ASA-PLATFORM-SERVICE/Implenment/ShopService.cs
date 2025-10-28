@@ -17,6 +17,7 @@ using System.Text.RegularExpressions;
 using System.Text.Json;
 using System.Threading.Tasks;
 using static ASA_PLATFORM_REPO.Repository.ShopRepo;
+using ASA_PLATFORM_SERVICE.DTOs.Response;
 
 namespace ASA_PLATFORM_SERVICE.Implenment
 {
@@ -256,6 +257,62 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 Page = page,
                 PageSize = pageSize
             };
+        }
+
+        public async Task<List<ShopExpiryResponse>> GetTopExpiringShopsAsync(int top = 5)
+        {
+            var now = DateTime.UtcNow;
+
+            var allShops = await _shopRepo.GetAllAsync();
+            var activeOrTrialShops = allShops.Where(s => s.Status == 1 || s.Status == 2).ToList();
+
+            var results = new List<(Shop shop, Order? order, DateTime? expiredAt, string packageName, decimal? price)>();
+
+            foreach (var shop in activeOrTrialShops)
+            {
+                var currentOrder = await _orderRepo.GetCurrentShopProduct(shop.ShopId);
+
+                DateTime? expiredAt = null;
+                string packageName = null;
+                decimal? packagePrice = null;
+
+                if (currentOrder != null)
+                {
+                    packageName = currentOrder.Product?.ProductName;
+                    packagePrice = currentOrder.Product?.Price;
+                    expiredAt = currentOrder.ExpiredAt;
+                }
+                else if (shop.Status == 2)
+                {
+                    // Trial logic: default 7 days from createdAt
+                    packageName = "Gói Basic - Trial";
+                    expiredAt = shop.CreatedAt?.AddDays(7);
+                    packagePrice = 0;
+                }
+
+                if (expiredAt.HasValue)
+                {
+                    results.Add((shop, currentOrder, expiredAt, packageName ?? string.Empty, packagePrice));
+                }
+            }
+
+            var topShops = results
+                .OrderBy(r => (r.expiredAt.HasValue ? (r.expiredAt.Value - now).TotalDays : double.MaxValue))
+                .ThenBy(r => r.shop.ShopId)
+                .Take(top)
+                .Select(r => new ShopExpiryResponse
+                {
+                    ShopName = r.shop.ShopName,
+                    OwnerName = r.shop.Fullname,
+                    CurrentPackageName = r.packageName,
+                    CurrentPackagePrice = r.price,
+                    ExpiredAt = r.expiredAt.HasValue 
+                        ? TimeZoneInfo.ConvertTimeFromUtc(DateTime.SpecifyKind(r.expiredAt.Value, DateTimeKind.Utc), TimeZoneInfo.Local).ToString("dd-MM-yyyy") 
+                        : null
+                })
+                .ToList();
+
+            return topShops;
         }
 
         public async Task<ApiResponse<ShopResponse>> UpdateAsync(long id, ShopRequest request)

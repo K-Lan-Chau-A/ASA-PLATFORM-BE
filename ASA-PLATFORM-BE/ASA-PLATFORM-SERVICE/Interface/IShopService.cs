@@ -24,5 +24,6 @@ namespace ASA_PLATFORM_SERVICE.Interface
         Task<object> GetShopCountByPackageAsync();
         Task<object> GetShopNewVsRenewalStatsAsync();
         Task<object> GetShopCountByProvinceAsync();
+        Task<List<ShopExpiryResponse>> GetTopExpiringShopsAsync(int top = 5);
     }
 }
