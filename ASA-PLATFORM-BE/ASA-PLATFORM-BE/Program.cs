@@ -4,7 +4,7 @@ using ASA_PLATFORM_SERVICE.Configurations;
 using ASA_PLATFORM_SERVICE.CronJobs;
 using ASA_PLATFORM_SERVICE.Implenment;
 using ASA_PLATFORM_SERVICE.Interface;
-using ASA_TENANT_SERVICE.Mapping;
+using ASA_PLATFORM_SERVICE.Configuration;
 using CloudinaryDotNet;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Quartz;
 using System.Text;
+using ASA_PLATFORM_SERVICE.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 // Cấu hình để chạy trên Docker/Render
@@ -50,6 +51,14 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddScoped<IFeatureService, FeatureService>();
+builder.Services.AddScoped<IChatbotService, ChatbotService>();
+
+// Register Gemini Configuration
+builder.Services.Configure<GeminiConfiguration>(
+    builder.Configuration.GetSection("GeminiSettings"));
+
+// Register GeminiService
+builder.Services.AddScoped<GeminiService>();
 
 // Register repositories
 builder.Services.AddScoped<LogActivityRepo>();
