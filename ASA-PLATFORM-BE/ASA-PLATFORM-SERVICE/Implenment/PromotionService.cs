@@ -54,14 +54,13 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 }
 
                 var entity = _mapper.Map<Promotion>(request);
-                
+
+                // Force Type string from numeric (0 => "%", 1 => "VND")
+                entity.Type = request.type == 0 ? "%" : "VND";
+
                 // Tự động set status = 1 (active) khi tạo promotion
                 entity.Status = 1;
-                
-                if(!string.IsNullOrEmpty(entity.Type) && entity.Type.ToUpper() == "PERCENTAGE")
-                {
-                    entity.Type = "%";
-                }      
+
                 var affected = await _promotionRepo.CreateAsync(entity);
 
                 // if has productIds, add to PromotionProduct
@@ -191,6 +190,8 @@ namespace ASA_PLATFORM_SERVICE.Implenment
 
                 // Map dữ liệu cơ bản
                 _mapper.Map(request, existing);
+                // Force Type string from numeric (0 => "%", 1 => "VND")
+                existing.Type = request.type == 0 ? "%" : "VND";
 
                 var affected = await _promotionRepo.UpdateAsync(existing);
 
