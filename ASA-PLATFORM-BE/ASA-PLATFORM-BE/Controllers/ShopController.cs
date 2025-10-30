@@ -5,6 +5,7 @@ using ASA_PLATFORM_SERVICE.Implenment;
 using ASA_PLATFORM_SERVICE.Interface;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace ASA_PLATFORM_BE.Controllers
 {
@@ -30,24 +31,50 @@ namespace ASA_PLATFORM_BE.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpGet("expiring")]
+        public async Task<ActionResult> GetTopExpiring([FromQuery] int top = 5)
+        {
+            try
+            {
+                var data = await _shopService.GetTopExpiringShopsAsync(top);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
         [HttpPost]
         public async Task<ActionResult<ShopResponse>> Create([FromBody] ShopRequest request)
         {
             var result = await _shopService.CreateAsync(request);
-            return Ok(result);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
         [HttpPut("{id}")]
         public async Task<ActionResult<ShopResponse>> Update(long id, [FromBody] ShopRequest request)
         {
             var result = await _shopService.UpdateAsync(id, request);
-            return Ok(result);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<bool>> Delete(long id)
         {
             var result = await _shopService.DeleteAsync(id);
-            return Ok(result);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }

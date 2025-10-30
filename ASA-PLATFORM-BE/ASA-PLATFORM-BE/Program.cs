@@ -4,7 +4,7 @@ using ASA_PLATFORM_SERVICE.Configurations;
 using ASA_PLATFORM_SERVICE.CronJobs;
 using ASA_PLATFORM_SERVICE.Implenment;
 using ASA_PLATFORM_SERVICE.Interface;
-using ASA_TENANT_SERVICE.Mapping;
+using ASA_PLATFORM_SERVICE.Configuration;
 using CloudinaryDotNet;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Quartz;
 using System.Text;
+using ASA_PLATFORM_SERVICE.Mapping;
 
 var builder = WebApplication.CreateBuilder(args);
 // Cấu hình để chạy trên Docker/Render
@@ -49,6 +50,15 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IPhotoService, PhotoService>();
+builder.Services.AddScoped<IFeatureService, FeatureService>();
+builder.Services.AddScoped<IChatbotService, ChatbotService>();
+
+// Register Gemini Configuration
+builder.Services.Configure<GeminiConfiguration>(
+    builder.Configuration.GetSection("GeminiSettings"));
+
+// Register GeminiService
+builder.Services.AddScoped<GeminiService>();
 
 // Register repositories
 builder.Services.AddScoped<LogActivityRepo>();
@@ -62,6 +72,7 @@ builder.Services.AddScoped<ReportRepo>();
 builder.Services.AddScoped<ShopRepo>();
 builder.Services.AddScoped<UserRepo>();
 builder.Services.AddScoped<PasswordResetRepo>();
+builder.Services.AddScoped<FeatureRepo>();
 
 // Add HttpClient for BeTenant
 builder.Services.AddHttpClient("BETenantUrl", client =>
@@ -130,6 +141,22 @@ builder.Services.AddQuartz(q =>
         .ForJob(checkTrialJobKey)
         .WithIdentity("CheckTrialTrigger")
         .WithCronSchedule("0 0 1 * * ?", x => x.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")))); // 01:00 UTC mỗi ngày
+
+    // Promotion Expiry job: chạy mỗi ngày lúc 00:00 (12h đêm VN time)
+    var promotionExpiryJobKey = new JobKey("PromotionExpiryJob");
+    q.AddJob<PromotionExpiryJob>(opts => opts.WithIdentity(promotionExpiryJobKey));
+    q.AddTrigger(opts => opts
+        .ForJob(promotionExpiryJobKey)
+        .WithIdentity("PromotionExpiryTrigger")
+        .WithCronSchedule("0 0 0 * * ?", x => x.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")))); // 00:00 VN time mỗi ngày
+
+    // Shop Status Expiry job: chạy mỗi ngày lúc 00:00 (12h đêm VN time)
+    var shopStatusExpiryJobKey = new JobKey("ShopStatusExpiryJob");
+    q.AddJob<ShopStatusExpiryJob>(opts => opts.WithIdentity(shopStatusExpiryJobKey));
+    q.AddTrigger(opts => opts
+        .ForJob(shopStatusExpiryJobKey)
+        .WithIdentity("ShopStatusExpiryTrigger")
+        .WithCronSchedule("0 15 0 * * ?", x => x.InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")))); // 00:15 VN time mỗi ngày (sau PromotionExpiryJob)
 });
 
 //// Quartz test 5p và 10p

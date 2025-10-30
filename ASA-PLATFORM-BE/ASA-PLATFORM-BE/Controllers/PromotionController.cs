@@ -34,20 +34,32 @@ namespace ASA_PLATFORM_BE.Controllers
         public async Task<ActionResult<PromotionResponse>> Create([FromBody] PromotionCreateRequest request)
         {
             var result = await _promotionService.CreateAsync(request);
-            return Ok(result);
+            if (result.Success)
+            {
+                return Ok(result); 
+            }
+            return BadRequest(result);
         }
         [HttpPut("{id}")]
         public async Task<ActionResult<PromotionResponse>> Update(long id, [FromBody] PromotionRequest request)
         {
             var result = await _promotionService.UpdateAsync(id, request);
-            return Ok(result);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<bool>> Delete(long id)
         {
             var result = await _promotionService.DeleteAsync(id);
-            return Ok(result);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
         }
     }
 }

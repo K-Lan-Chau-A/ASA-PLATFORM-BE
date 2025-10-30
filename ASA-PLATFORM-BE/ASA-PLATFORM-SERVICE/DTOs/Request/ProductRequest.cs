@@ -42,6 +42,8 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
 
         public int? accountLimit { get; set; }
 
+        public TimeSpan? Duration { get; set; }
+
         public DateTime? createdAt { get; set; }
 
         public DateTime? updatedAt { get; set; }

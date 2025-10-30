@@ -19,5 +19,11 @@ namespace ASA_PLATFORM_SERVICE.Interface
         Task<ApiResponse<bool>> DeleteAsync(long id);
         Task<Shop?> GetShopById(long id);
         Task<List<ShopTrialDto>> CheckTrialShops();
+        Task<int> UpdateExpiredShopStatusAsync();
+        Task<int> UpdateExpiredTrialShopStatusAsync();
+        Task<object> GetShopCountByPackageAsync();
+        Task<object> GetShopNewVsRenewalStatsAsync();
+        Task<object> GetShopCountByProvinceAsync();
+        Task<List<ShopExpiryResponse>> GetTopExpiringShopsAsync(int top = 5);
     }
 }

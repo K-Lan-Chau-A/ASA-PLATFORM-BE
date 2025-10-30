@@ -17,10 +17,12 @@ namespace ASA_PLATFORM_SERVICE.Implenment
     public class ProductService : IProductService
     {
         private readonly ProductRepo _productRepo;
+        private readonly PromotionProductRepo _promotionProductRepo;
         private readonly IMapper _mapper;
-        public ProductService(ProductRepo productRepo, IMapper mapper)
+        public ProductService(ProductRepo productRepo, PromotionProductRepo promotionProductRepo, IMapper mapper)
         {
             _productRepo = productRepo;
+            _promotionProductRepo = promotionProductRepo;
             _mapper = mapper;
         }
 
@@ -55,6 +57,7 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 if (affected > 0)
                 {
                     var response = _mapper.Map<ProductResponse>(entity);
+                    await ApplyPromotionLogic(response);
                     return new ApiResponse<ProductResponse>
                     {
                         Success = true,
@@ -124,9 +127,17 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 .Take(pageSize)
                 .ToListAsync();
 
+            var productResponses = _mapper.Map<List<ProductResponse>>(items);
+
+            // Áp dụng logic promotion cho từng product
+            foreach (var productResponse in productResponses)
+            {
+                await ApplyPromotionLogic(productResponse);
+            }
+
             return new PagedResponse<ProductResponse>
             {
-                Items = _mapper.Map<IEnumerable<ProductResponse>>(items),
+                Items = productResponses,
                 TotalCount = totalCount,
                 Page = page,
                 PageSize = pageSize
@@ -169,6 +180,7 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 if (affected > 0)
                 {
                     var response = _mapper.Map<ProductResponse>(existing);
+                    await ApplyPromotionLogic(response);
                     return new ApiResponse<ProductResponse>
                     {
                         Success = true,
@@ -193,6 +205,86 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                     Data = null
                 };
             }
+        }
+
+        private async Task ApplyPromotionLogic(ProductResponse productResponse)
+        {
+            try
+            {
+                // Set OriginalPrice = giá gốc từ DB
+                productResponse.OriginalPrice = productResponse.Price;
+
+                // Lấy tất cả promotion của product này (chỉ status = 1)
+                var promotions = await _promotionProductRepo.GetFiltered(new PromotionProduct { ProductId = productResponse.ProductId })
+                    .Include(pp => pp.Promotion)
+                    .Where(pp => pp.Promotion.Status == 1) // Chỉ lấy promotion có status = 1
+                    .Select(pp => pp.Promotion)
+                    .ToListAsync();
+
+                if (promotions.Any())
+                {
+                    // Tìm promotion tốt nhất (giảm giá nhiều nhất)
+                    var bestPromotion = FindBestPromotion(promotions, productResponse.OriginalPrice ?? 0);
+                    
+                    if (bestPromotion != null)
+                    {
+                        productResponse.PromotionValue = bestPromotion.Value;
+                        productResponse.PromotionType = bestPromotion.Type;
+                        productResponse.Price = CalculateFinalPrice(productResponse.OriginalPrice ?? 0, bestPromotion);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log error nhưng không throw để không ảnh hưởng đến response
+                // Có thể thêm logging ở đây nếu cần
+            }
+        }
+
+        private Promotion FindBestPromotion(List<Promotion> promotions, decimal originalPrice)
+        {
+            if (!promotions.Any()) return null;
+
+            Promotion bestPromotion = null;
+            decimal bestDiscount = 0;
+
+            foreach (var promotion in promotions)
+            {
+                var discount = CalculateDiscountAmount(originalPrice, promotion);
+                if (discount > bestDiscount)
+                {
+                    bestDiscount = discount;
+                    bestPromotion = promotion;
+                }
+            }
+
+            return bestPromotion;
+        }
+
+        private decimal CalculateDiscountAmount(decimal originalPrice, Promotion promotion)
+        {
+            if (promotion.Type == "%")
+            {
+                return originalPrice * (promotion.Value ?? 0) / 100;
+            }
+            else if (promotion.Type == "VNĐ")
+            {
+                return promotion.Value ?? 0;
+            }
+            return 0;
+        }
+
+        private decimal CalculateFinalPrice(decimal originalPrice, Promotion promotion)
+        {
+            if (promotion.Type == "%")
+            {
+                return originalPrice * (100 - (promotion.Value ?? 0)) / 100;
+            }
+            else if (promotion.Type == "VNĐ")
+            {
+                return Math.Max(0, originalPrice - (promotion.Value ?? 0)); // Đảm bảo giá không âm
+            }
+            return originalPrice;
         }
 
     }
