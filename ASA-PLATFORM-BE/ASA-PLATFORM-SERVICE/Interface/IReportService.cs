@@ -17,5 +17,6 @@ namespace ASA_PLATFORM_SERVICE.Interface
         Task<List<MonthlyRevenueResponse>> GetMonthlyRevenueLast12MonthsAsync();
         Task<DashboardStatsResponse> GetDashboardStatsAsync();
         Task<DashboardStatsResponse> GetStatsByPeriodAsync();
+        Task<MonthlyOrderSummaryResponse> GetCurrentMonthOrderSummaryAsync();
     }
 }
