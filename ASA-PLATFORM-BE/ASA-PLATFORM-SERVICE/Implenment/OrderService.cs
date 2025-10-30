@@ -22,13 +22,15 @@ namespace ASA_PLATFORM_SERVICE.Implenment
         private readonly IMapper _mapper;
         private readonly IShopService _shopService;
         private readonly ProductRepo _productRepo;
+        private readonly PromotionProductRepo _promotionProductRepo;
         private readonly ILogger<OrderService> _logger;
-        public OrderService(OrderRepo orderRepo, IMapper mapper, IShopService shopService, ProductRepo productRepo, ILogger<OrderService> logger)
+        public OrderService(OrderRepo orderRepo, IMapper mapper, IShopService shopService, ProductRepo productRepo, PromotionProductRepo promotionProductRepo, ILogger<OrderService> logger)
         {
             _orderRepo = orderRepo;
             _mapper = mapper;
             _shopService = shopService;
             _productRepo = productRepo;
+            _promotionProductRepo = promotionProductRepo;
             _logger = logger;
         }
 
@@ -85,7 +87,7 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                     _logger.LogInformation("[OrderService] Assigned request.ShopId={ShopId} after shop creation", request.ShopId);
                 }
 
-                // Derive TotalPrice and ExpiredAt from Product (apply discount 0..100%)
+                // Derive TotalPrice and ExpiredAt from Product (apply discount 0..100% and active promotion)
                 if (request.ProductId > 0)
                 {
                     var product = await _productRepo.GetByIdAsync(request.ProductId);
@@ -97,10 +99,53 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                             var discountRate = request.Discount ?? 0m;
                             if (discountRate < 0m) discountRate = 0m;
                             if (discountRate > 100m) discountRate = 100m;
-                            var finalPrice = basePrice * (1m - discountRate / 100m);
+                            // Apply active promotions for this product
+                            decimal promotionPercent = 0m;
+                            decimal promotionAbsolute = 0m;
+                            try
+                            {
+                                var today = DateOnly.FromDateTime(DateTime.UtcNow.Date);
+                                var promotionLinks = _promotionProductRepo
+                                    .GetFiltered(new PromotionProduct { ProductId = request.ProductId })
+                                    .Where(pp => pp.Promotion != null
+                                        && pp.Promotion.Status == 1
+                                        && (!pp.Promotion.StartDate.HasValue || pp.Promotion.StartDate.Value <= today)
+                                        && (!pp.Promotion.EndDate.HasValue || today <= pp.Promotion.EndDate.Value))
+                                    .ToList();
+
+                                foreach (var link in promotionLinks)
+                                {
+                                    var promo = link.Promotion;
+                                    if (promo?.Value.HasValue != true) continue;
+                                    if (!string.IsNullOrWhiteSpace(promo.Type) && promo.Type.Trim() == "%")
+                                    {
+                                        promotionPercent += promo.Value.Value;
+                                    }
+                                    else
+                                    {
+                                        promotionAbsolute += promo.Value.Value;
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.LogWarning(ex, "[OrderService] Failed to load promotions for ProductId={ProductId}", request.ProductId);
+                            }
+
+                            if (promotionPercent < 0m) promotionPercent = 0m;
+                            // Cap total percentage (request discount + promotion %) at 100
+                            var totalPercent = discountRate + promotionPercent;
+                            if (totalPercent > 100m) totalPercent = 100m;
+
+                            var finalPrice = basePrice * (1m - totalPercent / 100m);
+                            if (promotionAbsolute > 0m)
+                            {
+                                finalPrice -= promotionAbsolute;
+                            }
+                            if (finalPrice < 0m) finalPrice = 0m;
                             request.TotalPrice = finalPrice;
-                            _logger.LogInformation("[OrderService] Derived TotalPrice from ProductId={ProductId}: Base={Base}, Discount={Discount}%, Final={Final}",
-                                request.ProductId, basePrice, discountRate, finalPrice);
+                            _logger.LogInformation("[OrderService] Derived TotalPrice from ProductId={ProductId}: Base={Base}, ReqDiscount={ReqDiscount}%, Promo%={PromoPercent}%, PromoAbs={PromoAbs}, Final={Final}",
+                                request.ProductId, basePrice, discountRate, promotionPercent, promotionAbsolute, finalPrice);
                         }
 
                         // Do NOT compute ExpiredAt here; it will be set on webhook success

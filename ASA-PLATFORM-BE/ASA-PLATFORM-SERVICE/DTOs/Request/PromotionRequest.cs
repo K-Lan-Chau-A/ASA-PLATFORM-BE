@@ -14,8 +14,7 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
         public DateOnly? startDate { get; set; }
         public DateOnly? endDate { get; set; }
         public decimal? value { get; set; }
-        [EnumDataType(typeof(PromotionType))]
-        public PromotionType type { get; set; }
+        public int type { get; set; }
         public short? status { get; set; }
         public HashSet<long>? ProductIds { get; set; }
     }
@@ -46,14 +45,8 @@ namespace ASA_PLATFORM_SERVICE.DTOs.Request
         public decimal value { get; set; }
         
         [Required(ErrorMessage = "Type is required")]
-        [EnumDataType(typeof(PromotionType))]
-        public PromotionType type { get; set; }
+        public int type { get; set; }
         
         public HashSet<long>? ProductIds { get; set; }
-    }
-    public enum PromotionType
-    {
-        PERCENTAGE = 0,
-        VND = 1
     }
 }
