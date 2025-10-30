@@ -225,5 +225,30 @@ namespace ASA_PLATFORM_REPO.Repository
 
             return (newShops, activeShops, revenue, premiumSold);
         }
+
+        /// <summary>
+        /// Lấy thống kê đơn hàng trong tháng hiện tại: tổng giao dịch, thành công, thất bại, doanh thu
+        /// Doanh thu chỉ tính các đơn hàng thành công.
+        /// </summary>
+        public async Task<(int TotalTransactions, int SuccessTransactions, int FailedTransactions, decimal Revenue)> GetCurrentMonthOrderSummaryAsync()
+        {
+            var vnTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+            var localNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, vnTimeZone);
+
+            var monthStart = new DateTime(localNow.Year, localNow.Month, 1);
+            var monthEnd = monthStart.AddMonths(1).AddTicks(-1);
+            var monthStartUtc = DateTime.SpecifyKind(monthStart.ToUniversalTime(), DateTimeKind.Utc);
+            var monthEndUtc = DateTime.SpecifyKind(monthEnd.ToUniversalTime(), DateTimeKind.Utc);
+
+            var query = _context.Orders
+                .Where(o => o.CreatedAt >= monthStartUtc && o.CreatedAt <= monthEndUtc);
+
+            var totalTransactions = await query.CountAsync();
+            var successTransactions = await query.Where(o => o.Status == 1).CountAsync();
+            var failedTransactions = await query.Where(o => o.Status == 2).CountAsync();
+            var revenue = await query.Where(o => o.Status == 1).SumAsync(o => o.TotalPrice ?? 0);
+
+            return (totalTransactions, successTransactions, failedTransactions, revenue);
+        }
     }
 }
