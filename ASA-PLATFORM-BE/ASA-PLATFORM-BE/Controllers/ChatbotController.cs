@@ -92,6 +92,8 @@ namespace ASA_PLATFORM_BE.Controllers
             }
         }
 
+        
+
         [HttpGet("health")]
         public ActionResult Health()
         {
