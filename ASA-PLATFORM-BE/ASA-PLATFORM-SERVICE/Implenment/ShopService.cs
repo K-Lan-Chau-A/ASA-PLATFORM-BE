@@ -97,20 +97,7 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                     }
                 }
 
-                // 2. Lưu shop vào DB Platform
-                var affected = await _shopRepo.CreateAsync(entity);
-
-                if (affected <= 0)
-                {
-                    return new ApiResponse<ShopResponse>
-                    {
-                        Success = false,
-                        Message = "Create failed in Platform DB",
-                        Data = null
-                    };
-                }
-
-                // 3. Gọi API Tenant
+                // 2. Gọi API Tenant trước để hạn chế lỗi phía Platform
                 var tenantApiUrl = _configuration.GetValue<string>("BETenantUrl:Url");
                 var createShopEndpoint = $"{tenantApiUrl}/api/shops";
 
@@ -137,6 +124,18 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                     {
                         Success = false,
                         Message = $"Tenant API failed: {tenantResponse.StatusCode}",
+                        Data = null
+                    };
+                }
+
+                // 3. Lưu shop vào DB Platform (sau khi Tenant OK)
+                var affected = await _shopRepo.CreateAsync(entity);
+                if (affected <= 0)
+                {
+                    return new ApiResponse<ShopResponse>
+                    {
+                        Success = false,
+                        Message = "Create failed in Platform DB",
                         Data = null
                     };
                 }
