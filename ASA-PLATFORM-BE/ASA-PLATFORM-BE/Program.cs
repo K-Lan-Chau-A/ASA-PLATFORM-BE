@@ -107,7 +107,8 @@ builder.Services.AddCors(options =>
                     "http://localhost:8081",
                     "https://localhost:8081",
                     "https://localhost:8080",
-                    "https://asa-tenant-be.onrender.com"
+                    "https://asa-tenant-be.onrender.com",
+                    "https://asa.systems"
                  )
                 .AllowAnyHeader()
                 .AllowAnyMethod()
