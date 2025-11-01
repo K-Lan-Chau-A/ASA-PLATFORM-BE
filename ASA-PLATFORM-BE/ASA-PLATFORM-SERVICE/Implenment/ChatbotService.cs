@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Text;
+using System.Globalization;
 
 namespace ASA_PLATFORM_SERVICE.Implenment
 {
@@ -48,6 +49,10 @@ namespace ASA_PLATFORM_SERVICE.Implenment
 
                 // Parse registration data từ response
                 var registrationData = ParseRegistrationData(response, request.Question, request.ConversationHistory);
+                if (registrationData != null && !string.IsNullOrWhiteSpace(registrationData.Address))
+                {
+                    registrationData.Address = NormalizeVietnamAddress(registrationData.Address);
+                }
 
                 return new ChatbotResponseDto
                 {
@@ -310,6 +315,165 @@ Hãy trả lời ngắn gọn, chuyên nghiệp. Nếu không liên quan, redire
         {
             var match = System.Text.RegularExpressions.Regex.Match(text, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
             return match.Success ? match.Groups[1].Value : null;
+        }
+
+        private static string NormalizeVietnamAddress(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input)) return input;
+
+            var canonicalList = new Dictionary<string, string[]>(StringComparer.OrdinalIgnoreCase)
+            {
+                ["Thành phố Hà Nội"] = new [] { "ha noi", "hanoi", "hn", "tp ha noi", "tp.ha noi", "tp hanoi" },
+                ["Thành phố Hải Phòng"] = new [] { "hai phong", "haiphong", "hp", "tp hai phong", "tp.hai phong" },
+                ["Thành phố Đà Nẵng"] = new [] { "da nang", "danang", "dn", "tp da nang", "tp.da nang" },
+                ["Thành phố Hồ Chí Minh"] = new [] { "ho chi minh", "hochiminh", "hcm", "tp hcm", "tphcm", "tp.hcm", "sai gon", "saigon", "sg" },
+                ["Thành phố Cần Thơ"] = new [] { "can tho", "cantho", "ct", "tp can tho", "tp.can tho" },
+                ["Tỉnh Hà Giang"] = new [] { "ha giang" },
+                ["Tỉnh Cao Bằng"] = new [] { "cao bang" },
+                ["Tỉnh Lào Cai"] = new [] { "lao cai" },
+                ["Tỉnh Bắc Kạn"] = new [] { "bac kan", "backan" },
+                ["Tỉnh Lạng Sơn"] = new [] { "lang son", "langson" },
+                ["Tỉnh Tuyên Quang"] = new [] { "tuyen quang", "tuyenquang" },
+                ["Tỉnh Thái Nguyên"] = new [] { "thai nguyen", "thainguyen" },
+                ["Tỉnh Phú Thọ"] = new [] { "phu tho", "phutho" },
+                ["Tỉnh Bắc Giang"] = new [] { "bac giang", "bacgiang" },
+                ["Tỉnh Quảng Ninh"] = new [] { "quang ninh", "quangninh" },
+                ["Tỉnh Hải Dương"] = new [] { "hai duong", "haiduong" },
+                ["Tỉnh Hưng Yên"] = new [] { "hung yen", "hungyen" },
+                ["Tỉnh Thái Bình"] = new [] { "thai binh", "thaibinh" },
+                ["Tỉnh Hà Nam"] = new [] { "ha nam", "hanam" },
+                ["Tỉnh Nam Định"] = new [] { "nam dinh", "namdinh" },
+                ["Tỉnh Ninh Bình"] = new [] { "ninh binh", "ninhbinh" },
+                ["Tỉnh Thanh Hóa"] = new [] { "thanh hoa", "thanhhoa" },
+                ["Tỉnh Nghệ An"] = new [] { "nghe an", "nghean" },
+                ["Tỉnh Hà Tĩnh"] = new [] { "ha tinh", "hatinh" },
+                ["Tỉnh Quảng Bình"] = new [] { "quang binh", "quangbinh" },
+                ["Tỉnh Quảng Trị"] = new [] { "quang tri", "quangtri" },
+                ["Tỉnh Thừa Thiên Huế"] = new [] { "thua thien hue", "thuathienhue", "hue" },
+                ["Tỉnh Quảng Nam"] = new [] { "quang nam", "quangnam" },
+                ["Tỉnh Quảng Ngãi"] = new [] { "quang ngai", "quangngai" },
+                ["Tỉnh Bình Định"] = new [] { "binh dinh", "binhdinh" },
+                ["Tỉnh Phú Yên"] = new [] { "phu yen", "phuyen" },
+                ["Tỉnh Khánh Hòa"] = new [] { "khanh hoa", "khanhhoa", "nha trang" },
+                ["Tỉnh Ninh Thuận"] = new [] { "ninh thuan", "ninhthuan" },
+                ["Tỉnh Bình Thuận"] = new [] { "binh thuan", "binhthuan" },
+            };
+
+            string normalizedInput = RemoveDiacritics(input).ToLowerInvariant();
+            string? matchedCanonical = null;
+
+            foreach (var kv in canonicalList)
+            {
+                var canonical = kv.Key;
+                var canonicalPlain = RemoveDiacritics(canonical).ToLowerInvariant();
+                if (input.Contains(canonical, StringComparison.OrdinalIgnoreCase))
+                {
+                    matchedCanonical = canonical;
+                    break;
+                }
+                if (normalizedInput.Contains(canonicalPlain))
+                {
+                    matchedCanonical = canonical;
+                    break;
+                }
+                foreach (var syn in kv.Value)
+                {
+                    if (normalizedInput.Contains(syn))
+                    {
+                        matchedCanonical = canonical;
+                        break;
+                    }
+                }
+                if (matchedCanonical != null) break;
+            }
+
+            if (matchedCanonical == null) return input.Trim();
+
+            // Xây dựng danh sách alias để loại khỏi địa chỉ trước khi thêm tên chuẩn
+            string baseName = matchedCanonical
+                .Replace("Thành phố", "", StringComparison.OrdinalIgnoreCase)
+                .Replace("Tỉnh", "", StringComparison.OrdinalIgnoreCase)
+                .Trim();
+            var aliases = new List<string>();
+            if (canonicalList.TryGetValue(matchedCanonical, out var syns))
+            {
+                aliases.AddRange(syns);
+            }
+            // Thêm biến thể có/không dấu, có/thêm tiền tố tp, tp.
+            aliases.Add(matchedCanonical);
+            aliases.Add(baseName);
+            aliases.Add($"tp {baseName}");
+            aliases.Add($"tp. {baseName}");
+            aliases.Add(RemoveDiacritics(baseName).ToLowerInvariant());
+            aliases.Add($"tp {RemoveDiacritics(baseName).ToLowerInvariant()}");
+            aliases.Add($"tp. {RemoveDiacritics(baseName).ToLowerInvariant()}");
+
+            string cleaned = input;
+            foreach (var alias in aliases.Distinct(StringComparer.OrdinalIgnoreCase))
+            {
+                if (string.IsNullOrWhiteSpace(alias)) continue;
+                // Loại alias đứng một mình hoặc sau dấu phẩy/cuối chuỗi
+                var pattern = $@"(,\s*)?{System.Text.RegularExpressions.Regex.Escape(alias)}(?![\w])";
+                cleaned = System.Text.RegularExpressions.Regex.Replace(cleaned, pattern, "", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            }
+            // Nếu là thành phố, loại bỏ token 'tp'/'tp.' và 'thanh pho'/'thành phố' đứng lẻ trước dấu phẩy/cuối chuỗi
+            if (matchedCanonical.StartsWith("Thành phố", StringComparison.OrdinalIgnoreCase))
+            {
+                cleaned = System.Text.RegularExpressions.Regex.Replace(
+                    cleaned,
+                    @"(,?\s*)tp\.?\s*(?=,|$)",
+                    string.Empty,
+                    System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+                cleaned = System.Text.RegularExpressions.Regex.Replace(
+                    cleaned,
+                    @"(,?\s*)(thanh pho|thành phố)\s*(?=,|$)",
+                    string.Empty,
+                    System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            }
+            // Nếu là tỉnh, loại bỏ token 'tỉnh' hoặc 'tinh' đứng lẻ trước dấu phẩy/cuối chuỗi
+            if (matchedCanonical.StartsWith("Tỉnh", StringComparison.OrdinalIgnoreCase))
+            {
+                cleaned = System.Text.RegularExpressions.Regex.Replace(
+                    cleaned,
+                    @"(,?\s*)(tỉnh|tinh)\.?\s*(?=,|$)",
+                    string.Empty,
+                    System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            }
+
+            // Dọn khoảng trắng/dấu phẩy thừa
+            cleaned = System.Text.RegularExpressions.Regex.Replace(cleaned, @"\s+,\s+", ", ");
+            cleaned = System.Text.RegularExpressions.Regex.Replace(cleaned, @"\s{2,}", " ");
+            cleaned = cleaned.Trim().TrimEnd(',').Trim();
+
+            // Nếu đã chứa đúng tên chuẩn (sau khi dọn), chỉ đảm bảo có dấu phẩy
+            if (cleaned.IndexOf(matchedCanonical, StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                var idx2 = cleaned.IndexOf(matchedCanonical, StringComparison.OrdinalIgnoreCase);
+                if (idx2 > 0 && cleaned[idx2 - 1] != ',')
+                {
+                    cleaned = cleaned.Insert(idx2, ", ");
+                }
+                return cleaned;
+            }
+
+            return cleaned + ", " + matchedCanonical;
+        }
+
+        private static string RemoveDiacritics(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return text;
+            var normalized = text.Normalize(NormalizationForm.FormD);
+            var sb = new StringBuilder();
+            foreach (var c in normalized)
+            {
+                var uc = CharUnicodeInfo.GetUnicodeCategory(c);
+                if (uc != UnicodeCategory.NonSpacingMark)
+                {
+                    sb.Append(c);
+                }
+            }
+            return sb.ToString().Normalize(NormalizationForm.FormC);
         }
     }
 }

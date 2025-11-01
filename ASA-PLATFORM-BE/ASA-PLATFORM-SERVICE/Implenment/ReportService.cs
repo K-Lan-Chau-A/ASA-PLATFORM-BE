@@ -199,5 +199,17 @@ namespace ASA_PLATFORM_SERVICE.Implenment
                 }
             };
         }
+
+        public async Task<MonthlyOrderSummaryResponse> GetCurrentMonthOrderSummaryAsync()
+        {
+            var data = await _reportRepo.GetCurrentMonthOrderSummaryAsync();
+            return new MonthlyOrderSummaryResponse
+            {
+                TotalTransactions = data.TotalTransactions,
+                SuccessTransactions = data.SuccessTransactions,
+                FailedTransactions = data.FailedTransactions,
+                Revenue = data.Revenue
+            };
+        }
     }
 }

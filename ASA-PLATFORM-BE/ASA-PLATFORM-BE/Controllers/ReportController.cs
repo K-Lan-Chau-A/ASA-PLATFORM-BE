@@ -162,5 +162,31 @@ namespace ASA_PLATFORM_BE.Controllers
                 });
             }
         }
+
+        /// <summary>
+        /// API 6: Lấy báo cáo tháng hiện tại: tổng giao dịch, doanh thu, thành công, thất bại
+        /// </summary>
+        [HttpGet("monthly-order-summary")]
+        public async Task<ActionResult<object>> GetMonthlyOrderSummary()
+        {
+            try
+            {
+                var result = await _reportService.GetCurrentMonthOrderSummaryAsync();
+                return Ok(new
+                {
+                    Success = true,
+                    Message = "Lấy báo cáo tháng hiện tại thành công",
+                    Data = result
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    Success = false,
+                    Message = $"Lỗi server: {ex.Message}"
+                });
+            }
+        }
     }
 }
