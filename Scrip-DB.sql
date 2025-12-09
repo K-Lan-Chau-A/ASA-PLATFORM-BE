@@ -172,7 +172,7 @@ CREATE INDEX idx_password_reset_otps_email_otp
 
 -- 1. Tạo cửa hàng
 INSERT INTO shop (shop_name, address, status, fullname, phonenumber) VALUES
-('Tạp Hóa Minh Hạnh', '123 Đường Nguyễn Văn Cừ, Quận 5,Thành phố Hồ Chí Minh', 1, 'Nguyen Van A', '0912345678');
+('Tạp Hóa Minh Hạnh', '123 Đường Nguyễn Văn Cừ, Quận 5,Thành phố Hồ Chí Minh', 1, 'Nguyen Hà Mai Hân', '0912345678');
 
 -- 2. Tạo người dùng
 INSERT INTO "user"
